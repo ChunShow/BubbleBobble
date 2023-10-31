@@ -1,8 +1,11 @@
 #include "main.h"
 
+using namespace std;
+
 Bubble::Bubble()
 {
 	capturing = false;
+	speed = 0.1f;
 }
 
 void Bubble::setPos(float x, float y)
@@ -25,7 +28,6 @@ void Bubble::setDirection(DIRECT k) {
 
 void Bubble::initialize()
 {
-
 	Material mtl;
 	mtl.setEmission(0.0f, 0.0f, 0.0f, 1.0f);
 	mtl.setAmbient(0.0215f, 0.1745f, 0.0215f, 0.55f);
@@ -75,6 +77,33 @@ bool Bubble::characterCollisionCheck(float hitbox[2][2])
 	float boxLengthY = (hitbox[1][1] - hitbox[1][0]) / 2;
 	float radius = size * 0.1;
 	return (std::abs(pos[0] - boxCenterX) < (boxLengthX+0.05) && std::abs(pos[1] - boxCenterY) < (boxLengthY+0.05));
+}
+
+bool Bubble::mapCollision(vector<vector<float>> borderHard)
+{
+	float x, y, width, height;
+	float r = size * 0.1;
+	for (const auto& border : borderHard) {
+		x = border[0]; y = border[1]; width = border[2]; height = border[3];
+		if (abs(y - pos[1]) < r || abs(y - height - pos[1]) < r) {
+			if (x-r<pos[0] && pos[0]<x) {
+				size = 1.0f;
+				pos[0] = x - 0.1;
+				return true;
+			}
+			if (x+width<pos[0] && pos[0]<x+width+r) {
+				size = 1.0f;
+				pos[0] = x +width+ 0.1;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+float Bubble::getRadius()
+{
+	return size * 0.1;
 }
 
 void Bubble::draw()

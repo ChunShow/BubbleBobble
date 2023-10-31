@@ -29,7 +29,7 @@ void idle() {
 	if (endTime - startTime > 1000 / 30) {
 		if (keystates[KEY::LEFT]) {
 			//  case of player's direction changes from RIGHT to LEFT
-			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT; 
+			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT;
 			else {
 				if (player.state == FALL) player.setPosition(-0.015f, 0.0f);
 				else player.setPosition(-0.025f, 0.0f);
@@ -47,7 +47,7 @@ void idle() {
 		}
 		if (keystates[KEY::DOWN]) {
 			// case of player's state is JUMP or FALL
-			if (player.state != STAY) { 
+			if (player.state != STAY) {
 				player.state = FALL;
 				player.setPosition(0.0f, -0.01f);
 			}
@@ -60,21 +60,19 @@ void idle() {
 		}
 
 		for (auto& bubble : bubbles) {
-			float speed = 0.15;
+			float speed = bubble.speed;
 			float size = bubble.size;
+
+			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
+			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
 			float x = bubble.pos[0]; float y = bubble.pos[1];
-			bubble.setSize(min(bubble.size + 0.1, 1.0));
-			if (bubble.checkVerticalBoundary() || bubble.isGrown()) {
-				bubble.size = 1;
-				bubble.direction = D_UP;
-			}
 			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
 			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
-			if (bubble.direction == D_UP) bubble.setPos(x, y + speed*0.1);
+			if (bubble.direction == D_UP) bubble.setPos(x, y + speed * 0.1);
 
-			for (auto& monster : creature) {
+			/*for (auto& monster : creature) {
 				if (bubble.characterCollisionCheck(monster.hitbox)) cout << "Collision!" << endl;
-			}
+			}*/
 		}
 
 		if (player.state == STAY) {
@@ -99,7 +97,7 @@ void idle() {
 			}
 		}
 
-		for (auto monster = creature.begin(); monster < creature.end(); monster++)  {
+		for (auto monster = creature.begin(); monster < creature.end(); monster++) {
 			if ((*monster).direction == LEFT) {
 				if (stage1.checkMonster(*monster)) (*monster).setPosition(-0.015f, 0.0f);
 				else {
@@ -155,6 +153,7 @@ void display() {
 	}
 
 	for (auto monster : creature) monster.drawMonster();
+
 	stage1.drawMap();
 	glutSwapBuffers();
 }
