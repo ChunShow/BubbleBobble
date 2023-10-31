@@ -23,9 +23,6 @@ extern Player player;
 extern vector<Monster> creature;
 extern bool keystates[5];
 
-extern GLuint textureID;
-extern GLubyte* textureData;
-extern int imageWidth, imageHeight;
-FIBITMAP* createBitMap(char const* filename);
-void generateTexture();
+extern GLuint stoneTexture;
+extern GLuint brickTexture;
 void initTexture();

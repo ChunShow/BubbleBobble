@@ -18,26 +18,41 @@ void Map::drawMap() {
 void Map::drawBlock(float x, float y, float width, float height) {
 	if (!drawn) setBorder(x, y, width);
 
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glBindTexture(GL_TEXTURE_2D, textureID);
 	glBegin(GL_POLYGON);
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(x + width, y);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width, y - height);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(x, y - height);
+	float ratio;
+	if (width > height) {
+		ratio = height / width;
+		glTexCoord2f(0.0f, ratio); glVertex2f(x, y);
+		glTexCoord2f(1.0f, ratio); glVertex2f(x + width, y);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y - height);
+	}
+	else {
+		ratio = width / height;
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
+		glTexCoord2f(ratio, 1.0f); glVertex2f(x + width, y);
+		glTexCoord2f(ratio, 0.0f); glVertex2f(x + width, y - height);
+	}
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y - height);
 	glEnd();
-
-	glDisable(GL_TEXTURE_2D);	
 }
 void Map::drawHard(float x, float y, float width, float height) {
 	if (!drawn) setHard(x, y, width, height);
 
 	glBegin(GL_POLYGON);
-	glVertex2f(x, y);
-	glVertex2f(x + width, y);
-	glVertex2f(x + width, y - height);
-	glVertex2f(x, y - height);
+	float ratio;
+	if (width > height) {
+		ratio = height / width;
+		glTexCoord2f(0.0f, ratio); glVertex2f(x, y);
+		glTexCoord2f(1.0f, ratio); glVertex2f(x + width, y);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y - height);
+	}
+	else {
+		ratio = width / height;
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
+		glTexCoord2f(ratio, 1.0f); glVertex2f(x + width, y);
+		glTexCoord2f(ratio, 0.0f); glVertex2f(x + width, y - height);
+	}
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y - height);
 	glEnd();
 }
 void Map::setBorder(float x, float y, float width) {
@@ -56,8 +71,11 @@ void Map::setHard(float x, float y, float width, float height) {
 }
 
 void Map::drawStage1() {
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, brickTexture);
+
 	//  the bottom layer
-	glColor3f(0.0f, 1.0f, 1.0f);
 	drawHard(-1.2f, -0.95f, 1.0f, 0.25f);
 	drawHard(0.2f, -0.95f, 1.0f, 0.25f);
 
@@ -72,11 +90,10 @@ void Map::drawStage1() {
 	drawHard(0.95f, -0.53f, 0.25f, 0.47f);
 
 	//  the first layer
-	glColor3f(0.5f, 0.5f, 0.5f);
 	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
 	drawBlock(0.7f, -0.53f, 0.5f, 0.05f);
-	drawBlock(-0.4f, -0.53f, 0.8f, 0.05f);
-
+	drawBlock(-0.4f, -0.53f, 0.80f, 0.05f);
+	
 	//  the second layer
 	drawBlock(-1.2f, -0.11f, 0.5f, 0.05f);
 	drawBlock(0.7f, -0.11f, 0.5f, 0.05f);
@@ -87,11 +104,12 @@ void Map::drawStage1() {
 	drawBlock(0.7f, 0.31f, 0.5f, 0.05f);
 
 	//  the middle object
-	glColor3f(0.7f, 0.3f, 0.3f);
-	drawHard(-0.3f, 0.36f, 0.6f, 0.10f);
+	glBindTexture(GL_TEXTURE_2D, stoneTexture);
 	drawHard(-0.4f, 0.66f, 0.10f, 0.40f);
+	drawHard(-0.3f, 0.36f, 0.6f, 0.10f);
 	drawHard(0.3f, 0.66f, 0.10f, 0.40f);
 
+	glDisable(GL_TEXTURE_2D);
 	drawn = true;
 }
 
