@@ -143,7 +143,6 @@ void display() {
 	light1.setSpecular(0.5f, 0.5f, 0.0f, 1.0f);
 	glEnable(GL_LIGHT0);
 	light1.draw();
-
 	for (auto monster : creature) player.checkhit(monster.hitbox);
 	player.drawPlayer();
 
