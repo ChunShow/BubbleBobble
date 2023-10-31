@@ -59,18 +59,21 @@ void idle() {
 		}
 
 		for (auto& bubble : bubbles) {
-			float speed = 0.04;
+			float speed = 0.15;
 			float size = bubble.size;
 			float x = bubble.pos[0]; float y = bubble.pos[1];
-			bubble.setSize(min(bubble.size + 0.05, 1.0));
+			bubble.setSize(min(bubble.size + 0.1, 1.0));
 			if (bubble.checkVerticalBoundary() || bubble.isGrown()) {
 				bubble.size = 1;
 				bubble.direction = D_UP;
 			}
 			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
 			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
-			if (bubble.direction == D_UP) bubble.setPos(x, y + speed);
+			if (bubble.direction == D_UP) bubble.setPos(x, y + speed*0.1);
 
+			for (auto& monster : creature) {
+				if (bubble.characterCollisionCheck(monster.hitbox)) cout << "Collision!" << endl;
+			}
 		}
 
 		if (player.state == STAY) {
@@ -112,7 +115,6 @@ void idle() {
 			}
 		}
 
-
 		startTime = endTime;
 		glutPostRedisplay();
 	}
@@ -124,7 +126,7 @@ void display() {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0f, 1.0f, 0.1f, 100.0f);
+	glOrtho(-1.0f, 1.0f, -1.0f, 1.f, -1.0f, 50.f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0.0, 0.0, 1.0,
@@ -139,19 +141,18 @@ void display() {
 	light1.setAmbient(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setLightID(GL_LIGHT0);
-	light1.setPosition(0.0f, 0.0f, 50.0f);
+	light1.setPosition(50.0f, 50.0f, 50.0f);
 	light1.setSpecular(0.5f, 0.5f, 0.0f, 1.0f);
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	for (auto monster : creature) player.checkHeat(monster.heatbox);
+	for (auto monster : creature) player.checkhit(monster.hitbox);
 	player.drawPlayer();
 	for (int i = 0; i < bubbles.size(); i++) {
 		bubbles[i].draw();
 	}
 	for (auto monster : creature) monster.drawMonster();
 	stage1.drawMap();
-
 	glutSwapBuffers();
 }
 

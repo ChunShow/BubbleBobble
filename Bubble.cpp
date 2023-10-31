@@ -50,6 +50,12 @@ bool Bubble::checkVerticalBoundary()
 	return (pos[0] - size * 0.1 < -0.95f || pos[0] + size * 0.1 > 0.95f);
 }
 
+bool Bubble::checkUpperBoundary()
+{
+	float radius = size * 0.1;
+	return (pos[1] > 1.0f);
+}
+
 bool Bubble::isGrown()
 {
 	return size == 1.0f;
@@ -58,6 +64,17 @@ bool Bubble::isGrown()
 bool Bubble::isCapturing()
 {
 	return capturing;
+}
+
+bool Bubble::characterCollisionCheck(float hitbox[2][2])
+{
+	if (isGrown()) return false;
+	float boxCenterX = (hitbox[0][0] + hitbox[0][1]) / 2;
+	float boxCenterY = (hitbox[1][0] + hitbox[1][1]) / 2;
+	float boxLengthX = (hitbox[0][1] - hitbox[0][0]) / 2;
+	float boxLengthY = (hitbox[1][1] - hitbox[1][0]) / 2;
+	float radius = size * 0.1;
+	return (std::abs(pos[0] - boxCenterX) < (boxLengthX+0.05) && std::abs(pos[1] - boxCenterY) < (boxLengthY+0.05));
 }
 
 void Bubble::draw()

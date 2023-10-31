@@ -3,10 +3,10 @@
 //  initial setting of player
 Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(5) {
 	position[0] = -0.9f; position[1] = -0.95f;
-	heatbox[0][0] = position[0] + 0.03f;
-	heatbox[0][1] = position[0] + 0.16f;
-	heatbox[1][0] = position[1];
-	heatbox[1][1] = position[1] + 0.15f;
+	hitbox[0][0] = position[0] + 0.03f;
+	hitbox[0][1] = position[0] + 0.16f;
+	hitbox[1][0] = position[1];
+	hitbox[1][1] = position[1] + 0.15f;
 }
 
 void Player::drawPlayer() {
@@ -638,17 +638,17 @@ void Player::setPosition(float x, float y) {
 		player.position[1] = 1.0f;
 	}
 
-	//  change player's heatbox coordinate
+	//  change player's hitbox coordinate
 	if (direction == RIGHT) {
-		heatbox[0][0] = position[0] + 0.03f;
-		heatbox[0][1] = position[0] + 0.16f;
+		hitbox[0][0] = position[0] + 0.03f;
+		hitbox[0][1] = position[0] + 0.16f;
 	}
 	else {
-		heatbox[0][0] = position[0] + 0.01f;
-		heatbox[0][1] = position[0] + 0.14f;
+		hitbox[0][0] = position[0] + 0.01f;
+		hitbox[0][1] = position[0] + 0.14f;
 	}
-	heatbox[1][0] = position[1];
-	heatbox[1][1] = position[1] + 0.15f;
+	hitbox[1][0] = position[1];
+	hitbox[1][1] = position[1] + 0.15f;
 
 }
 
@@ -672,16 +672,16 @@ Bubble Player::shoot()
 	return bubble;
 }
 
-void Player::checkHeat(float box[2][2]) {
-	//  float box[2][2] means a Monster's heat box
+void Player::checkhit(float box[2][2]) {
+	//  float box[2][2] means a Monster's hit box
 	//  only check when blinkTime is 0 
 	if (blinkTime == 0) {
-		//  check weather player's heat box contacts Monster's heat box
-		if ((box[0][0] <= player.heatbox[0][0] && player.heatbox[0][0] <= box[0][1]) ||
-			(box[0][0] <= player.heatbox[0][1] && player.heatbox[0][1] <= box[0][1])) {
-			if ((box[1][0] <= player.heatbox[1][0] && player.heatbox[1][0] <= box[1][1]) ||
-				(box[1][0] <= player.heatbox[1][1] && player.heatbox[1][1] <= box[1][1])) {
-				//  if player's heat box contacts Monster's heat box, decrease the number of life and generate blinkTime
+		//  check weather player's hit box contacts Monster's hit box
+		if ((box[0][0] <= player.hitbox[0][0] && player.hitbox[0][0] <= box[0][1]) ||
+			(box[0][0] <= player.hitbox[0][1] && player.hitbox[0][1] <= box[0][1])) {
+			if ((box[1][0] <= player.hitbox[1][0] && player.hitbox[1][0] <= box[1][1]) ||
+				(box[1][0] <= player.hitbox[1][1] && player.hitbox[1][1] <= box[1][1])) {
+				//  if player's hit box contacts Monster's hit box, decrease the number of life and generate blinkTime
 				life--;
 				blinkTime = 27;
 			}
