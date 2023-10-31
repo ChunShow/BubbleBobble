@@ -25,8 +25,8 @@ public:
 	
 	Bubble shoot();
 
-	//  check weather player contacts a monster
-	void checkHeat(float box[2][2]);
+	//  check whether player contacts a monster
+	void checkhit(float box[2][2]);
 
 	//  draw player's left lives
 	void drawHeartPixel(float x, float y, int n, int i);
@@ -38,13 +38,13 @@ public:
 	float height;
 	float velocity;
 
-	/*  player's heat box setting
-		heatbox[0][0] : the left side of x coordinate
-		heatbox[0][1] : the right side of x coordinate
-		heatbox[1][0] : the bottom of y coordinate
-		heatbox[1][1] : the top of y coordinate
+	/*  player's hit box setting
+		hitbox[0][0] : the left side of x coordinate
+		hitbox[0][1] : the right side of x coordinate
+		hitbox[1][0] : the bottom of y coordinate
+		hitbox[1][1] : the top of y coordinate
 	*/  
-	float heatbox[2][2];
+	float hitbox[2][2];
 
 	//  blinkTime means a time for which player is blinking
 	int blinkTime;

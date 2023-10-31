@@ -6,10 +6,10 @@ Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 	position[1] = 0.0f;
 	switch (type)
 	case CREATURE: {
-		heatbox[0][0] = position[0] + 0.01f;
-		heatbox[0][1] = position[0] + 0.14f;
-		heatbox[1][0] = position[1];
-		heatbox[1][1] = position[1] + 0.13f;
+		hitbox[0][0] = position[0] + 0.01f;
+		hitbox[0][1] = position[0] + 0.14f;
+		hitbox[1][0] = position[1];
+		hitbox[1][1] = position[1] + 0.13f;
 		break;
 	}
 }
@@ -412,13 +412,13 @@ void Monster::setPosition(float x, float y) {
 	position[0] += x;
 	position[1] += y;
 
-	//  change monster's heatbox coordinate
+	//  change monster's hitbox coordinate
 	switch (type)
 	case CREATURE: {
-		heatbox[0][0] = position[0] + 0.01f;
-		heatbox[0][1] = position[0] + 0.14f;
-		heatbox[1][0] = position[1];
-		heatbox[1][1] = position[1] + 0.13f;
+		hitbox[0][0] = position[0] + 0.01f;
+		hitbox[0][1] = position[0] + 0.14f;
+		hitbox[1][0] = position[1];
+		hitbox[1][1] = position[1] + 0.13f;
 		break;
 	}
 }

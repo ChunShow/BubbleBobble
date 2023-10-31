@@ -28,25 +28,26 @@ void idle() {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
 		if (keystates[KEY::LEFT]) {
-			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT; //  the player's direction change
+			//  case of player's direction changes from RIGHT to LEFT
+			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT; 
 			else {
-				player.direction = KEY::LEFT;
 				if (player.state == FALL) player.setPosition(-0.015f, 0.0f);
 				else player.setPosition(-0.025f, 0.0f);
 				stage1.checkLEFT();
 			}
 		}
 		if (keystates[KEY::RIGHT]) {
-			if (player.direction == KEY::LEFT) player.direction = KEY::RIGHT; //  the player's direction change
+			//  case of player's direction changes from LEFT to RIGHT
+			if (player.direction == KEY::LEFT) player.direction = KEY::RIGHT;
 			else {
-				player.direction = KEY::RIGHT;
 				if (player.state == FALL) player.setPosition(0.015f, 0.0f);
 				else player.setPosition(0.025f, 0.0f);
 				stage1.checkRIGHT();
 			}
 		}
 		if (keystates[KEY::DOWN]) {
-			if (player.state != STAY) { //  if the player's state is JUMP or FALL
+			// case of player's state is JUMP or FALL
+			if (player.state != STAY) { 
 				player.state = FALL;
 				player.setPosition(0.0f, -0.01f);
 			}
@@ -112,7 +113,6 @@ void idle() {
 			}
 		}
 
-
 		startTime = endTime;
 		glutPostRedisplay();
 	}
@@ -144,11 +144,13 @@ void display() {
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	for (auto monster : creature) player.checkHeat(monster.heatbox);
+	for (auto monster : creature) player.checkhit(monster.hitbox);
 	player.drawPlayer();
+
 	for (int i = 0; i < bubbles.size(); i++) {
 		bubbles[i].draw();
 	}
+
 	for (auto monster : creature) monster.drawMonster();
 	stage1.drawMap();
 

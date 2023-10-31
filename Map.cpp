@@ -1,16 +1,42 @@
 #include "main.h"
-#include <iostream>
 
+//  initial setting of map
 Map::Map(int n) : stage(n) {}
 
 void Map::drawMap() {
+	//  draw map according to the stage
 	switch (stage)
 	case 1: {
 		drawStage1();
 		break;
 	}
 }
-//  set the border of block to distinguish the player's state
+
+void Map::drawBlock(float x, float y, float width, float height) {
+	setBorder(x, y, width);
+
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(x + width, y);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width, y - height);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(x, y - height);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);	
+}
+void Map::drawHard(float x, float y, float width, float height) {
+	setHard(x, y, width, height);
+
+	glBegin(GL_POLYGON);
+	glVertex2f(x, y);
+	glVertex2f(x + width, y);
+	glVertex2f(x + width, y - height);
+	glVertex2f(x, y - height);
+	glEnd();
+}
 void Map::setBorder(float x, float y, float width) {
 	border.push_back(vector<float>());
 	border.back().push_back(x);
@@ -19,31 +45,11 @@ void Map::setBorder(float x, float y, float width) {
 }
 void Map::setHard(float x, float y, float width, float height) {
 	setBorder(x, y, width);
-
 	borderHard.push_back(vector<float>());
 	borderHard.back().push_back(x);
 	borderHard.back().push_back(y);
 	borderHard.back().push_back(width);
 	borderHard.back().push_back(height);
-}
-void Map::drawBlock(float x, float y, float width, float height) {
-	setBorder(x, y, width);
-
-	glBegin(GL_POLYGON);
-	glVertex2f(x, y);
-	glVertex2f(x + width, y);
-	glVertex2f(x + width, y - height);
-	glVertex2f(x, y - height);
-	glEnd();
-}
-void Map::drawHard(float x, float y, float width, float height) {
-	setHard(x, y, width, height);
-	glBegin(GL_POLYGON);
-	glVertex2f(x, y);
-	glVertex2f(x + width, y);
-	glVertex2f(x + width, y - height);
-	glVertex2f(x, y - height);
-	glEnd();
 }
 
 void Map::drawStage1() {
@@ -88,9 +94,9 @@ bool Map::checkFALL() {
 	float x, y, width;
 	float pos[2];
 	/*
-		the player's x coordinate range
-		pos[0] means the left side of the player's bottom
-		pos[1] means the right side of the player's bottom
+		player's x coordinate range
+		pos[0] means the left side of player's bottom
+		pos[1] means the right side of player's bottom
 	*/
 	if (player.direction == RIGHT) {
 		pos[0] = player.position[0] + 0.02f;
@@ -104,11 +110,11 @@ bool Map::checkFALL() {
 		x = border[i][0];
 		y = border[i][1];
 		width = border[i][2];
-		//  check whether the player's left side or right side in the border's x coordinate range
+		//  check whether player's left side or right side in border's x coordinate range
 		if ((x <= pos[0] && pos[0] <= x + width) ||
 			(x <= pos[0] + 0.07f && pos[0] + 0.07f <= x + width) ||
 			(x <= pos[1] && pos[1] <= x + width)) {
-			//  check whether the player's y coordinate contacts the border's y coordinate
+			//  check whether player's y coordinate contacts border's y coordinate
 			if (y - 0.02f <= player.position[1] && player.position[1] <= y) {
 				player.position[1] = y;
 				player.state = STAY;
@@ -122,9 +128,9 @@ void Map::checkJUMP() {
 	float x, y, width, height;
 	float pos[2];
 	/*
-	the player's x coordinate range
-	pos[0] means the left side of the player's bottom
-	pos[1] means the right side of the player's bottom
+	player's x coordinate range
+	pos[0] means the left side of player's bottom
+	pos[1] means the right side of player's bottom
 	*/
 	if (player.direction == RIGHT) {
 		pos[0] = player.position[0] + 0.02f;
@@ -139,9 +145,9 @@ void Map::checkJUMP() {
 		y = borderHard[i][1];
 		width = borderHard[i][2];
 		height = borderHard[i][3];
-		//  check whether the player's left side or right side in the borderHard's x coordinate range
+		//  check whether player's left side or right side in borderHard's x coordinate range
 		if ((x <= pos[0] && pos[0] <= x + width) || (x <= pos[1] && pos[1] <= x + width)) {
-			//  check whether the player's height contacts the borderHard's y coordinate - height
+			//  check whether player's height contacts borderHard's (y coordinate - height)
 			if (y - height <= player.position[1] + player.height && player.position[1] + player.height <= y - height + 0.08f) {
 				player.position[1] = y - height - player.height;
 			}
@@ -152,9 +158,9 @@ void Map::checkLEFT() {
 	float x, y, width, height;
 	float pos[2];
 	/*
-	the player's x coordinate range
-	pos[0] means the left side of the player's bottom
-	pos[1] means the right side of the player's bottom
+	player's x coordinate range
+	pos[0] means the left side of player's bottom
+	pos[1] means the right side of player's bottom
 	*/
 	pos[0] = player.position[0] + 0.01f;
 	pos[1] = player.position[0] + 0.15f;
@@ -163,25 +169,24 @@ void Map::checkLEFT() {
 		y = borderHard[i][1];
 		width = borderHard[i][2];
 		height = borderHard[i][3];
-		//  check whether the player's height is in the borderHard's y coordinate range
+		//  check whether player's height is in borderHard's y coordinate range
 		if ((y - height <= player.position[1] && player.position[1] < y) ||
 			(y - height <= player.position[1] + 0.09f && player.position[1] + 0.09f <= y) ||
 			(y - height < player.position[1] + player.height && player.position[1] + player.height <= y)) {
-			//  check whether the player's left side contacts the borderHard's x coordinate + width
+			//  check whether player's left side contacts borderHard's (x coordinate + width)
 			if (x + width - 0.025f <= pos[0] && pos[0] <= x + width) {
 				player.position[0] = x + width;
 			}
 		}
 	}
 }
-
 void Map::checkRIGHT() {
 	float x, y, width, height;
 	float pos[2];
 	/*
-	the player's x coordinate range
-	pos[0] means the left side of the player's bottom
-	pos[1] means the right side of the player's bottom
+	player's x coordinate range
+	pos[0] means the left side of player's bottom
+	pos[1] means the right side of player's bottom
 	*/
 	pos[0] = player.position[0] + 0.02f;
 	pos[1] = player.position[0] + 0.16f;
@@ -190,34 +195,43 @@ void Map::checkRIGHT() {
 		y = borderHard[i][1];
 		width = borderHard[i][2];
 		height = borderHard[i][3];
-		//  check whether the player's height is in the borderHard's y coordinate range
+		//  check whether player's height is in borderHard's y coordinate range
 		if ((y - height <= player.position[1] && player.position[1] < y) ||
 			(y - height <= player.position[1] + 0.09f && player.position[1] + 0.09f <= y) ||
 			(y - height < player.position[1] + player.height && player.position[1] + player.height <= y)) {
-			//  check whether the player's left side contacts the borderHard's x coordinate + width
+			//  check whether player's left side contacts borderHard's (x coordinate + width)
 			if (x <= pos[1] && pos[1] <= x + 0.025f) {
 				player.position[0] = x - 0.17f;
 			}
 		}
 	}
 }
+
 bool Map::checkMonster(Monster monster) {
 	float x, y, width;
 	float pos[2];
+	/*
+	monster's x coordinate range
+	pos[0] means the left side of monster's bottom
+	pos[1] means the right side of monster's bottom
+	*/
 	pos[0] = monster.position[0] + 0.01f;
 	pos[1] = monster.position[0] + 0.16f;
 	for (auto i = 0; i < border.size(); i++) {
 		x = border[i][0];
 		y = border[i][1];
 		width = border[i][2];
-		//  check whether the monster's left side or right side in the border's x coordinate range
+		//  check whether monster's left side or right side in border's x coordinate range
 		if ((monster.direction == LEFT) && (x <= pos[0] && pos[0] <= x + width)) {
+			//  check whether monster's y coordinate contacts border's y coordinate
 			if (y - 0.02f <= monster.position[1] && monster.position[1] <= y) {
 				monster.position[1] = y;
 				return true;
 			}
 		}
+		//  check whether monster's left side or right side in border's x coordinate range
 		else if ((monster.direction == RIGHT) && (x <= pos[1] && pos[1] <= x + width)) {
+			//  check whether monster's y coordinate contacts border's y coordinate
 			if (y - 0.02f <= monster.position[1] && monster.position[1] <= y) {
 				monster.position[1] = y;
 				return true;
