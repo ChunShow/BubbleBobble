@@ -59,24 +59,6 @@ void idle() {
 			lastCreationTime = endTime;
 		}
 
-		for (auto& bubble : bubbles) {
-			float speed = bubble.speed;
-			float size = bubble.size;
-
-			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
-			
-			float x = bubble.pos[0]; float y = bubble.pos[1];
-			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
-			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
-			if (bubble.direction == D_UP) bubble.setPos(bubble.pos[0], bubble.pos[1] + speed * 0.1);
-			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
-
-			for (auto& monster : creature) {
-				if (bubble.characterCollisionCheck(monster.hitbox)) cout << "Collision!" << endl;
-			}
-			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
-		}
-
 		if (player.state == STAY) {
 			if (stage1.checkFALL()) {
 				player.state = FALL;
@@ -114,6 +96,29 @@ void idle() {
 					(*monster).setPosition(-0.015f, 0.0f);
 				}
 			}
+		}
+
+		for (auto& bubble : bubbles) {
+			float speed = bubble.speed;
+			float size = bubble.size;
+
+			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
+
+			float x = bubble.pos[0]; float y = bubble.pos[1];
+			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
+			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
+			if (bubble.direction == D_UP) bubble.setPos(bubble.pos[0], bubble.pos[1] + speed * 0.1);
+			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
+
+			for (auto& monster : creature) {
+				if (bubble.characterCollisionCheck(monster.hitbox)) {
+					bubble.direction = D_UP;
+					bubble.size = 1.0f;
+					bubble.capturing = true;
+					monster.caught = true;
+				}
+			}
+			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
 		}
 
 		startTime = endTime;
@@ -163,7 +168,17 @@ void display() {
 		}
 	}
 
-	for (auto monster : creature) monster.drawMonster();
+	int j = 0;
+	while (creature.begin() + j < creature.end()) {
+		if (!creature[j].caught) {
+			creature[j].drawMonster();
+			j++;
+		}
+		else {
+			creature.erase(creature.begin() + j);
+		}
+	}
+
 	stage1.drawMap();
 	glutSwapBuffers();
 }
