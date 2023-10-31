@@ -9,11 +9,12 @@ void Light::setLightID(int LID)
 	lightID = LID;
 }
 
-void Light::setPosition(float x, float y, float z)
+void Light::setPosition(float x, float y, float z, float w)
 {
 	pos[0] = x;
 	pos[1] = y;
 	pos[2] = z;
+	pos[3] = w;
 }
 
 void Light::setAmbient(float r, float g, float b, float a)

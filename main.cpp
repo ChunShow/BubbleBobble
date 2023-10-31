@@ -127,7 +127,7 @@ void display() {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-1.0f, 1.0f, -1.0f, 1.f, -1.0f, 50.f);
+	glOrtho(-1.0f, 1.0f, -1.0f, 1.f, -5.0f, 5.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0.0, 0.0, 1.0,
@@ -142,7 +142,7 @@ void display() {
 	light1.setAmbient(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setLightID(GL_LIGHT0);
-	light1.setPosition(50.0f, 50.0f, 50.0f);
+	light1.setPosition(10.0f, 10.0f, 10.0f, 1.0f);
 	light1.setSpecular(0.5f, 0.5f, 0.0f, 1.0f);
 	glEnable(GL_LIGHT0);
 	light1.draw();
@@ -150,6 +150,8 @@ void display() {
 	for (auto monster : creature) player.checkhit(monster.hitbox);
 	player.drawPlayer();
 
+
+	glColor3f(0.3f, 0.9f, 0.2f);
 	int i = 0;
 	while (bubbles.begin() + i < bubbles.end()) {
 		if (bubbles[i].alive) {
@@ -162,7 +164,6 @@ void display() {
 	}
 
 	for (auto monster : creature) monster.drawMonster();
-
 	stage1.drawMap();
 	glutSwapBuffers();
 }

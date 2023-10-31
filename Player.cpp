@@ -669,6 +669,7 @@ Bubble Player::shoot()
 		bubble.setDirection(DIRECT::D_RIGHT);
 	}
 	bubble.createdTime = clock();
+	bubble.draw();
 	return bubble;
 }
 

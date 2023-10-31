@@ -31,10 +31,10 @@ void Bubble::initialize()
 {
 	Material mtl;
 	mtl.setEmission(0.0f, 0.0f, 0.0f, 1.0f);
-	mtl.setAmbient(0.0215f, 0.1745f, 0.0215f, 0.55f);
-	mtl.setDiffuse(0.07568f, 0.61424f, 0.07568f, 0.55f);
-	mtl.setSpecular(0.633f, 0.727811f, 0.633f, 0.55f);
-	mtl.setShininess(76.8f);
+	mtl.setAmbient(0.0f, 0.1f, 0.06f, 1.0f);
+	mtl.setDiffuse(0.0f, 0.5098f, 0.5098f, 1.0f);
+	mtl.setSpecular(0.502f, 0.502f, 0.502f, 1.0f);
+	mtl.setShininess(32.0f);
 
 	setMaterial(mtl);
 
