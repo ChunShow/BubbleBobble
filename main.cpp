@@ -161,8 +161,6 @@ void display() {
 		}
 	}
 
-	cout << bubbles.size() << endl;
-
 	for (auto monster : creature) monster.drawMonster();
 
 	stage1.drawMap();
