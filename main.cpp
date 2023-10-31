@@ -15,12 +15,19 @@ clock_t endTime;
 Player player;
 Map stage1(1);
 vector<Bubble> bubbles;
+vector<Monster> creature;
 
 using namespace std;
 
 bool keystates[5];
 
 void initialize() {
+	for (int i = 0; i < 3; i++) {
+		creature.push_back(Monster(CREATURE));
+	}
+	creature[0].setPosition(0.0f, -0.53f);
+	creature[1].setPosition(0.0f, -0.11);
+	creature[2].setPosition(0.0f, 0.36f);
 }
 
 void idle() {
@@ -97,6 +104,24 @@ void idle() {
 			}
 		}
 
+		for (auto monster = creature.begin(); monster < creature.end(); monster++)  {
+			if ((*monster).direction == LEFT) {
+				if (stage1.checkMonster(*monster)) (*monster).setPosition(-0.015f, 0.0f);
+				else {
+					(*monster).direction = RIGHT;
+					(*monster).setPosition(0.015f, 0.0f);
+				}
+			}
+			else {
+				if (stage1.checkMonster(*monster)) (*monster).setPosition(0.015f, 0.0f);
+				else {
+					(*monster).direction = LEFT;
+					(*monster).setPosition(-0.015f, 0.0f);
+				}
+			}
+		}
+
+
 		startTime = endTime;
 		glutPostRedisplay();
 	}
@@ -128,12 +153,13 @@ void display() {
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	stage1.drawMap();
+	for (auto monster : creature) player.checkHeat(monster.heatbox);
 	player.drawPlayer();
-
 	for (int i = 0; i < bubbles.size(); i++) {
 		bubbles[i].draw();
 	}
+	for (auto monster : creature) monster.drawMonster();
+	stage1.drawMap();
 
 	glutSwapBuffers();
 }

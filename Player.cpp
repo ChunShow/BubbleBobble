@@ -1,14 +1,33 @@
 #include "main.h"
-#include "iostream"
 
-Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f) {
-	//  initial position of the player
+//  initial setting of player
+Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(5) {
 	position[0] = -0.9f; position[1] = -0.95f;
+	heatbox[0][0] = position[0] + 0.03f;
+	heatbox[0][1] = position[0] + 0.16f;
+	heatbox[1][0] = position[1];
+	heatbox[1][1] = position[1] + 0.15f;
 }
 
 void Player::drawPlayer() {
-	if (direction == LEFT) this->leftDragon();
-	else this->rightDragon();
+	if (blinkTime % 4 == 0 || blinkTime % 4 == 1) {
+		//  draw dragon facing left
+		if (direction == LEFT) {
+			if (state == JUMP) leftDragonJUMP();
+			else if (state == FALL) leftDragonFALL();
+			leftDragon();
+		}
+		//  draw dragon facing right
+		else {
+			if (state == JUMP) rightDragonJUMP();
+			else if (state == FALL) rightDragonFALL();
+			rightDragon();
+		}
+		if (blinkTime != 0) blinkTime--;
+	}
+	else blinkTime--;
+
+	drawLife();
 }
 void Player::drawPixel(float x, float y, int n) {
 	glBegin(GL_POLYGON);
@@ -105,7 +124,7 @@ void Player::leftDragon() {
 	drawPixel(0.08f, y, 1);
 
 	// green pixel
-	glColor3f(0.5f, 1.0f, 0.2f);
+	glColor3f(0.4f, 1.0f, 0.15f);
 	y = 0.0f;;
 	y += 0.01f;
 	drawPixel(0.11f, y, 4);
@@ -207,8 +226,8 @@ void Player::leftDragon() {
 	drawPixel(0.04f, y, 1);
 	drawPixel(0.06f, y, 2);
 
-	// red pixel
-	glColor3f(1.0f, 0.5f, 0.25f);
+	// orange pixel
+	glColor3f(1.0f, 0.4f, 0.2f);
 	y = 0.0f;
 	y += 0.01f;
 	drawPixel(0.01f, y, 3);
@@ -341,7 +360,7 @@ void Player::rightDragon() {
 	drawPixel(0.09f, y, 1);
 
 	// green pixel
-	glColor3f(0.5f, 1.0f, 0.2f);
+	glColor3f(0.4f, 1.0f, 0.15f);
 	y = 0.0f;
 	y += 0.01f;
 	drawPixel(0.03f, y, 4);
@@ -443,8 +462,8 @@ void Player::rightDragon() {
 	drawPixel(0.1f, y, 2);
 	drawPixel(0.13f, y, 1);
 
-	// red pixel
-	glColor3f(1.0f, 0.5f, 0.25f);
+	// orange pixel
+	glColor3f(1.0f, 0.4f, 0.2f);
 	y = 0.0f;
 	y += 0.01f;
 	drawPixel(0.07f, y, 4);
@@ -490,23 +509,147 @@ void Player::rightDragon() {
 	y += 0.01f;
 	drawPixel(0.09f, y, 1);
 }
+void Player::leftDragonJUMP() {
+	float y = 0.073f;
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+}
+void Player::rightDragonJUMP() {
+	float y =  0.073f;
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+}
+void Player::leftDragonFALL() {
+	float y = 0.074f;
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.04f, y, 1);
+	drawPixel(0.06f, y, 1);
+}
+void Player::rightDragonFALL() {
+	float y = 0.074f;
+	glColor3f(0.0f, 0.0f, 0.0f);
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	glColor3f(1.0f, 1.0f, 1.0f);
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+}
+
 void Player::setPosition(float x, float y) {
+	//  change player's x, y coordinates
 	position[0] += x;
 	position[1] += y;
-	//  when the player is out of the window, change the position of the player
-	//  the left side
+
+	//  when player is out of the window, change the position of player
+	//  out of the left side
 	if ((direction == KEY::LEFT) && (position[0] + 0.01f < -1.2f)) {
 		player.position[0] = 1.05f;
 	}
-	//  the right side
+	//  out of the right side
 	else if ((direction == KEY::RIGHT) && (position[0] + 0.16f > 1.2f)) {
 		player.position[0] = -1.18f;
 	}
 
-	//  when the player is dropped in the bottom hole
+	//  when player is dropped in the bottom hole
 	if (player.position[1] < -1.2f) {
 		player.position[1] = 1.0f;
 	}
+
+	//  change player's heatbox coordinate
+	if (direction == RIGHT) {
+		heatbox[0][0] = position[0] + 0.03f;
+		heatbox[0][1] = position[0] + 0.16f;
+	}
+	else {
+		heatbox[0][0] = position[0] + 0.01f;
+		heatbox[0][1] = position[0] + 0.14f;
+	}
+	heatbox[1][0] = position[1];
+	heatbox[1][1] = position[1] + 0.15f;
+
 }
 
 Bubble Player::shoot()
@@ -529,3 +672,37 @@ Bubble Player::shoot()
 	return bubble;
 }
 
+void Player::checkHeat(float box[2][2]) {
+	//  float box[2][2] means a Monster's heat box
+	//  only check when blinkTime is 0 
+	if (blinkTime == 0) {
+		//  check weather player's heat box contacts Monster's heat box
+		if ((box[0][0] <= player.heatbox[0][0] && player.heatbox[0][0] <= box[0][1]) ||
+			(box[0][0] <= player.heatbox[0][1] && player.heatbox[0][1] <= box[0][1])) {
+			if ((box[1][0] <= player.heatbox[1][0] && player.heatbox[1][0] <= box[1][1]) ||
+				(box[1][0] <= player.heatbox[1][1] && player.heatbox[1][1] <= box[1][1])) {
+				//  if player's heat box contacts Monster's heat box, decrease the number of life and generate blinkTime
+				life--;
+				blinkTime = 27;
+			}
+		}
+	}
+}
+void Player::drawHeartPixel(float x, float y, int n, int i) {
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.99f + i * 0.08f + x, -0.995f + y);
+	glVertex2f(-0.99f + i * 0.08f + x, -0.995f + y + 0.01f);
+	glVertex2f(-0.99f + i * 0.08f + x + n * 0.01f, -0.995f + y + 0.01f);
+	glVertex2f(-0.99f + i * 0.08f + x + n * 0.01f, -0.995f + y);;
+	glEnd();
+}
+void Player::drawLife() {
+	glColor3f(1.0f, 0.0f, 0.0f);
+	for (int i = 0; i < life; i++) {
+		drawHeartPixel(0.02f, 0.00f, 1, i);
+		drawHeartPixel(0.01f, 0.01f, 3, i);
+		drawHeartPixel(0.00f, 0.02f, 5, i);
+		drawHeartPixel(0.01f, 0.03f, 1, i);
+		drawHeartPixel(0.03f, 0.03f, 1, i);
+	}
+}

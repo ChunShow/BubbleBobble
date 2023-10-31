@@ -4,7 +4,27 @@
 Map::Map(int n) : stage(n) {}
 
 void Map::drawMap() {
-	if (stage == 1) drawStage1();
+	switch (stage)
+	case 1: {
+		drawStage1();
+		break;
+	}
+}
+//  set the border of block to distinguish the player's state
+void Map::setBorder(float x, float y, float width) {
+	border.push_back(vector<float>());
+	border.back().push_back(x);
+	border.back().push_back(y);
+	border.back().push_back(width);
+}
+void Map::setHard(float x, float y, float width, float height) {
+	setBorder(x, y, width);
+
+	borderHard.push_back(vector<float>());
+	borderHard.back().push_back(x);
+	borderHard.back().push_back(y);
+	borderHard.back().push_back(width);
+	borderHard.back().push_back(height);
 }
 void Map::drawBlock(float x, float y, float width, float height) {
 	setBorder(x, y, width);
@@ -18,7 +38,6 @@ void Map::drawBlock(float x, float y, float width, float height) {
 }
 void Map::drawHard(float x, float y, float width, float height) {
 	setHard(x, y, width, height);
-
 	glBegin(GL_POLYGON);
 	glVertex2f(x, y);
 	glVertex2f(x + width, y);
@@ -37,6 +56,12 @@ void Map::drawStage1() {
 	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
 
+	//  the side layer
+	drawHard(-1.2f, 1.0f, 0.25f, 1.16f);
+	drawHard(-1.2f, -0.53f, 0.25f, 0.47f);
+	drawHard(0.95f, 1.0f, 0.25f, 1.16f);
+	drawHard(0.95f, -0.53f, 0.25f, 0.47f);
+
 	//  the first layer
 	glColor3f(0.5f, 0.5f, 0.5f);
 	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
@@ -54,31 +79,9 @@ void Map::drawStage1() {
 
 	//  the middle object
 	glColor3f(0.7f, 0.3f, 0.3f);
-	drawHard(-0.4f, 0.36f, 0.8f, 0.10f);
-	drawHard(-0.4f, 0.66f, 0.10f, 0.35f);
-	drawHard(0.3f, 0.66f, 0.10f, 0.35f);
-
-	glColor3f(0.0f, 1.0f, 1.0f);
-	drawHard(-1.2f, 1.0f, 0.25f, 1.16f);
-	drawHard(-1.2f, -0.53f, 0.25f, 0.47f);
-	drawHard(0.95f, 1.0f, 0.25f, 1.16f);
-	drawHard(0.95f, -0.53f, 0.25f, 0.47f);
-}
-//  set the border of block to distinguish the player's state
-void Map::setBorder(float x, float y, float width) {
-	border.push_back(vector<float>());
-	border.back().push_back(x);
-	border.back().push_back(y);
-	border.back().push_back(width);
-}
-void Map::setHard(float x, float y, float width, float height) {
-	setBorder(x, y, width);
-
-	borderHard.push_back(vector<float>());
-	borderHard.back().push_back(x);
-	borderHard.back().push_back(y);
-	borderHard.back().push_back(width);
-	borderHard.back().push_back(height);
+	drawHard(-0.3f, 0.36f, 0.6f, 0.10f);
+	drawHard(-0.4f, 0.66f, 0.10f, 0.40f);
+	drawHard(0.3f, 0.66f, 0.10f, 0.40f);
 }
 
 bool Map::checkFALL() {
@@ -196,4 +199,29 @@ void Map::checkRIGHT() {
 			}
 		}
 	}
+}
+bool Map::checkMonster(Monster monster) {
+	float x, y, width;
+	float pos[2];
+	pos[0] = monster.position[0] + 0.01f;
+	pos[1] = monster.position[0] + 0.16f;
+	for (auto i = 0; i < border.size(); i++) {
+		x = border[i][0];
+		y = border[i][1];
+		width = border[i][2];
+		//  check whether the monster's left side or right side in the border's x coordinate range
+		if ((monster.direction == LEFT) && (x <= pos[0] && pos[0] <= x + width)) {
+			if (y - 0.02f <= monster.position[1] && monster.position[1] <= y) {
+				monster.position[1] = y;
+				return true;
+			}
+		}
+		else if ((monster.direction == RIGHT) && (x <= pos[1] && pos[1] <= x + width)) {
+			if (y - 0.02f <= monster.position[1] && monster.position[1] <= y) {
+				monster.position[1] = y;
+				return true;
+			}
+		}
+	}
+	return false;
 }
