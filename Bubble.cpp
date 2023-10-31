@@ -82,19 +82,26 @@ bool Bubble::characterCollisionCheck(float hitbox[2][2])
 bool Bubble::mapCollision(vector<vector<float>> borderHard)
 {
 	float x, y, width, height;
-	float r = size * 0.1;
+	float r = size*0.1f;
+	float b_x=0.0f, b_y=0.0f;
 	for (const auto& border : borderHard) {
 		x = border[0]; y = border[1]; width = border[2]; height = border[3];
-		if (abs(y - pos[1]) < r || abs(y - height - pos[1]) < r) {
-			if (x-r<pos[0] && pos[0]<x) {
-				size = 1.0f;
-				pos[0] = x - 0.1;
-				return true;
-			}
-			if (x+width<pos[0] && pos[0]<x+width+r) {
-				size = 1.0f;
-				pos[0] = x +width+ 0.1;
-				return true;
+		b_x = pos[0]; b_y = pos[1];
+		if (y - height - r < b_y && b_y  < y + r) {
+			if (x - r < b_x && b_x< x + width + r) {
+				switch (direction) {
+				case(D_LEFT):
+					size = 1.0f;
+					pos[0] = x + width + 0.1;
+					return true;
+				case(D_RIGHT):
+					size = 1.0f;
+					pos[0] = x - 0.1;
+					return true;
+				case(D_UP):
+					pos[1] = y - height - 0.1;
+					return true;
+				}
 			}
 		}
 	}

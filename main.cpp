@@ -64,11 +64,12 @@ void idle() {
 			float size = bubble.size;
 
 			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
-			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
+			
 			float x = bubble.pos[0]; float y = bubble.pos[1];
 			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
 			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
-			if (bubble.direction == D_UP) bubble.setPos(x, y + speed * 0.1);
+			if (bubble.direction == D_UP) bubble.setPos(bubble.pos[0], bubble.pos[1] + speed * 0.1);
+			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
 
 			/*for (auto& monster : creature) {
 				if (bubble.characterCollisionCheck(monster.hitbox)) cout << "Collision!" << endl;
