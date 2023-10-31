@@ -1,7 +1,10 @@
 #include "main.h"
 
 //  initial setting of map
-Map::Map(int n) : stage(n) {}
+Map::Map(int n) {
+	stage = n;
+	drawn = false; 
+}
 
 void Map::drawMap() {
 	//  draw map according to the stage
@@ -13,7 +16,7 @@ void Map::drawMap() {
 }
 
 void Map::drawBlock(float x, float y, float width, float height) {
-	setBorder(x, y, width);
+	if (!drawn) setBorder(x, y, width);
 
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -28,7 +31,7 @@ void Map::drawBlock(float x, float y, float width, float height) {
 	glDisable(GL_TEXTURE_2D);	
 }
 void Map::drawHard(float x, float y, float width, float height) {
-	setHard(x, y, width, height);
+	if (!drawn) setHard(x, y, width, height);
 
 	glBegin(GL_POLYGON);
 	glVertex2f(x, y);
@@ -88,6 +91,8 @@ void Map::drawStage1() {
 	drawHard(-0.3f, 0.36f, 0.6f, 0.10f);
 	drawHard(-0.4f, 0.66f, 0.10f, 0.40f);
 	drawHard(0.3f, 0.66f, 0.10f, 0.40f);
+
+	drawn = true;
 }
 
 bool Map::checkFALL() {
@@ -182,6 +187,7 @@ void Map::checkLEFT() {
 		}
 	}
 }
+
 void Map::checkRIGHT() {
 	float x, y, width, height;
 	float pos[2];

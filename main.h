@@ -9,6 +9,8 @@
 #include "keyFunction.h"
 #include "Bubble.h"
 
+#include <ctime>
+
 using namespace std;
 
 #define WINDOW_X 400

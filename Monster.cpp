@@ -12,6 +12,7 @@ Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 		hitbox[1][1] = position[1] + 0.13f;
 		break;
 	}
+	caught = false;
 }
 
 void Monster::drawMonster() {

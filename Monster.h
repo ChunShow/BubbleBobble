@@ -29,4 +29,6 @@ public:
 		hitbox[1][1] : the top of y coordinate
 	*/
 	float hitbox[2][2];
+
+	bool caught;
 };

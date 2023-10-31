@@ -35,6 +35,9 @@ public:
 
 	//  stage means the stage number
 	int stage;
+
+	// true if the map has been drawn
+	bool drawn;
 	
 	//  border has information of map's layers on which player's state will be STAY from FALL
 	vector<vector<float>> border;
