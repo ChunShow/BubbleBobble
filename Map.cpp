@@ -174,6 +174,7 @@ void Map::checkLEFT() {
 		}
 	}
 }
+
 void Map::checkRIGHT() {
 	float x, y, width, height;
 	float pos[2];

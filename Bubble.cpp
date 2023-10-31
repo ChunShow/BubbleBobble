@@ -1,4 +1,9 @@
-#include "Bubble.h"
+#include "main.h"
+
+Bubble::Bubble()
+{
+	capturing = false;
+}
 
 void Bubble::setPos(float x, float y)
 {
@@ -38,6 +43,21 @@ void Bubble::initialize()
 
 	setPos(0.0f, 0.0f);
 	setSize(1.0);
+}
+
+bool Bubble::checkVerticalBoundary()
+{
+	return (pos[0] - size * 0.1 < -0.95f || pos[0] + size * 0.1 > 0.95f);
+}
+
+bool Bubble::isGrown()
+{
+	return size == 1.0f;
+}
+
+bool Bubble::isCapturing()
+{
+	return capturing;
 }
 
 void Bubble::draw()

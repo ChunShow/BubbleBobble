@@ -2,12 +2,6 @@
 #include <ctime>
 #include <iostream>
 
-#define WINDOW_X 400
-#define WINDOW_Y 100
-
-#define WINDOW_WIDTH 640		// window's width
-#define WINDOW_HEIGHT 640		// window's height
-
 clock_t startTime = clock();
 clock_t lastCreationTime = clock();
 clock_t endTime;
@@ -58,13 +52,6 @@ void idle() {
 			}
 		}
 		if (keystates[KEY::SPACEBAR] && (endTime - lastCreationTime) > 300) {
-			/*Bubble bubble;
-			bubble.initialize();
-			cout << player.position[0] << endl;
-			bubble.setPos(player.position[0], player.position[1]);
-			bubble.setSize(0.1f);
-			if (player.direction == KEY::LEFT) bubble.setDirection(DIRECT::D_LEFT);
-			else bubble.setDirection(DIRECT::D_RIGHT);*/
 
 			Bubble bubble = player.shoot();
 			bubbles.push_back(bubble);
@@ -72,10 +59,14 @@ void idle() {
 		}
 
 		for (auto& bubble : bubbles) {
-			float speed = 0.06;
+			float speed = 0.04;
 			float size = bubble.size;
 			float x = bubble.pos[0]; float y = bubble.pos[1];
-			bubble.setSize(min(bubble.size + 0.1, 1.0));
+			bubble.setSize(min(bubble.size + 0.05, 1.0));
+			if (bubble.checkVerticalBoundary() || bubble.isGrown()) {
+				bubble.size = 1;
+				bubble.direction = D_UP;
+			}
 			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
 			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
 			if (bubble.direction == D_UP) bubble.setPos(x, y + speed);
@@ -148,7 +139,7 @@ void display() {
 	light1.setAmbient(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setLightID(GL_LIGHT0);
-	light1.setPosition(3.0f, 3.0f, 3.0f);
+	light1.setPosition(0.0f, 0.0f, 50.0f);
 	light1.setSpecular(0.5f, 0.5f, 0.0f, 1.0f);
 	glEnable(GL_LIGHT0);
 	light1.draw();
