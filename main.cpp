@@ -71,9 +71,10 @@ void idle() {
 			if (bubble.direction == D_UP) bubble.setPos(bubble.pos[0], bubble.pos[1] + speed * 0.1);
 			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
 
-			/*for (auto& monster : creature) {
+			for (auto& monster : creature) {
 				if (bubble.characterCollisionCheck(monster.hitbox)) cout << "Collision!" << endl;
-			}*/
+			}
+			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
 		}
 
 		if (player.state == STAY) {
@@ -149,9 +150,18 @@ void display() {
 	for (auto monster : creature) player.checkhit(monster.hitbox);
 	player.drawPlayer();
 
-	for (int i = 0; i < bubbles.size(); i++) {
-		bubbles[i].draw();
+	int i = 0;
+	while (bubbles.begin() + i < bubbles.end()) {
+		if (bubbles[i].alive) {
+			bubbles[i].draw();
+			i++;
+		}
+		else {
+			bubbles.erase(bubbles.begin() + i);
+		}
 	}
+
+	cout << bubbles.size() << endl;
 
 	for (auto monster : creature) monster.drawMonster();
 

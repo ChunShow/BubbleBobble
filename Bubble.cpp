@@ -6,6 +6,7 @@ Bubble::Bubble()
 {
 	capturing = false;
 	speed = 0.1f;
+	alive = true;
 }
 
 void Bubble::setPos(float x, float y)
@@ -111,6 +112,11 @@ bool Bubble::mapCollision(vector<vector<float>> borderHard)
 float Bubble::getRadius()
 {
 	return size * 0.1;
+}
+
+clock_t Bubble::getCreatedTime()
+{
+	return createdTime;
 }
 
 void Bubble::draw()

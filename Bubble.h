@@ -23,12 +23,15 @@ public:
 	bool characterCollisionCheck(float hitbox[2][2]);
 	bool mapCollision(vector<vector<float>> borderHard);
 	float getRadius();
+	clock_t getCreatedTime();
 	void draw();
 
 	float size;
 	float speed;
 	float pos[2];
 	bool capturing;
+	bool alive;
+	clock_t createdTime;
 	DIRECT direction;
 	Material mtl;
 
