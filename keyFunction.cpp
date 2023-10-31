@@ -46,7 +46,6 @@ void keyDown(unsigned char key, int x, int y) {
 		break;
 	}
 }
-
 void keyUp(unsigned char key, int x, int y) {
 	switch (key) {
 	case spacebar:

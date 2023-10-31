@@ -8,13 +8,13 @@ public:
 	//	int n means the stage of map
 	Map(int n);
 
-	//  draws pixel image of map according to the stage
+	//  draw pixel image of map according to the stage
 	void drawMap();
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
 	    drawHard draws hard block which player can't pass
 		setBorder stores block information in border
-		setHard stores hard block information in borderHard
+		setHard stores hard block information in borderHard and block information in border
 	*/
 	void drawBlock(float x, float y, float width, float height);
 	void drawHard(float x, float y, float width, float height);
@@ -24,7 +24,7 @@ public:
 	//  stages' pixel image setting
 	void drawStage1();
 
-	//  check weather player's movement is allowed or not
+	//  check whether player's movement is allowed or not
 	bool checkFALL();
 	void checkJUMP();
 	void checkLEFT();

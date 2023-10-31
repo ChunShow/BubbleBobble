@@ -1,6 +1,6 @@
 #pragma once
 #include <GL/freeglut.h>
-using namespace std;
+#include <FreeImage.h>
 
 #include "iostream"
 #include "Player.h"
@@ -8,6 +8,8 @@ using namespace std;
 #include "Map.h"
 #include "keyFunction.h"
 #include "Bubble.h"
+
+using namespace std;
 
 #define WINDOW_X 400
 #define WINDOW_Y 100
@@ -18,3 +20,10 @@ using namespace std;
 extern Player player;
 extern vector<Monster> creature;
 extern bool keystates[5];
+
+extern GLuint textureID;
+extern GLubyte* textureData;
+extern int imageWidth, imageHeight;
+FIBITMAP* createBitMap(char const* filename);
+void generateTexture();
+void initTexture();

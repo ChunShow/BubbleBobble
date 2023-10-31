@@ -25,7 +25,7 @@ public:
 	
 	Bubble shoot();
 
-	//  check weather player contacts a monster
+	//  check whether player contacts a monster
 	void checkhit(float box[2][2]);
 
 	//  draw player's left lives

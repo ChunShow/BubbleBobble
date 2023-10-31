@@ -676,7 +676,7 @@ void Player::checkhit(float box[2][2]) {
 	//  float box[2][2] means a Monster's hit box
 	//  only check when blinkTime is 0 
 	if (blinkTime == 0) {
-		//  check weather player's hit box contacts Monster's hit box
+		//  check whether player's hit box contacts Monster's hit box
 		if ((box[0][0] <= player.hitbox[0][0] && player.hitbox[0][0] <= box[0][1]) ||
 			(box[0][0] <= player.hitbox[0][1] && player.hitbox[0][1] <= box[0][1])) {
 			if ((box[1][0] <= player.hitbox[1][0] && player.hitbox[1][0] <= box[1][1]) ||
@@ -688,6 +688,7 @@ void Player::checkhit(float box[2][2]) {
 		}
 	}
 }
+
 void Player::drawHeartPixel(float x, float y, int n, int i) {
 	glBegin(GL_POLYGON);
 	glVertex2f(-0.99f + i * 0.08f + x, -0.995f + y);
