@@ -124,6 +124,7 @@ bool Map::checkFALL() {
 	}
 	return true;
 }
+
 void Map::checkJUMP() {
 	float x, y, width, height;
 	float pos[2];
@@ -154,6 +155,7 @@ void Map::checkJUMP() {
 		}
 	}
 }
+
 void Map::checkLEFT() {
 	float x, y, width, height;
 	float pos[2];

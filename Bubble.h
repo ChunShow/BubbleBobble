@@ -14,8 +14,10 @@ public:
 	void setDirection(DIRECT d);
 	void initialize();
 	bool checkVerticalBoundary();
+	bool checkUpperBoundary();
 	bool isGrown();
 	bool isCapturing();
+	bool characterCollisionCheck(float hitbox[2][2]);
 	void draw();
 
 	float size;

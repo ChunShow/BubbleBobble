@@ -32,6 +32,7 @@ void Monster::drawPixel(float x, float y, int n) {
 	glVertex2f(position[0] + x + n * 0.01f, position[1] + y);
 	glEnd();
 }
+
 void Monster::leftCreature() {
 	//  black
 	glColor3f(0.0f, 0.0f, 0.0f);
