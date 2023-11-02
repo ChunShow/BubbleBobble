@@ -1,6 +1,5 @@
 #include "main.h"
 #include <ctime>
-#include <iostream>
 
 clock_t startTime = clock();
 clock_t lastCreationTime = clock();
@@ -11,9 +10,12 @@ Map stage1(1);
 vector<Bubble> bubbles;
 vector<Monster> creature;
 
-using namespace std;
+Texture stoneTexture(STONE);
+Texture brickTexture(BRICK);
+Texture defaultTexture;
 
 bool keystates[5];
+int n = 1;
 
 void initialize() {
 	for (int i = 0; i < 3; i++) {
@@ -22,6 +24,10 @@ void initialize() {
 	creature[0].setPosition(0.0f, -0.53f);
 	creature[1].setPosition(0.0f, -0.11);
 	creature[2].setPosition(0.0f, 0.36f);
+
+	stoneTexture.initTexture();
+	brickTexture.initTexture();
+	defaultTexture.initTexture();
 }
 
 void idle() {
@@ -151,9 +157,9 @@ void display() {
 	light1.setSpecular(0.5f, 0.5f, 0.0f, 1.0f);
 	glEnable(GL_LIGHT0);
 	light1.draw();
+
 	for (auto monster : creature) player.checkhit(monster.hitbox);
 	player.drawPlayer();
-
 
 	glColor3f(0.3f, 0.9f, 0.2f);
 	int i = 0;
@@ -178,7 +184,7 @@ void display() {
 		}
 	}
 
-	stage1.drawMap();
+	stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
 
 	glutSwapBuffers();
 }
@@ -193,7 +199,6 @@ int main(int argc, char** argv) {
 
 	initialize();
 
-	initTexture();
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyDown);
 	glutKeyboardUpFunc(keyUp);

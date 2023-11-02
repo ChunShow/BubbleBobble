@@ -1,6 +1,5 @@
 #pragma once
 #include <GL/freeglut.h>
-#include <FreeImage.h>
 
 #include "iostream"
 #include "Player.h"
@@ -23,6 +22,4 @@ extern Player player;
 extern vector<Monster> creature;
 extern bool keystates[5];
 
-extern GLuint stoneTexture;
-extern GLuint brickTexture;
 void initTexture();

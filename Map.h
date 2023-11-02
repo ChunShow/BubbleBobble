@@ -1,15 +1,15 @@
 #pragma once
 #include <vector>
-using namespace std;
+#include "Texture.h"
 
 class Map {
 public:
 	//  constructor
-	//	int n means the stage of map
-	Map(int n);
+	//	int level means the stage of map
+	Map(int level);
 
 	//  draw pixel image of map according to the stage
-	void drawMap();
+	void drawMap(Texture texture1, Texture texture2, Texture texture3);
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
 	    drawHard draws hard block which player can't pass
@@ -22,7 +22,7 @@ public:
 	void setHard(float x, float y, float width, float height);
 
 	//  stages' pixel image setting
-	void drawStage1();
+	void drawStage1(Texture texture1, Texture texture2, Texture texture3);
 
 	//  check whether player's movement is allowed or not
 	bool checkFALL();
@@ -33,7 +33,7 @@ public:
 	//  restrict monster's movement range
 	bool checkMonster(Monster monster);
 
-	//  stage means the stage number
+	//  stage means the stage level
 	int stage;
 
 	// true if the map has been drawn

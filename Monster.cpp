@@ -4,8 +4,8 @@
 Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 	position[0] = 0.0f;
 	position[1] = 0.0f;
-	switch (type)
-	case CREATURE: {
+	switch (type) {
+	case CREATURE:
 		hitbox[0][0] = position[0] + 0.01f;
 		hitbox[0][1] = position[0] + 0.14f;
 		hitbox[1][0] = position[1];
@@ -17,12 +17,13 @@ Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 
 void Monster::drawMonster() {
 	//  draw monster according to the type
-	switch (type)
-	case CREATURE: {
+	switch (type) {
+	case CREATURE:
 		//  draw creature facing left
 		if (direction == LEFT) leftCreature();
 		//  draw creature facing right
 		else rightCreature();
+		break;
 	}
 }
 void Monster::drawPixel(float x, float y, int n) {
@@ -415,8 +416,8 @@ void Monster::setPosition(float x, float y) {
 	position[1] += y;
 
 	//  change monster's hitbox coordinate
-	switch (type)
-	case CREATURE: {
+	switch (type) {
+	case CREATURE:
 		hitbox[0][0] = position[0] + 0.01f;
 		hitbox[0][1] = position[0] + 0.14f;
 		hitbox[1][0] = position[1];

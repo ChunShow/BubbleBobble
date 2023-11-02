@@ -1,16 +1,16 @@
 #include "main.h"
 
 //  initial setting of map
-Map::Map(int n) {
-	stage = n;
+Map::Map(int level) {
+	stage = level;
 	drawn = false; 
 }
 
-void Map::drawMap() {
-	//  draw map according to the stage
-	switch (stage)
-	case 1: {
-		drawStage1();
+void Map::drawMap(Texture texture1, Texture texture2, Texture texture3) {
+	//  draw map according to the level of stage
+	switch (stage) {
+	case 1:
+		drawStage1(texture1, texture2, texture3);
 		break;
 	}
 }
@@ -70,12 +70,12 @@ void Map::setHard(float x, float y, float width, float height) {
 	borderHard.back().push_back(height);
 }
 
-void Map::drawStage1() {
+void Map::drawStage1(Texture texture1, Texture texture2, Texture texture3) {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glBindTexture(GL_TEXTURE_2D, brickTexture);
 
 	//  the bottom layer
+	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
 	drawHard(-1.2f, -0.95f, 1.0f, 0.25f);
 	drawHard(0.2f, -0.95f, 1.0f, 0.25f);
 
@@ -84,12 +84,14 @@ void Map::drawStage1() {
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
 
 	//  the side layer
+	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
 	drawHard(-1.2f, 1.0f, 0.25f, 1.16f);
 	drawHard(-1.2f, -0.53f, 0.25f, 0.47f);
 	drawHard(0.95f, 1.0f, 0.25f, 1.16f);
 	drawHard(0.95f, -0.53f, 0.25f, 0.47f);
 
 	//  the first layer
+	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
 	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
 	drawBlock(0.7f, -0.53f, 0.5f, 0.05f);
 	drawBlock(-0.4f, -0.53f, 0.80f, 0.05f);
@@ -104,7 +106,7 @@ void Map::drawStage1() {
 	drawBlock(0.7f, 0.31f, 0.5f, 0.05f);
 
 	//  the middle object
-	glBindTexture(GL_TEXTURE_2D, stoneTexture);
+	glBindTexture(GL_TEXTURE_2D, texture2.getTextureID());
 	drawHard(-0.4f, 0.66f, 0.10f, 0.40f);
 	drawHard(-0.3f, 0.36f, 0.6f, 0.10f);
 	drawHard(0.3f, 0.66f, 0.10f, 0.40f);
@@ -147,7 +149,6 @@ bool Map::checkFALL() {
 	}
 	return true;
 }
-
 void Map::checkJUMP() {
 	float x, y, width, height;
 	float pos[2];
@@ -178,7 +179,6 @@ void Map::checkJUMP() {
 		}
 	}
 }
-
 void Map::checkLEFT() {
 	float x, y, width, height;
 	float pos[2];
@@ -205,7 +205,6 @@ void Map::checkLEFT() {
 		}
 	}
 }
-
 void Map::checkRIGHT() {
 	float x, y, width, height;
 	float pos[2];
