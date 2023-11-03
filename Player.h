@@ -50,5 +50,4 @@ public:
 	int blinkTime;
 	//  life means the number of left lives of player
 	int life;
-	float angle;
 };

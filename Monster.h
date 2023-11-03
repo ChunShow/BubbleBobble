@@ -9,6 +9,7 @@ public:
 
 	//  draw monster's pixel image according to the type
 	void drawMonster();
+	void drawRotate();
 
 	//  monster pixel image setting
 	void drawPixel(float x, float y, int n);
@@ -17,6 +18,13 @@ public:
 
 	//  change monster's position (x, y coordinates)
 	void setPosition(float x, float y);
+	void setHitbox();
+	void caughtBubble(float bubblePos[2]);
+	void setCaught();
+	bool getCaught();
+	void setRotate();
+	bool getRotate();
+	float getTime();
 
 	MONSTER type;
 	KEY direction;
@@ -31,4 +39,7 @@ public:
 	float hitbox[2][2];
 
 	bool caught;
+	bool rotation;
+	float angle;
+	float time;
 };

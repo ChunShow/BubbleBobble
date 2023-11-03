@@ -4,18 +4,15 @@
 Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 	position[0] = 0.0f;
 	position[1] = 0.0f;
-	switch (type) {
-	case CREATURE:
-		hitbox[0][0] = position[0] + 0.01f;
-		hitbox[0][1] = position[0] + 0.14f;
-		hitbox[1][0] = position[1];
-		hitbox[1][1] = position[1] + 0.13f;
-		break;
-	}
+	setHitbox();
 	caught = false;
+	rotation = false;
+	angle = 0.0f;
 }
 
 void Monster::drawMonster() {
+	glPushMatrix();
+	drawRotate();
 	//  draw monster according to the type
 	switch (type) {
 	case CREATURE:
@@ -25,6 +22,7 @@ void Monster::drawMonster() {
 		else rightCreature();
 		break;
 	}
+	glPopMatrix();
 }
 void Monster::drawPixel(float x, float y, int n) {
 	glBegin(GL_POLYGON);
@@ -416,6 +414,10 @@ void Monster::setPosition(float x, float y) {
 	position[1] += y;
 
 	//  change monster's hitbox coordinate
+	setHitbox();
+}
+
+void Monster::setHitbox() {
 	switch (type) {
 	case CREATURE:
 		hitbox[0][0] = position[0] + 0.01f;
@@ -423,5 +425,45 @@ void Monster::setPosition(float x, float y) {
 		hitbox[1][0] = position[1];
 		hitbox[1][1] = position[1] + 0.13f;
 		break;
+	default:
+		hitbox[0][0] = position[0];
+		hitbox[0][1] = position[0] + 0.15f;
+		hitbox[1][0] = position[1];
+		hitbox[1][1] = position[1] + 0.15f;
+		break;
 	}
+}
+
+void Monster::caughtBubble(float bubblePos[2]) {
+	if (getCaught()) {
+		position[0] = bubblePos[0] - 0.1f;
+		position[1] = bubblePos[1] - 0.1f;
+	}
+}
+void Monster::setCaught() {
+	caught = true;
+	setRotate();
+}
+bool Monster::getCaught() {
+	return caught;
+}
+void Monster::setRotate() {
+	rotation = !rotation;
+	if (time == 0.0f) time = 50.0f;
+}
+bool Monster::getRotate() {
+	return rotation;
+}
+void Monster::drawRotate() {
+	if (getRotate()) {
+		time -= 1.0f;
+		angle += 5.0f;
+		glTranslatef(position[0] + 0.07f, position[1] + 0.07f, 0.0f);
+		glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		glTranslatef(-position[0] - 0.07f, -position[1] - 0.07f, 0.0f);
+
+	}
+}
+float Monster::getTime() {
+	return time;
 }

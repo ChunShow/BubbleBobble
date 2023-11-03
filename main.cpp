@@ -116,16 +116,16 @@ void idle() {
 			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
 
 			for (auto& monster : creature) {
-				if (bubble.characterCollisionCheck(monster.hitbox)) {
+				if (bubble.characterCollisionCheck(monster.hitbox) && !monster.getCaught()) {
 					bubble.direction = D_UP;
 					bubble.size = 1.0f;
 					bubble.capturing = true;
-					monster.caught = true;
+					monster.setCaught();
+					monster.caughtBubble(bubble.pos);
 				}
 			}
 			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
 		}
-		player.angle += 5.0f;
 		startTime = endTime;
 		glutPostRedisplay();
 	}
@@ -174,7 +174,11 @@ void display() {
 
 	int j = 0;
 	while (creature.begin() + j < creature.end()) {
-		if (!creature[j].caught) {
+		if (!creature[j].getCaught()) {
+			creature[j].drawMonster();
+			j++;
+		}
+		else if (creature[j].getTime() > 0) {
 			creature[j].drawMonster();
 			j++;
 		}
@@ -187,7 +191,6 @@ void display() {
 
 	glutSwapBuffers();
 }
-
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
