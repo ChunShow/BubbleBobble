@@ -182,11 +182,13 @@ void Map::checkJUMP() {
 void Map::checkLEFT() {
 	float x, y, width, height;
 	float pos[2];
+
 	/*
 	player's x coordinate range
 	pos[0] means the left side of player's bottom
 	pos[1] means the right side of player's bottom
 	*/
+
 	pos[0] = player.position[0] + 0.01f;
 	pos[1] = player.position[0] + 0.15f;
 	for (auto i = 0; i < borderHard.size(); i++) {
