@@ -668,11 +668,11 @@ Bubble Player::shoot()
 
 	bubble.setSize(0.1f);
 	if (direction == KEY::LEFT) {
-		bubble.setPos(x, y + 0.1);
+		bubble.setPos(x, y + 0.1f);
 		bubble.setDirection(DIRECT::D_LEFT);
 	}
 	else {
-		bubble.setPos(x + 0.1, y + 0.1);
+		bubble.setPos(x + 0.1f, y + 0.1f);
 		bubble.setDirection(DIRECT::D_RIGHT);
 	}
 	bubble.createdTime = clock();
