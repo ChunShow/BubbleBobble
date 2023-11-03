@@ -26,7 +26,10 @@ public:
 	Bubble shoot();
 
 	//  check whether player contacts a monster
-	void checkhit(float box[2][2]);
+	void checkHit(float box[2][2]);
+
+	// check whether player contacts with a bubble
+	bool checkHitBubble(vector<vector<float>> hitBox);
 
 	//  draw player's left lives
 	void drawHeartPixel(float x, float y, int n, int i);

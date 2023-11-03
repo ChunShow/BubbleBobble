@@ -23,6 +23,7 @@ public:
 	bool characterCollisionCheck(float hitbox[2][2]);
 	bool mapCollision(vector<vector<float>> borderHard);
 	float getRadius();
+	vector<vector<float>> getHitBox();
 	clock_t getCreatedTime();
 	void draw();
 
@@ -35,5 +36,6 @@ public:
 	DIRECT direction;
 	Material mtl;
 
+	float max_radius = 0.08f;
 };
 

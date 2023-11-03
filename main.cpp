@@ -69,6 +69,7 @@ void idle() {
 				player.state = FALL;
 			}
 		}
+
 		else if (player.state == JUMP) {
 			if (player.velocity > 0) {
 				player.setPosition(0.0f, player.velocity);
@@ -83,6 +84,14 @@ void idle() {
 		else if (player.state == FALL) {
 			if (stage1.checkFALL()) {
 				player.setPosition(0.0f, -0.01f);
+			}
+		}
+
+		for (auto& bubble : bubbles) {
+			if (!bubble.isGrown()) continue;
+			vector<vector<float>> box = bubble.getHitBox();
+			if (player.checkHitBubble(bubble.getHitBox())) {
+				bubble.alive = false;
 			}
 		}
 
@@ -114,6 +123,10 @@ void idle() {
 			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
 			if (bubble.direction == D_UP) bubble.setPos(bubble.pos[0], bubble.pos[1] + speed * 0.1);
 			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
+
+			if (bubble.pos[0] < -1.0f) bubble.setPos(1.0f, bubble.pos[1]);
+			if (bubble.pos[0] > 1.0f) bubble.setPos(-1.0f, bubble.pos[1]);
+			if (bubble.pos[1] > 1.0f) bubble.setPos(bubble.pos[0], -1.0f);
 
 			for (auto& monster : creature) {
 				if (bubble.characterCollisionCheck(monster.hitbox) && !monster.getCaught()) {
@@ -157,7 +170,7 @@ void display() {
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	for (auto monster : creature) player.checkhit(monster.hitbox);
+	for (auto monster : creature) player.checkHit(monster.hitbox);
 	player.drawPlayer();
 
 	glColor3f(0.3f, 0.9f, 0.2f);
