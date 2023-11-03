@@ -150,6 +150,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
@@ -161,6 +162,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>

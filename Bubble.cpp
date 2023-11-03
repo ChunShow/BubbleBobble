@@ -5,13 +5,8 @@ using namespace std;
 Bubble::Bubble()
 {
 	capturing = false;
-	speed = 0.09f;
+	velocity[0] = 0.09f;
 	alive = true;
-}
-
-void Bubble::setPos(float x, float y)
-{
-	pos[0] = x; pos[1] = y;
 }
 
 void Bubble::setMaterial(Material m)
@@ -44,18 +39,17 @@ void Bubble::initialize()
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mtl.ambient);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mtl.shininess);
 
-	setPos(0.0f, 0.0f);
 	setSize(1.0);
 }
 
 bool Bubble::checkVerticalBoundary()
 {
-	return (pos[0] - getRadius() < -0.95f || pos[0] + getRadius() > 0.95f);
+	return (position[0] - getRadius() < -0.95f || position[0] + getRadius() > 0.95f);
 }
 
 bool Bubble::checkUpperBoundary()
 {
-	return (pos[1] > 1.0f);
+	return (position[1] > 1.0f);
 }
 
 bool Bubble::isGrown()
@@ -75,7 +69,7 @@ bool Bubble::characterCollisionCheck(float hitbox[2][2])
 	float boxCenterY = (hitbox[1][0] + hitbox[1][1]) / 2;
 	float boxLengthX = (hitbox[0][1] - hitbox[0][0]) / 2;
 	float boxLengthY = (hitbox[1][1] - hitbox[1][0]) / 2;
-	return (std::abs(pos[0] - boxCenterX) < (boxLengthX+0.05) && std::abs(pos[1] - boxCenterY) < (boxLengthY+0.05));
+	return (std::abs(position[0] - boxCenterX) < (boxLengthX+0.05) && std::abs(pos[1] - boxCenterY) < (boxLengthY+0.05));
 }
 
 bool Bubble::mapCollision(vector<vector<float>> borderHard)
@@ -112,14 +106,10 @@ float Bubble::getRadius()
 	return size * max_radius;
 }
 
-vector<vector<float>> Bubble::getHitBox()
+float* Bubble::getHitBox()
 {
 	float r = getRadius();
-	vector<float> x_hit = { pos[0] - r, pos[0] + r };
-	vector<float> y_hit = { pos[1] - r, pos[1] + r };
-	vector<vector<float>> hitbox = {};
-	hitbox.push_back(x_hit);
-	hitbox.push_back(y_hit);
+	float hitbox[4] = { pos[0] - r, pos[0] + r, pos[1] - r, pos[1] + r };
 	return hitbox;
 }
 

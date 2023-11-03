@@ -32,29 +32,33 @@ void initialize() {
 void idle() {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
+		player.setVelocityX(0.0f); player.setVelocityY(0.0f);
+
 		if (keystates[KEY::LEFT]) {
 			//  case of player's direction changes from RIGHT to LEFT
 			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT;
 			else {
-				if (player.state == FALL) player.setPosition(-0.015f, 0.0f);
-				else player.setPosition(-0.025f, 0.0f);
+				if (player.state == FALL) player.setVelocityX(-0.015f);
+				else player.setVelocityX(-0.025f);
 				stage1.checkLEFT();
 			}
 		}
+
 		if (keystates[KEY::RIGHT]) {
 			//  case of player's direction changes from LEFT to RIGHT
 			if (player.direction == KEY::LEFT) player.direction = KEY::RIGHT;
 			else {
-				if (player.state == FALL) player.setPosition(0.015f, 0.0f);
-				else player.setPosition(0.025f, 0.0f);
+				if (player.state == FALL) player.setVelocityX(0.015f);
+				else player.setVelocityX(0.025f);
 				stage1.checkRIGHT();
 			}
 		}
+
 		if (keystates[KEY::DOWN]) {
 			// case of player's state is JUMP or FALL
 			if (player.state != STAY) {
 				player.state = FALL;
-				player.setPosition(0.0f, -0.01f);
+				player.setVelocityY(-0.01f);
 			}
 		}
 		if (keystates[KEY::SPACEBAR] && (endTime - lastCreationTime) > 300) {
@@ -81,6 +85,7 @@ void idle() {
 				player.state = FALL;
 			}
 		}
+
 		else if (player.state == FALL) {
 			if (stage1.checkFALL()) {
 				player.setPosition(0.0f, -0.01f);

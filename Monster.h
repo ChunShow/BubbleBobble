@@ -1,8 +1,9 @@
 #pragma once
+#include "Object.h"
 
 enum MONSTER { ROBOT, CREATURE, GHOST };
 
-class Monster {
+class Monster: public Object {
 public:
 	//  constructor
 	Monster(MONSTER Type);
@@ -17,8 +18,6 @@ public:
 	void rightCreature();
 
 	//  change monster's position (x, y coordinates)
-	void setPosition(float x, float y);
-	void setHitbox();
 	void caughtBubble(float bubblePos[2]);
 	void setCaught();
 	bool getCaught();
@@ -28,15 +27,6 @@ public:
 
 	MONSTER type;
 	KEY direction;
-	float position[2];
-
-	/*  monster's hit box setting
-		hitbox[0][0] : the left side of x coordinate
-		hitbox[0][1] : the right side of x coordinate
-		hitbox[1][0] : the bottom of y coordinate
-		hitbox[1][1] : the top of y coordinate
-	*/
-	float hitbox[2][2];
 
 	bool caught;
 	bool rotation;

@@ -2,9 +2,7 @@
 
 //  initial setting of monster
 Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
-	position[0] = 0.0f;
-	position[1] = 0.0f;
-	setHitbox();
+	setPosition(0.0f, 0.0f);
 	caught = false;
 	rotation = false;
 	angle = 0.0f;
@@ -25,11 +23,13 @@ void Monster::drawMonster() {
 	glPopMatrix();
 }
 void Monster::drawPixel(float x, float y, int n) {
+	float x_pos = getPosition()[0];
+	float y_pos = getPosition()[1];
 	glBegin(GL_POLYGON);
-	glVertex2f(position[0] + x, position[1] + y);
-	glVertex2f(position[0] + x, position[1] + y + 0.01f);
-	glVertex2f(position[0] + x + n * 0.01f, position[1] + y + 0.01f);
-	glVertex2f(position[0] + x + n * 0.01f, position[1] + y);
+	glVertex2f(x_pos + x, y_pos + y);
+	glVertex2f(x_pos + x, y_pos + y + 0.01f);
+	glVertex2f(x_pos + x + n * 0.01f, y_pos + y + 0.01f);
+	glVertex2f(x_pos + x + n * 0.01f, y_pos + y);
 	glEnd();
 }
 
@@ -407,37 +407,9 @@ void Monster::rightCreature() {
 	y += 0.01f;
 	drawPixel(0.09f, y, 1);
 }
-
-void Monster::setPosition(float x, float y) {
-	//  change monster's x, y coordinates
-	position[0] += x;
-	position[1] += y;
-
-	//  change monster's hitbox coordinate
-	setHitbox();
-}
-
-void Monster::setHitbox() {
-	switch (type) {
-	case CREATURE:
-		hitbox[0][0] = position[0] + 0.01f;
-		hitbox[0][1] = position[0] + 0.14f;
-		hitbox[1][0] = position[1];
-		hitbox[1][1] = position[1] + 0.13f;
-		break;
-	default:
-		hitbox[0][0] = position[0];
-		hitbox[0][1] = position[0] + 0.15f;
-		hitbox[1][0] = position[1];
-		hitbox[1][1] = position[1] + 0.15f;
-		break;
-	}
-}
-
 void Monster::caughtBubble(float bubblePos[2]) {
 	if (getCaught()) {
-		position[0] = bubblePos[0] - 0.1f;
-		position[1] = bubblePos[1] - 0.1f;
+		setPosition(bubblePos[0] - 0.1f, bubblePos[1] - 0.1f);
 	}
 }
 void Monster::setCaught() {
@@ -458,12 +430,12 @@ void Monster::drawRotate() {
 	if (getRotate()) {
 		time -= 1.0f;
 		angle += 5.0f;
-		glTranslatef(position[0] + 0.07f, position[1] + 0.07f, 0.0f);
+		glTranslatef(getPosition()[0] + 0.07f, getPosition()[1] + 0.07f, 0.0f);
 		glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		glTranslatef(-position[0] - 0.07f, -position[1] - 0.07f, 0.0f);
-
+		glTranslatef(-getPosition()[0] - 0.07f, -getPosition()[1] - 0.07f, 0.0f);
 	}
 }
+
 float Monster::getTime() {
 	return time;
 }
