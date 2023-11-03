@@ -680,7 +680,7 @@ Bubble Player::shoot()
 	return bubble;
 }
 
-void Player::checkhit(float box[2][2]) {
+void Player::checkHit(float box[2][2]) {
 	//  float box[2][2] means a Monster's hit box
 	//  only check when blinkTime is 0 
 	if (blinkTime == 0) {
@@ -693,6 +693,16 @@ void Player::checkhit(float box[2][2]) {
 				life--;
 				blinkTime = 27;
 			}
+		}
+	}
+}
+
+bool Player::checkHitBubble(vector<vector<float>> box) {
+	if ((box[0][0] <= player.hitbox[0][0] && player.hitbox[0][0] <= box[0][1]) ||
+		(box[0][0] <= player.hitbox[0][1] && player.hitbox[0][1] <= box[0][1])) {
+		if ((box[1][0] <= player.hitbox[1][0] && player.hitbox[1][0] <= box[1][1]) ||
+			(box[1][0] <= player.hitbox[1][1] && player.hitbox[1][1] <= box[1][1])) {
+			return true;
 		}
 	}
 }
