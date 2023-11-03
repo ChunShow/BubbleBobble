@@ -7,9 +7,15 @@ Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(
 	hitbox[0][1] = position[0] + 0.16f;
 	hitbox[1][0] = position[1];
 	hitbox[1][1] = position[1] + 0.15f;
+	angle = 0.0f;
 }
 
 void Player::drawPlayer() {
+	glPushMatrix();
+	glTranslatef(position[0] + 0.07f, position[1] + 0.07f, 0.0f);
+	glRotatef(angle, 0.0f, 0.0f, 1.0f);
+	glTranslatef(-position[0] - 0.07f, -position[1] - 0.07f, 0.0f);
+
 	if (blinkTime % 4 == 0 || blinkTime % 4 == 1) {
 		//  draw dragon facing left
 		if (direction == LEFT) {
@@ -26,6 +32,7 @@ void Player::drawPlayer() {
 		if (blinkTime != 0) blinkTime--;
 	}
 	else blinkTime--;
+	glPopMatrix();
 
 	drawLife();
 }

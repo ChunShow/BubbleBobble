@@ -15,7 +15,6 @@ Texture brickTexture(BRICK);
 Texture defaultTexture;
 
 bool keystates[5];
-int n = 1;
 
 void initialize() {
 	for (int i = 0; i < 3; i++) {
@@ -126,7 +125,7 @@ void idle() {
 			}
 			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
 		}
-
+		player.angle += 5.0f;
 		startTime = endTime;
 		glutPostRedisplay();
 	}
