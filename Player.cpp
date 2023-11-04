@@ -632,6 +632,21 @@ void Player::updatePosition() {
 	}
 }
 
+void Player::decreaseLife()
+{
+	player.life -= 1;
+}
+
+void Player::giveInvincibility()
+{
+	player.blinkTime = 27;
+}
+
+bool Player::isInvincible()
+{
+	return blinkTime > 0;
+}
+
 Bubble Player::shoot()
 {
 	Bubble bubble;
@@ -670,10 +685,4 @@ void Player::drawLife() {
 		drawHeartPixel(0.01f, 0.03f, 1, i);
 		drawHeartPixel(0.03f, 0.03f, 1, i);
 	}
-}
-
-void Player::translate(float x, float y)
-{
-	setPosition(getPositionX() + x, getPositionY() + y);
-
 }

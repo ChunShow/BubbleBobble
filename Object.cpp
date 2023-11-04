@@ -35,6 +35,11 @@ float Object::getPositionY()
 	return position[1];
 }
 
+void Object::translate(float x, float y)
+{
+	setPosition(getPositionX() + x, getPositionY() + y);
+}
+
 void Object::setVelocity(float v1, float v2)
 {
 	velocity[0] = v1; velocity[1] = v2;

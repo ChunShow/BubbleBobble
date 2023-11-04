@@ -15,6 +15,8 @@ public:
 	float getPositionX();
 	void setPositionY(float y);
 	float getPositionY();
+
+	void translate(float x, float y);
 	
 	void setVelocity(float v1, float v2);
 	float* getVelocity();

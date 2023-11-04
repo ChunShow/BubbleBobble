@@ -21,8 +21,13 @@ public:
 	void rightDragonJUMP();
 	void leftDragonFALL();
 	void rightDragonFALL();
-
 	void updatePosition();
+
+	void decreaseLife();
+	void giveInvincibility();
+	bool isInvincible();
+
+
 	
 	Bubble shoot();
 
@@ -38,6 +43,7 @@ public:
 
 	//  blinkTime means a time for which player is blinking
 	int blinkTime;
+
 	//  life means the number of left lives of player
 	int life;
 };

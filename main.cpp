@@ -32,14 +32,13 @@ void initialize() {
 void idle() {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
-		player.setVelocityX(0.0f); player.setVelocityY(0.0f);
 
 		if (keystates[KEY::LEFT]) {
 			//  case of player's direction changes from RIGHT to LEFT
 			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT;
 			else {
-				if (player.state == FALL) player.setVelocityX(-0.015f);
-				else player.setVelocityX(-0.025f);
+				if (player.state == FALL) player.translate(-0.015f, 0.0f);
+				else player.translate(-0.025f, 0.0f);
 				stage1.checkLEFT();
 			}
 		}
@@ -48,8 +47,8 @@ void idle() {
 			//  case of player's direction changes from LEFT to RIGHT
 			if (player.direction == KEY::LEFT) player.direction = KEY::RIGHT;
 			else {
-				if (player.state == FALL) player.setVelocityX(0.015f);
-				else player.setVelocityX(0.025f);
+				if (player.state == FALL) player.translate(0.015f, 0.0f);
+				else player.translate(0.025f, 0.0f);
 				stage1.checkRIGHT();
 			}
 		}
@@ -58,7 +57,7 @@ void idle() {
 			// case of player's state is JUMP or FALL
 			if (player.state != STAY) {
 				player.state = FALL;
-				player.setVelocityY(-0.01f);
+				player.translate(0.0f, -0.01f);
 			}
 		}
 		if (keystates[KEY::SPACEBAR] && (endTime - lastCreationTime) > 300) {
@@ -75,50 +74,49 @@ void idle() {
 		}
 
 		else if (player.state == JUMP) {
-			if (player.velocity > 0) {
-				player.setPosition(0.0f, player.velocity);
+			if (player.getVelocityY() > 0) {
+				player.setVelocityY(player.getVelocityY()-0.008f);
+				player.translate(0.0f, player.getVelocityY());
 				stage1.checkJUMP();
-				player.velocity -= 0.008f;
 			}
 			else {
-				player.position[1] -= 0.01f;
+				player.translate(0.0f, -0.01f);
 				player.state = FALL;
 			}
 		}
 
 		else if (player.state == FALL) {
 			if (stage1.checkFALL()) {
-				player.setPosition(0.0f, -0.01f);
+				player.translate(0.0f, -0.01f);
 			}
 		}
 
 		for (auto& bubble : bubbles) {
 			if (!bubble.isGrown()) continue;
-			vector<vector<float>> box = bubble.getHitBox();
-			if (player.checkHitBubble(bubble.getHitBox())) {
+			if (player.collisionDetection(bubble)) {
 				bubble.alive = false;
 			}
 		}
 
 		for (auto monster = creature.begin(); monster < creature.end(); monster++) {
 			if ((*monster).direction == LEFT) {
-				if (stage1.checkMonster(*monster)) (*monster).setPosition(-0.015f, 0.0f);
+				if (stage1.checkMonster(*monster)) (*monster).translate(-0.015f, 0.0f);
 				else {
 					(*monster).direction = RIGHT;
-					(*monster).setPosition(0.015f, 0.0f);
+					(*monster).translate(0.015f, 0.0f);
 				}
 			}
 			else {
-				if (stage1.checkMonster(*monster)) (*monster).setPosition(0.015f, 0.0f);
+				if (stage1.checkMonster(*monster)) (*monster).translate(0.015f, 0.0f);
 				else {
 					(*monster).direction = LEFT;
-					(*monster).setPosition(-0.015f, 0.0f);
+					(*monster).translate(-0.015f, 0.0f);
 				}
 			}
 		}
 
 		for (auto& bubble : bubbles) {
-			float speed = bubble.speed;
+			float speed = bubble.horizontal_speed;
 			float size = bubble.size;
 
 			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
@@ -175,7 +173,13 @@ void display() {
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	for (auto monster : creature) player.checkHit(monster.hitbox);
+	for (const auto& monster : creature) {
+		if (player.collisionDetection(monster)) {
+			if (!player.isInvincible()) {
+				player.giveInvincibility();
+				player.decreaseLife();
+		}
+	}
 	player.drawPlayer();
 
 	glColor3f(0.3f, 0.9f, 0.2f);
