@@ -78,8 +78,8 @@ bool Object::collisionDetection(Object& other)
 	float xleft1 = hitbox1[0]; float xright1 = hitbox1[2]; float ybottom1 = hitbox1[3]; float ytop1= hitbox1[4];
 	float xleft2 = hitbox2[0]; float xright2 = hitbox2[2]; float ybottom2 = hitbox2[3]; float ytop2 = hitbox2[4];
 
-	bool xCollision = (xleft1 <= xright2) && (xright1 >= xleft2);
-	bool yCollision = (ytop1 >= ybottom2) && (ybottom1 <= ytop2);
+	bool xCollision = ((xleft1 <= xright2) && (xright1 >= xleft2));
+	bool yCollision = ((ytop1 >= ybottom2) && (ybottom1 <= ytop2));
 
 	return xCollision && yCollision;
 }

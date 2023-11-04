@@ -78,7 +78,7 @@ bool Bubble::mapCollision(vector<vector<float>> borderHard)
 					return true;
 				case(D_RIGHT):
 					size = 1.0f;
-					setPositionX( x - max_radius);
+					setPositionX(x - max_radius);
 					return true;
 				case(D_UP):
 					setPositionY(y - height - max_radius);

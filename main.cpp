@@ -136,6 +136,7 @@ void idle() {
 
 			for (auto& monster : creature) {
 				if (bubble.collisionDetection(monster) && !monster.getCaught()) {
+					cout << "bubble&monster" << endl;
 					bubble.direction = D_UP;
 					bubble.size = 1.0f;
 					bubble.capturing = true;
