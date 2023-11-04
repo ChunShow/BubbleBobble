@@ -3,8 +3,9 @@
 //  initial setting of monster
 Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 	setPosition(0.0f, 0.0f);
-	caught = false;
+	trapped = false;
 	rotation = false;
+	alive = true;
 	angle = 0.0f;
 }
 
@@ -407,18 +408,15 @@ void Monster::rightCreature() {
 	y += 0.01f;
 	drawPixel(0.09f, y, 1);
 }
-void Monster::caughtBubble(float bubblePos[2]) {
-	if (getCaught()) {
-		setPosition(bubblePos[0] - 0.1f, bubblePos[1] - 0.1f);
-	}
-}
 
-void Monster::setCaught() {
-	caught = true;
+void Monster::trap(Bubble& bubble) {
+	trapped = true;
+	trappedBubble = &bubble;
 	setRotate();
 }
-bool Monster::getCaught() {
-	return caught;
+
+bool Monster::isTrapped() {
+	return trapped;
 }
 void Monster::setRotate() {
 	rotation = !rotation;
@@ -430,16 +428,36 @@ bool Monster::isRotating() {
 
 void Monster::drawRotate() {
 	if (isRotating()) {
-		//time -= 1.0f;
+		//time -= 0.001f;
 		angle += 5.0f;
-		glTranslatef(getPositionX() + 0.07f, getPositionY() + 0.07f, 0.0f);
+		glTranslatef(getPositionX() + 0.09f, getPositionY() + 0.09f, 1.0f);
 		glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		glScalef(0.7f, 0.7f, 0.7f);
 		glTranslatef(-getPositionX() - 0.07f, -getPositionY() - 0.07f, 0.0f);
 	}
 }
 
 float Monster::getTime() {
 	return time;
+}
+
+void Monster::kill()
+{
+	alive = false;
+}
+
+bool Monster::isAlive()
+{
+	return alive;
+}
+
+Bubble* Monster::getTrappedBubble()
+{
+	if (!isTrapped()) {
+		cout << "This method should not be called" << endl;
+		return nullptr;
+	}
+	return trappedBubble;
 }
 
 Hitbox Monster::getHitbox() {

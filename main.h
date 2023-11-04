@@ -19,7 +19,7 @@ using namespace std;
 #define WINDOW_HEIGHT 640		// window's height
 
 extern Player player;
-extern vector<Monster> creature;
+extern vector<Monster> monsters;
 extern bool keystates[5];
 
 void initTexture();

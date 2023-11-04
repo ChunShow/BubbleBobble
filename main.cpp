@@ -9,7 +9,7 @@ Player player;
 Player* playerPointer = &player;
 Map stage1(1);
 vector<Bubble> bubbles;
-vector<Monster> creature;
+vector<Monster> monsters;
 
 Texture stoneTexture(STONE);
 Texture brickTexture(BRICK);
@@ -19,11 +19,11 @@ bool keystates[5];
 
 void initialize() {
 	for (int i = 0; i < 3; i++) {
-		creature.push_back(Monster(CREATURE));
+		monsters.push_back(Monster(CREATURE));
 	}
-	creature[0].setPosition(0.0f, -0.53f);
-	creature[1].setPosition(0.0f, -0.11);
-	creature[2].setPosition(0.0f, 0.36f);
+	monsters[0].setPosition(0.0f, -0.53f);
+	monsters[1].setPosition(0.0f, -0.11);
+	monsters[2].setPosition(0.0f, 0.36f);
 
 	stoneTexture.initTexture();
 	brickTexture.initTexture();
@@ -101,19 +101,25 @@ void idle() {
 			}
 		}
 
-		for (auto monster = creature.begin(); monster < creature.end(); monster++) {
-			if ((*monster).direction == LEFT) {
-				if (stage1.checkMonster(*monster)) (*monster).translate(-0.015f, 0.0f);
+		for (auto& monster : monsters) {
+			if (monster.isTrapped()) {
+				Bubble bubble = *monster.getTrappedBubble();
+				float bubble_x = bubble.getPositionX(); float bubble_y = bubble.getPositionY();
+				monster.setPosition(bubble_x - bubble.max_radius, bubble_y - bubble.max_radius);
+				continue;
+			}
+			if (monster.direction == LEFT) {
+				if (stage1.checkMonster(monster)) monster.translate(-0.015f, 0.0f);
 				else {
-					(*monster).direction = RIGHT;
-					(*monster).translate(0.015f, 0.0f);
+					monster.direction = RIGHT;
+					monster.translate(0.015f, 0.0f);
 				}
 			}
 			else {
-				if (stage1.checkMonster(*monster)) (*monster).translate(0.015f, 0.0f);
+				if (stage1.checkMonster(monster)) monster.translate(0.015f, 0.0f);
 				else {
-					(*monster).direction = LEFT;
-					(*monster).translate(-0.015f, 0.0f);
+					monster.direction = LEFT;
+					monster.translate(-0.015f, 0.0f);
 				}
 			}
 		}
@@ -134,14 +140,12 @@ void idle() {
 			if (bubble.getPositionX() > 1.0f) bubble.setPositionX(-1.0f);
 			if (bubble.getPositionY() > 1.0f) bubble.setPositionY(-1.0f);
 
-			for (auto& monster : creature) {
-				if (bubble.collisionDetection(monster) && !monster.getCaught()) {
-					cout << "bubble&monster" << endl;
+			for (auto& monster : monsters) {
+				if (bubble.collisionDetection(monster) && !monster.isTrapped() && !bubble.isGrown()) {
 					bubble.direction = D_UP;
 					bubble.size = 1.0f;
 					bubble.capturing = true;
-					monster.caughtBubble(bubble.getPosition());
-					monster.setCaught();
+					monster.trap(bubble);
 				}
 			}
 			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
@@ -177,8 +181,8 @@ void display() {
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	for (auto& monster : creature) {
-		if (monster.collisionDetection(*playerPointer)) {
+	for (auto& monster : monsters) {
+		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
 			if (!player.isInvincible()) {
 				player.giveInvincibility();
 				player.decreaseLife();
@@ -199,17 +203,17 @@ void display() {
 		}
 	}
 	int j = 0;
-	while (creature.begin() + j < creature.end()) {
-		if (!creature[j].getCaught()) {
-			creature[j].drawMonster();
+	while (monsters.begin() + j < monsters.end()) {
+		if (!monsters[j].isTrapped()) {
+			monsters[j].drawMonster();
 			j++;
 		}
-		else if (creature[j].getTime() > 0) {
-			creature[j].drawMonster();
-			j++;
+		else if (!monsters[j].isAlive()) {
+			monsters.erase(monsters.begin() + j);
 		}
 		else {
-			creature.erase(creature.begin() + j);
+			monsters[j].drawMonster();
+			j++;
 		}
 	}
 	stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
