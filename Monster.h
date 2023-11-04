@@ -25,7 +25,7 @@ public:
 	bool getRotate();
 	float getTime();
 
-	float* getHitbox();
+	virtual float* getHitbox() override;
 
 	MONSTER type;
 	KEY direction;

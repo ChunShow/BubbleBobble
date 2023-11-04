@@ -5,7 +5,6 @@ using namespace std;
 Bubble::Bubble()
 {
 	capturing = false;
-	velocity[0] = 0.09f;
 	alive = true;
 }
 
@@ -44,12 +43,12 @@ void Bubble::initialize()
 
 bool Bubble::checkVerticalBoundary()
 {
-	return (position[0] - getRadius() < -0.95f || position[0] + getRadius() > 0.95f);
+	return (getPositionX() - getRadius() < -0.95f || getPositionX() + getRadius() > 0.95f);
 }
 
 bool Bubble::checkUpperBoundary()
 {
-	return (position[1] > 1.0f);
+	return (getPositionY() > 1.0f);
 }
 
 bool Bubble::isGrown()
@@ -69,20 +68,20 @@ bool Bubble::mapCollision(vector<vector<float>> borderHard)
 	float b_x=0.0f, b_y=0.0f;
 	for (const auto& border : borderHard) {
 		x = border[0]; y = border[1]; width = border[2]; height = border[3];
-		b_x = position[0]; b_y = position[1];
+		b_x = getPositionX(); b_y = getPositionY();
 		if (y - height - r < b_y && b_y  < y + r) {
 			if (x - r < b_x && b_x< x + width + r) {
 				switch (direction) {
 				case(D_LEFT):
 					size = 1.0f;
-					position[0] = x + width + max_radius;
+					setPositionX(x + width + max_radius);
 					return true;
 				case(D_RIGHT):
 					size = 1.0f;
-					position[0] = x - max_radius;
+					setPositionX( x - max_radius);
 					return true;
 				case(D_UP):
-					position[1] = y - height - max_radius;
+					setPositionY(y - height - max_radius);
 					return true;
 				}
 			}
@@ -96,10 +95,10 @@ float Bubble::getRadius()
 	return size * max_radius;
 }
 
-float* Bubble::getHitBox()
+float* Bubble::getHitbox()
 {
 	float r = getRadius();
-	float hitbox[4] = { position[0] - r, position[0] + r, position[1] - r, position[1] + r };
+	float hitbox[4] = { getPositionX() - r,  getPositionX() + r, getPositionY() - r, getPositionY() + r };
 	return hitbox;
 }
 
@@ -111,7 +110,7 @@ clock_t Bubble::getCreatedTime()
 void Bubble::draw()
 {
 	glPushMatrix();
-	glTranslatef(position[0], position[1], 0.0f);
+	glTranslatef(getPositionX(), getPositionY(), 0.0f);
 	glScalef(size, size, size);
 	glutSolidSphere(max_radius, 20, 20);
 	glPopMatrix();

@@ -25,9 +25,11 @@ public:
 	void setVelocityY(float v2);
 	float getVelocityY();
 
-	float* getHitbox();
+	virtual float* getHitbox();
 
-	bool collisionDetection(Object other);
+	bool collisionDetection(Object& other);
+
+private:
 	float position[2];
 	float velocity[2];
 };

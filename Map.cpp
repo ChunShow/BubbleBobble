@@ -124,12 +124,12 @@ bool Map::checkFALL() {
 		pos[1] means the right side of player's bottom
 	*/
 	if (player.direction == RIGHT) {
-		pos[0] = player.position[0] + 0.02f;
-		pos[1] = player.position[0] + 0.16f;
+		pos[0] = player.getPositionX() + 0.02f;
+		pos[1] = player.getPositionX() + 0.16f;
 	}
 	else {
-		pos[0] = player.position[0] + 0.01f;
-		pos[1] = player.position[0] + 0.15f;
+		pos[0] = player.getPositionX() + 0.01f;
+		pos[1] = player.getPositionX() + 0.15f;
 	}
 	for (auto i = 0; i < border.size(); i++) {
 		x = border[i][0];
@@ -140,8 +140,8 @@ bool Map::checkFALL() {
 			(x <= pos[0] + 0.07f && pos[0] + 0.07f <= x + width) ||
 			(x <= pos[1] && pos[1] <= x + width)) {
 			//  check whether player's y coordinate contacts border's y coordinate
-			if (y - 0.02f <= player.position[1] && player.position[1] <= y) {
-				player.position[1] = y;
+			if (y - 0.02f <= player.getPositionY() && player.getPositionY() <= y) {
+				player.setPositionY(y);
 				player.state = STAY;
 				return false;
 			}
@@ -158,12 +158,12 @@ void Map::checkJUMP() {
 	pos[1] means the right side of player's bottom
 	*/
 	if (player.direction == RIGHT) {
-		pos[0] = player.position[0] + 0.02f;
-		pos[1] = player.position[0] + 0.16f;
+		pos[0] = player.getPositionX() + 0.02f;
+		pos[1] = player.getPositionX() + 0.16f;
 	}
 	else {
-		pos[0] = player.position[0] + 0.01f;
-		pos[1] = player.position[0] + 0.15f;
+		pos[0] = player.getPositionX() + 0.01f;
+		pos[1] = player.getPositionX() + 0.15f;
 	}
 	for (auto i = 0; i < borderHard.size(); i++) {
 		x = borderHard[i][0];
@@ -173,8 +173,8 @@ void Map::checkJUMP() {
 		//  check whether player's left side or right side in borderHard's x coordinate range
 		if ((x <= pos[0] && pos[0] <= x + width) || (x <= pos[1] && pos[1] <= x + width)) {
 			//  check whether player's height contacts borderHard's (y coordinate - height)
-			if (y - height <= player.position[1] + player.height && player.position[1] + player.height <= y - height + 0.08f) {
-				player.position[1] = y - height - player.height;
+			if (y - height <= player.getPositionY() + player.height && player.getPositionY() + player.height <= y - height + 0.08f) {
+				player.setPositionY(y - height - player.height);
 			}
 		}
 	}
@@ -189,20 +189,20 @@ void Map::checkLEFT() {
 	pos[1] means the right side of player's bottom
 	*/
 
-	pos[0] = player.position[0] + 0.01f;
-	pos[1] = player.position[0] + 0.15f;
+	pos[0] = player.getPositionX() + 0.01f;
+	pos[1] = player.getPositionX() + 0.15f;
 	for (auto i = 0; i < borderHard.size(); i++) {
 		x = borderHard[i][0];
 		y = borderHard[i][1];
 		width = borderHard[i][2];
 		height = borderHard[i][3];
 		//  check whether player's height is in borderHard's y coordinate range
-		if ((y - height <= player.position[1] && player.position[1] < y) ||
-			(y - height <= player.position[1] + 0.09f && player.position[1] + 0.09f <= y) ||
-			(y - height < player.position[1] + player.height && player.position[1] + player.height <= y)) {
+		if ((y - height <= player.getPositionY() && player.getPositionY() < y) ||
+			(y - height <= player.getPositionY() + 0.09f && player.getPositionY() + 0.09f <= y) ||
+			(y - height < player.getPositionY() + player.height && player.getPositionY() + player.height <= y)) {
 			//  check whether player's left side contacts borderHard's (x coordinate + width)
 			if (x + width - 0.025f <= pos[0] && pos[0] <= x + width) {
-				player.position[0] = x + width;
+				player.setPositionX(x + width);
 			}
 		}
 	}
@@ -215,20 +215,20 @@ void Map::checkRIGHT() {
 	pos[0] means the left side of player's bottom
 	pos[1] means the right side of player's bottom
 	*/
-	pos[0] = player.position[0] + 0.02f;
-	pos[1] = player.position[0] + 0.16f;
+	pos[0] = player.getPositionX() + 0.02f;
+	pos[1] = player.getPositionX() + 0.16f;
 	for (auto i = 0; i < borderHard.size(); i++) {
 		x = borderHard[i][0];
 		y = borderHard[i][1];
 		width = borderHard[i][2];
 		height = borderHard[i][3];
 		//  check whether player's height is in borderHard's y coordinate range
-		if ((y - height <= player.position[1] && player.position[1] < y) ||
-			(y - height <= player.position[1] + 0.09f && player.position[1] + 0.09f <= y) ||
-			(y - height < player.position[1] + player.height && player.position[1] + player.height <= y)) {
+		if ((y - height <= player.getPositionY() && player.getPositionY() < y) ||
+			(y - height <= player.getPositionY() + 0.09f && player.getPositionY() + 0.09f <= y) ||
+			(y - height < player.getPositionY() + player.height && player.getPositionY() + player.height <= y)) {
 			//  check whether player's left side contacts borderHard's (x coordinate + width)
 			if (x <= pos[1] && pos[1] <= x + 0.025f) {
-				player.position[0] = x - 0.17f;
+				player.setPositionX(x - 0.17f);
 			}
 		}
 	}
@@ -242,8 +242,8 @@ bool Map::checkMonster(Monster monster) {
 	pos[0] means the left side of monster's bottom
 	pos[1] means the right side of monster's bottom
 	*/
-	pos[0] = monster.position[0] + 0.01f;
-	pos[1] = monster.position[0] + 0.16f;
+	pos[0] = monster.getPositionX() + 0.01f;
+	pos[1] = monster.getPositionX() + 0.16f;
 	for (auto i = 0; i < border.size(); i++) {
 		x = border[i][0];
 		y = border[i][1];
@@ -251,16 +251,16 @@ bool Map::checkMonster(Monster monster) {
 		//  check whether monster's left side or right side in border's x coordinate range
 		if ((monster.direction == LEFT) && (x <= pos[0] && pos[0] <= x + width)) {
 			//  check whether monster's y coordinate contacts border's y coordinate
-			if (y - 0.02f <= monster.position[1] && monster.position[1] <= y) {
-				monster.position[1] = y;
+			if (y - 0.02f <= monster.getPositionY() && monster.getPositionY() <= y) {
+				monster.setPositionY(y);
 				return true;
 			}
 		}
 		//  check whether monster's left side or right side in border's x coordinate range
 		else if ((monster.direction == RIGHT) && (x <= pos[1] && pos[1] <= x + width)) {
 			//  check whether monster's y coordinate contacts border's y coordinate
-			if (y - 0.02f <= monster.position[1] && monster.position[1] <= y) {
-				monster.position[1] = y;
+			if (y - 0.02f <= monster.getPositionY() && monster.getPositionY() <= y) {
+				monster.setPositionY(y);
 				return true;
 			}
 		}

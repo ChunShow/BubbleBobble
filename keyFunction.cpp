@@ -12,7 +12,7 @@ void specialKeyDown(int key, int x, int y) {
 		keystates[KEY::UP] = 1;
 		if (player.state == STAY) {
 			player.state = JUMP;
-			player.setVelocityY(0.08f);
+			player.setVelocityY(0.10f);
 		}
 		break;
 	case GLUT_KEY_DOWN:

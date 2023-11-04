@@ -443,16 +443,18 @@ float Monster::getTime() {
 float* Monster::getHitbox() {
 	float xLeft, xRight, yBottom, yTop;
 	switch (type) {
-		xLeft = position[0] + 0.01f;
-		xRight = position[0] + 0.14f;
-		yBottom = position[1];
-		yTop = position[1] + 0.13f;
+	case(CREATURE):
+		xLeft = getPositionX() + 0.01f;
+		xRight = getPositionX() + 0.14f;
+		yBottom = getPositionY();
+		yTop = getPositionY() + 0.13f;
 		break;
 	default:
-		xLeft = position[0];
-		xRight = position[0] + 0.15f;
-		yBottom = position[1];
-		yTop = position[1] + 0.15f;
+		xLeft = getPositionX();
+		xRight = getPositionX() + 0.15f;
+		yBottom = getPositionY();
+		yTop = getPositionY() + 0.15f;
+		break;
 	}
 	float hitbox[4] = { xLeft, xRight, yBottom, yTop };
 	return hitbox;

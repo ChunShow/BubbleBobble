@@ -28,10 +28,10 @@ void Player::drawPlayer() {
 
 void Player::drawPixel(float x, float y, int n) {
 	glBegin(GL_POLYGON);
-	glVertex2f(position[0] + x, position[1] + y);
-	glVertex2f(position[0] + x, position[1] + y + 0.01f);
-	glVertex2f(position[0] + x + n * 0.01f, position[1] + y + 0.01f);
-	glVertex2f(position[0] + x + n * 0.01f, position[1] + y);
+	glVertex2f(getPositionX() + x, getPositionY() + y);
+	glVertex2f(getPositionX() + x, getPositionY() + y + 0.01f);
+	glVertex2f(getPositionX() + x + n * 0.01f, getPositionY() + y + 0.01f);
+	glVertex2f(getPositionX() + x + n * 0.01f, getPositionY() + y);
 	glEnd();
 }
 void Player::leftDragon() {
@@ -689,10 +689,10 @@ void Player::drawLife() {
 }
 
 float* Player::getHitbox() {
-	float xLeft = position[0] + 0.03f;
-	float xRight = position[0] + 0.16f;
-	float yBottom = position[1];
-	float yTop = position[1] + 0.15f;
+	float xLeft = getPositionX() + 0.03f;
+	float xRight = getPositionX() + 0.16f;
+	float yBottom = getPositionY();
+	float yTop = getPositionY() + 0.15f;
 
 	float hitbox[4]  = {xLeft, xRight, yBottom, yTop};
 	return hitbox;

@@ -22,11 +22,10 @@ public:
 	
 	bool isGrown();
 	bool isCapturing();
-	bool characterCollisionCheck(float hitbox[2][2]);
 	bool mapCollision(vector<vector<float>> borderHard);
 
 	float getRadius();
-	float* getHitBox();
+	virtual float* getHitbox() override;
 	clock_t getCreatedTime();
 	void draw();
 

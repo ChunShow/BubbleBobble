@@ -6,6 +6,7 @@ clock_t lastCreationTime = clock();
 clock_t endTime;
 
 Player player;
+Player* playerPointer = &player;
 Map stage1(1);
 vector<Bubble> bubbles;
 vector<Monster> creature;
@@ -91,9 +92,11 @@ void idle() {
 			}
 		}
 
+		player.updatePosition();
+
 		for (auto& bubble : bubbles) {
 			if (!bubble.isGrown()) continue;
-			if (player.collisionDetection(bubble)) {
+			if (bubble.collisionDetection(*playerPointer)) {
 				bubble.alive = false;
 			}
 		}
@@ -173,8 +176,8 @@ void display() {
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	for (const auto& monster : creature) {
-		if (player.collisionDetection(monster)) {
+	for (auto& monster : creature) {
+		if (monster.collisionDetection(*playerPointer)) {
 			if (!player.isInvincible()) {
 				player.giveInvincibility();
 				player.decreaseLife();
