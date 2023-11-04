@@ -121,23 +121,23 @@ void idle() {
 
 			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
 
-			float x = bubble.pos[0]; float y = bubble.pos[1];
-			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
-			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
-			if (bubble.direction == D_UP) bubble.setPos(bubble.pos[0], bubble.pos[1] + speed * 0.1);
+			float x = bubble.getPositionX(); float y = bubble.getPositionY();
+			if (bubble.direction == D_LEFT) bubble.translate(-speed, 0.0f);
+			if (bubble.direction == D_RIGHT) bubble.translate(speed, 0.0f);
+			if (bubble.direction == D_UP) bubble.translate(0.0f, speed * 0.1);
 			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
 
-			if (bubble.pos[0] < -1.0f) bubble.setPos(1.0f, bubble.pos[1]);
-			if (bubble.pos[0] > 1.0f) bubble.setPos(-1.0f, bubble.pos[1]);
-			if (bubble.pos[1] > 1.0f) bubble.setPos(bubble.pos[0], -1.0f);
+			if (bubble.getPositionX() < -1.0f) bubble.setPositionX(1.0f);
+			if (bubble.getPositionX() > 1.0f) bubble.setPositionX(-1.0f);
+			if (bubble.getPositionY() > 1.0f) bubble.setPositionY(-1.0f);
 
 			for (auto& monster : creature) {
-				if (bubble.characterCollisionCheck(monster.hitbox) && !monster.getCaught()) {
+				if (bubble.collisionDetection(monster) && !monster.getCaught()) {
 					bubble.direction = D_UP;
 					bubble.size = 1.0f;
 					bubble.capturing = true;
 					monster.setCaught();
-					monster.caughtBubble(bubble.pos);
+					monster.caughtBubble(bubble.getPosition());
 				}
 			}
 			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
