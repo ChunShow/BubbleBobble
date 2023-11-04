@@ -27,6 +27,8 @@ public:
 	void giveInvincibility();
 	bool isInvincible();
 
+	float* getHitbox();
+
 	Bubble shoot();
 
 	//  draw player's left lives
