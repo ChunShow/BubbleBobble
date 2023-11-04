@@ -25,7 +25,7 @@ public:
 	bool mapCollision(vector<vector<float>> borderHard);
 
 	float getRadius();
-	virtual float* getHitbox() override;
+	virtual Hitbox getHitbox() override;
 	clock_t getCreatedTime();
 	void draw();
 

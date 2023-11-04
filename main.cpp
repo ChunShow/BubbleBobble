@@ -140,8 +140,8 @@ void idle() {
 					bubble.direction = D_UP;
 					bubble.size = 1.0f;
 					bubble.capturing = true;
-					monster.setCaught();
 					monster.caughtBubble(bubble.getPosition());
+					monster.setCaught();
 				}
 			}
 			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
@@ -184,39 +184,36 @@ void display() {
 				player.decreaseLife();
 			}
 		}
-		player.drawPlayer();
-
-		glColor3f(0.3f, 0.9f, 0.2f);
-		int i = 0;
-		while (bubbles.begin() + i < bubbles.end()) {
-			if (bubbles[i].alive) {
-				bubbles[i].draw();
-				i++;
-			}
-			else {
-				bubbles.erase(bubbles.begin() + i);
-			}
-		}
-
-		int j = 0;
-		while (creature.begin() + j < creature.end()) {
-			if (!creature[j].getCaught()) {
-				creature[j].drawMonster();
-				j++;
-			}
-			else if (creature[j].getTime() > 0) {
-				creature[j].drawMonster();
-				j++;
-			}
-			else {
-				creature.erase(creature.begin() + j);
-			}
-		}
-
-		stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
-
-		glutSwapBuffers();
 	}
+	player.drawPlayer();
+
+	glColor3f(0.3f, 0.9f, 0.2f);
+	int i = 0;
+	while (bubbles.begin() + i < bubbles.end()) {
+		if (bubbles[i].alive) {
+			bubbles[i].draw();
+			i++;
+		}
+		else {
+			bubbles.erase(bubbles.begin() + i);
+		}
+	}
+	int j = 0;
+	while (creature.begin() + j < creature.end()) {
+		if (!creature[j].getCaught()) {
+			creature[j].drawMonster();
+			j++;
+		}
+		else if (creature[j].getTime() > 0) {
+			creature[j].drawMonster();
+			j++;
+		}
+		else {
+			creature.erase(creature.begin() + j);
+		}
+	}
+	stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
+	glutSwapBuffers();
 }
 
 int main(int argc, char** argv) {

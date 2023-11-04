@@ -1,6 +1,6 @@
 #pragma once
 #include "GL/freeglut.h"
-#include <vector>
+#include "Hitbox.h"
 #include <iostream>
 
 using namespace std;
@@ -25,7 +25,7 @@ public:
 	void setVelocityY(float v2);
 	float getVelocityY();
 
-	virtual float* getHitbox();
+	virtual Hitbox getHitbox();
 
 	bool collisionDetection(Object& other);
 

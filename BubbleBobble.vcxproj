@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Bubble.h" />
+    <ClInclude Include="Hitbox.h" />
     <ClInclude Include="keyFunction.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="main.h" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bubble.cpp" />
+    <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="keyFunction.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />

@@ -22,10 +22,10 @@ public:
 	void setCaught();
 	bool getCaught();
 	void setRotate();
-	bool getRotate();
+	bool isRotating();
 	float getTime();
 
-	virtual float* getHitbox() override;
+	virtual Hitbox getHitbox() override;
 
 	MONSTER type;
 	KEY direction;

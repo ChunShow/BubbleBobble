@@ -95,11 +95,10 @@ float Bubble::getRadius()
 	return size * max_radius;
 }
 
-float* Bubble::getHitbox()
+Hitbox Bubble::getHitbox()
 {
 	float r = getRadius();
-	float hitbox[4] = { getPositionX() - r,  getPositionX() + r, getPositionY() - r, getPositionY() + r };
-	return hitbox;
+	return Hitbox(getPositionX() - r,  getPositionX() + r, getPositionY() - r, getPositionY() + r);
 }
 
 clock_t Bubble::getCreatedTime()

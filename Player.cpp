@@ -688,13 +688,11 @@ void Player::drawLife() {
 	}
 }
 
-float* Player::getHitbox() {
-	float hitbox[4];
+Hitbox Player::getHitbox() {
 	float xLeft = getPositionX() + 0.03f;
 	float xRight = getPositionX() + 0.16f;
 	float yBottom = getPositionY();
 	float yTop = getPositionY() + 0.15f;
 
-	hitbox[0] = xLeft; hitbox[1] = xRight; hitbox[2] = yBottom; hitbox[3] = yTop;
-	return hitbox;
+	return Hitbox(xLeft, xRight, yBottom, yTop);
 };

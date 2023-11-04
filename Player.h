@@ -27,7 +27,7 @@ public:
 	void giveInvincibility();
 	bool isInvincible();
 
-	virtual float* getHitbox() override;
+	virtual Hitbox getHitbox() override;
 
 	Bubble shoot();
 

@@ -412,6 +412,7 @@ void Monster::caughtBubble(float bubblePos[2]) {
 		setPosition(bubblePos[0] - 0.1f, bubblePos[1] - 0.1f);
 	}
 }
+
 void Monster::setCaught() {
 	caught = true;
 	setRotate();
@@ -423,16 +424,17 @@ void Monster::setRotate() {
 	rotation = !rotation;
 	if (time == 0.0f) time = 50.0f;
 }
-bool Monster::getRotate() {
+bool Monster::isRotating() {
 	return rotation;
 }
+
 void Monster::drawRotate() {
-	if (getRotate()) {
-		time -= 1.0f;
+	if (isRotating()) {
+		//time -= 1.0f;
 		angle += 5.0f;
-		glTranslatef(getPosition()[0] + 0.07f, getPosition()[1] + 0.07f, 0.0f);
+		glTranslatef(getPositionX() + 0.07f, getPositionY() + 0.07f, 0.0f);
 		glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		glTranslatef(-getPosition()[0] - 0.07f, -getPosition()[1] - 0.07f, 0.0f);
+		glTranslatef(-getPositionX() - 0.07f, -getPositionY() - 0.07f, 0.0f);
 	}
 }
 
@@ -440,7 +442,7 @@ float Monster::getTime() {
 	return time;
 }
 
-float* Monster::getHitbox() {
+Hitbox Monster::getHitbox() {
 	float xLeft, xRight, yBottom, yTop;
 	float hitbox[4];
 	switch (type) {
@@ -457,6 +459,5 @@ float* Monster::getHitbox() {
 		yTop = getPositionY() + 0.15f;
 		break;
 	}
-	hitbox[0] = xLeft; hitbox[1] = xRight; hitbox[2] = yBottom; hitbox[3] = yTop;
-	return hitbox;
+	return Hitbox(xLeft, xRight, yBottom, yTop);
 }
