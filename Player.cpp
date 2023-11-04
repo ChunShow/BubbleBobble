@@ -688,3 +688,5 @@ void Player::drawLife() {
 	}
 }
 
+float* Player::getHitbox() {
+}
