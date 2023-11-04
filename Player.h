@@ -35,8 +35,6 @@ public:
 	void drawHeartPixel(float x, float y, int n, int i);
 	void drawLife();
 
-	void translate(float x, float y);
-
 	KEY direction;
 	STATE state;
 	float height;

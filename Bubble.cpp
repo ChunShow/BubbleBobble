@@ -62,16 +62,6 @@ bool Bubble::isCapturing()
 	return capturing;
 }
 
-bool Bubble::characterCollisionCheck(float hitbox[2][2])
-{
-	if (isGrown()) return false;
-	float boxCenterX = (hitbox[0][0] + hitbox[0][1]) / 2;
-	float boxCenterY = (hitbox[1][0] + hitbox[1][1]) / 2;
-	float boxLengthX = (hitbox[0][1] - hitbox[0][0]) / 2;
-	float boxLengthY = (hitbox[1][1] - hitbox[1][0]) / 2;
-	return (std::abs(position[0] - boxCenterX) < (boxLengthX+0.05) && std::abs(position[1] - boxCenterY) < (boxLengthY+0.05));
-}
-
 bool Bubble::mapCollision(vector<vector<float>> borderHard)
 {
 	float x, y, width, height;

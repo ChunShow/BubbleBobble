@@ -439,3 +439,21 @@ void Monster::drawRotate() {
 float Monster::getTime() {
 	return time;
 }
+
+float* Monster::getHitbox() {
+	float xLeft, xRight, yBottom, yTop;
+	switch (type) {
+		xLeft = position[0] + 0.01f;
+		xRight = position[0] + 0.14f;
+		yBottom = position[1];
+		yTop = position[1] + 0.13f;
+		break;
+	default:
+		xLeft = position[0];
+		xRight = position[0] + 0.15f;
+		yBottom = position[1];
+		yTop = position[1] + 0.15f;
+	}
+	float hitbox[4] = { xLeft, xRight, yBottom, yTop };
+	return hitbox;
+}
