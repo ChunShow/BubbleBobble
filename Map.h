@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Texture.h"
+#include "Monster.h"
 
 class Map {
 public:
@@ -22,7 +23,9 @@ public:
 	void setHard(float x, float y, float width, float height);
 
 	//  stages' pixel image setting
+	void drawStage0(Texture texture1, Texture texture2, Texture texture3);
 	void drawStage1(Texture texture1, Texture texture2, Texture texture3);
+	void drawStage2(Texture texture1, Texture texture2, Texture texture3);
 
 	//  check whether player's movement is allowed or not
 	bool checkFALL();
@@ -33,6 +36,10 @@ public:
 	//  restrict monster's movement range
 	bool checkMonster(Monster monster);
 
+	//  getter
+	vector<vector<float>> getBorderHard();
+
+private:
 	//  stage means the stage level
 	int stage;
 

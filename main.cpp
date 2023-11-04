@@ -7,9 +7,10 @@ clock_t endTime;
 
 Player player;
 Player* playerPointer = &player;
-Map stage1(1);
+vector<Map> stages;
 vector<Bubble> bubbles;
 vector<Monster> monsters;
+int level;
 
 Texture stoneTexture(STONE);
 Texture brickTexture(BRICK);
@@ -18,6 +19,12 @@ Texture defaultTexture;
 bool keystates[5];
 
 void initialize() {
+	level = 1;
+
+	for (int i = 0; i < 3; i++) {
+		stages.push_back(Map(i));
+	}
+
 	for (int i = 0; i < 3; i++) {
 		monsters.push_back(Monster(CREATURE));
 	}
@@ -36,28 +43,28 @@ void idle() {
 
 		if (keystates[KEY::LEFT]) {
 			//  case of player's direction changes from RIGHT to LEFT
-			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT;
+			if (player.getDirection() == KEY::RIGHT) player.setDirection(KEY::LEFT);
 			else {
-				if (player.state == FALL) player.translate(-0.015f, 0.0f);
+				if (player.getState() == FALL) player.translate(-0.015f, 0.0f);
 				else player.translate(-0.025f, 0.0f);
-				stage1.checkLEFT();
+				stages[level].checkLEFT();
 			}
 		}
 
 		if (keystates[KEY::RIGHT]) {
 			//  case of player's direction changes from LEFT to RIGHT
-			if (player.direction == KEY::LEFT) player.direction = KEY::RIGHT;
+			if (player.getDirection() == KEY::LEFT) player.setDirection(KEY::RIGHT);
 			else {
-				if (player.state == FALL) player.translate(0.015f, 0.0f);
+				if (player.getState() == FALL) player.translate(0.015f, 0.0f);
 				else player.translate(0.025f, 0.0f);
-				stage1.checkRIGHT();
+				stages[level].checkRIGHT();
 			}
 		}
 
 		if (keystates[KEY::DOWN]) {
 			// case of player's state is JUMP or FALL
-			if (player.state != STAY) {
-				player.state = FALL;
+			if (player.getState() != STAY) {
+				player.setState(FALL);
 				player.translate(0.0f, -0.01f);
 			}
 		}
@@ -68,26 +75,26 @@ void idle() {
 			lastCreationTime = endTime;
 		}
 
-		if (player.state == STAY) {
-			if (stage1.checkFALL()) {
-				player.state = FALL;
+		if (player.getState() == STAY) {
+			if (stages[level].checkFALL()) {
+				player.setState(FALL);
 			}
 		}
 
-		else if (player.state == JUMP) {
+		else if (player.getState() == JUMP) {
 			if (player.getVelocityY() > 0) {
 				player.setVelocityY(player.getVelocityY()-0.008f);
 				player.translate(0.0f, player.getVelocityY());
-				stage1.checkJUMP();
+				stages[level].checkJUMP();
 			}
 			else {
 				player.translate(0.0f, -0.01f);
-				player.state = FALL;
+				player.setState(FALL);
 			}
 		}
 
-		else if (player.state == FALL) {
-			if (stage1.checkFALL()) {
+		else if (player.getState() == FALL) {
+			if (stages[level].checkFALL()) {
 				player.translate(0.0f, -0.01f);
 			}
 		}
@@ -108,17 +115,17 @@ void idle() {
 				monster.setPosition(bubble_x - bubble.max_radius, bubble_y - bubble.max_radius);
 				continue;
 			}
-			if (monster.direction == LEFT) {
-				if (stage1.checkMonster(monster)) monster.translate(-0.015f, 0.0f);
+			if (monster.getDirection() == LEFT) {
+				if (stages[level].checkMonster(monster)) monster.translate(-0.015f, 0.0f);
 				else {
-					monster.direction = RIGHT;
+					monster.setDirection(RIGHT);
 					monster.translate(0.015f, 0.0f);
 				}
 			}
 			else {
-				if (stage1.checkMonster(monster)) monster.translate(0.015f, 0.0f);
+				if (stages[level].checkMonster(monster)) monster.translate(0.015f, 0.0f);
 				else {
-					monster.direction = LEFT;
+					monster.setDirection(LEFT);
 					monster.translate(-0.015f, 0.0f);
 				}
 			}
@@ -134,7 +141,7 @@ void idle() {
 			if (bubble.direction == D_LEFT) bubble.translate(-speed, 0.0f);
 			if (bubble.direction == D_RIGHT) bubble.translate(speed, 0.0f);
 			if (bubble.direction == D_UP) bubble.translate(0.0f, speed * 0.1);
-			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
+			if (bubble.mapCollision(stages[level].getBorderHard()) || bubble.isGrown()) bubble.direction = D_UP;
 
 			if (bubble.getPositionX() < -1.0f) bubble.setPositionX(1.0f);
 			if (bubble.getPositionX() > 1.0f) bubble.setPositionX(-1.0f);
@@ -216,7 +223,7 @@ void display() {
 			j++;
 		}
 	}
-	stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
+	stages[level].drawMap(brickTexture, stoneTexture, defaultTexture);
 	glutSwapBuffers();
 }
 

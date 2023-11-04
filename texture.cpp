@@ -1,9 +1,11 @@
 #include "Texture.h"
 
 Texture::Texture() : textureType(DEFAULT) {}
+
 Texture::Texture(TEXTURE type) : textureType(type) {}
 
-FIBITMAP* Texture::createBitMap(char const* filename) {
+FIBITMAP* Texture::createBitMap(char const* filename) 
+{
 	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename, 0);
 	if (format == -1) { //  couldn't find image
 		exit(-1);
@@ -26,7 +28,9 @@ FIBITMAP* Texture::createBitMap(char const* filename) {
 	}
 	return bitmap32;
 }
-void Texture::generateTexture() {
+
+void Texture::generateTexture() 
+{
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -36,7 +40,9 @@ void Texture::generateTexture() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight,
 		0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, textureData);
 }
-void Texture::initTexture() {
+
+void Texture::initTexture() 
+{
 	FIBITMAP* bitmap32;
 	setTextureFile(bitmap32);
 	imageWidth = FreeImage_GetWidth(bitmap32);
@@ -44,8 +50,10 @@ void Texture::initTexture() {
 	textureData = FreeImage_GetBits(bitmap32);
 	generateTexture();
 }
+
 //  a texture image file is assigned to a bitmap according to a texture type
-void Texture::setTextureFile(FIBITMAP*& bitmap) {
+void Texture::setTextureFile(FIBITMAP*& bitmap) 
+{
 	switch (textureType) {
 	case BRICK:
 		bitmap = createBitMap("texture/brick2.png");
@@ -58,6 +66,8 @@ void Texture::setTextureFile(FIBITMAP*& bitmap) {
 		break;
 	}
 }
-GLuint Texture::getTextureID() const {
+
+GLuint Texture::getTextureID() const 
+{
 	return textureID;
 }

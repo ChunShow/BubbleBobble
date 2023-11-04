@@ -3,7 +3,8 @@
 
 enum MONSTER { ROBOT, CREATURE, GHOST };
 
-class Monster: public Object {
+class Monster: public Object
+{
 public:
 	//  constructor
 	Monster(MONSTER Type);
@@ -17,19 +18,23 @@ public:
 	void leftCreature();
 	void rightCreature();
 
-	//  change monster's position (x, y coordinates)
 	void trap(Bubble& bubble);
 	bool isTrapped();
-	void setRotate();
 	bool isRotating();
-	float getTime();
-	void kill();
 	bool isAlive();
+	void kill();
 
+	//  setter
+	void setRotate();
+	void setDirection(KEY drt);
+
+	//  getter
+	KEY getDirection();
+	float getTime();
 	Bubble* getTrappedBubble();
-
 	virtual Hitbox getHitbox() override;
 
+private:
 	MONSTER type;
 	KEY direction;
 

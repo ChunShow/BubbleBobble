@@ -32,11 +32,11 @@ void Bubble::initialize()
 
 	setMaterial(mtl);
 
-	glMaterialfv(GL_FRONT, GL_EMISSION, mtl.emission);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mtl.ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mtl.ambient);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mtl.ambient);
-	glMaterialfv(GL_FRONT, GL_SHININESS, mtl.shininess);
+	glMaterialfv(GL_FRONT, GL_EMISSION, mtl.getEmission());
+	glMaterialfv(GL_FRONT, GL_AMBIENT, mtl.getAmbient());
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mtl.getDiffuse());
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mtl.getSpecular());
+	glMaterialfv(GL_FRONT, GL_SHININESS, mtl.getShininess());
 
 	setSize(1.0);
 }

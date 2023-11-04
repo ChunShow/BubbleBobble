@@ -9,7 +9,8 @@ Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 	angle = 0.0f;
 }
 
-void Monster::drawMonster() {
+void Monster::drawMonster() 
+{
 	glPushMatrix();
 	drawRotate();
 	//  draw monster according to the type
@@ -23,9 +24,23 @@ void Monster::drawMonster() {
 	}
 	glPopMatrix();
 }
-void Monster::drawPixel(float x, float y, int n) {
-	float x_pos = getPosition()[0];
-	float y_pos = getPosition()[1];
+
+void Monster::drawRotate()
+{
+	if (isRotating()) {
+		//time -= 0.001f;
+		angle += 5.0f;
+		glTranslatef(getPositionX() + 0.085f, getPositionY() + 0.085f, 1.0f);
+		glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		glScalef(0.7f, 0.7f, 0.7f);
+		glTranslatef(-getPositionX() - 0.085f, -getPositionY() - 0.085f, 0.0f);
+	}
+}
+
+void Monster::drawPixel(float x, float y, int n)
+{
+	float x_pos = getPositionX();
+	float y_pos = getPositionY();
 	glBegin(GL_POLYGON);
 	glVertex2f(x_pos + x, y_pos + y);
 	glVertex2f(x_pos + x, y_pos + y + 0.01f);
@@ -221,6 +236,7 @@ void Monster::leftCreature() {
 	y += 0.01f;
 	drawPixel(0.09f, y, 1);
 }
+
 void Monster::rightCreature() {
 	//  black
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -409,36 +425,26 @@ void Monster::rightCreature() {
 	drawPixel(0.09f, y, 1);
 }
 
-void Monster::trap(Bubble& bubble) {
+void Monster::trap(Bubble& bubble) 
+{
 	trapped = true;
 	trappedBubble = &bubble;
 	setRotate();
 }
 
-bool Monster::isTrapped() {
+bool Monster::isTrapped() 
+{
 	return trapped;
 }
-void Monster::setRotate() {
-	rotation = !rotation;
-	if (time == 0.0f) time = 50.0f;
-}
-bool Monster::isRotating() {
+
+bool Monster::isRotating() 
+{
 	return rotation;
 }
 
-void Monster::drawRotate() {
-	if (isRotating()) {
-		//time -= 0.001f;
-		angle += 5.0f;
-		glTranslatef(getPositionX() + 0.09f, getPositionY() + 0.09f, 1.0f);
-		glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		glScalef(0.7f, 0.7f, 0.7f);
-		glTranslatef(-getPositionX() - 0.07f, -getPositionY() - 0.07f, 0.0f);
-	}
-}
-
-float Monster::getTime() {
-	return time;
+bool Monster::isAlive()
+{
+	return alive;
 }
 
 void Monster::kill()
@@ -446,9 +452,26 @@ void Monster::kill()
 	alive = false;
 }
 
-bool Monster::isAlive()
+
+void Monster::setRotate()
 {
-	return alive;
+	rotation = !rotation;
+	if (time == 0.0f) time = 50.0f;
+}
+
+void Monster::setDirection(KEY drt)
+{
+	direction = drt;
+}
+
+KEY Monster::getDirection()
+{
+	return direction;
+}
+
+float Monster::getTime()
+{
+	return time;
 }
 
 Bubble* Monster::getTrappedBubble()
@@ -460,9 +483,9 @@ Bubble* Monster::getTrappedBubble()
 	return trappedBubble;
 }
 
-Hitbox Monster::getHitbox() {
+Hitbox Monster::getHitbox() 
+{
 	float xLeft, xRight, yBottom, yTop;
-	float hitbox[4];
 	switch (type) {
 	case(CREATURE):
 		xLeft = getPositionX() + 0.01f;

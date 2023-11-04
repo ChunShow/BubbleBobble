@@ -5,7 +5,8 @@
 enum KEY { LEFT, RIGHT, UP, DOWN, SPACEBAR };
 enum STATE { STAY, JUMP, FALL };
 
-class Player: public Object {
+class Player: public Object 
+{
 public:
 	//  constructor
 	Player();
@@ -23,18 +24,29 @@ public:
 	void rightDragonFALL();
 	void updatePosition();
 
+	//  reflect player's contact with other monsters
 	void decreaseLife();
 	void giveInvincibility();
 	bool isInvincible();
 
-	virtual Hitbox getHitbox() override;
-
+	//  draw bubble
 	Bubble shoot();
+	
+	//  setter
+	void setDirection(KEY dr);
+	void setState(STATE st);
+
+	//  getter
+	KEY getDirection();
+	STATE getState();
+	float getHeight();
+	virtual Hitbox getHitbox() override;
 
 	//  draw player's left lives
 	void drawHeartPixel(float x, float y, int n, int i);
 	void drawLife();
 
+private:
 	KEY direction;
 	STATE state;
 	float height;

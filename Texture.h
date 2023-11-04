@@ -6,8 +6,10 @@ enum TEXTURE { BRICK, STONE, DEFAULT };
 
 class Texture{
 public:
+	//  constructor
 	Texture();
 	Texture(TEXTURE type);
+
 	FIBITMAP* createBitMap(char const* filename);
 	void generateTexture();
 	void initTexture();

@@ -1,11 +1,13 @@
 #include "main.h"
 
 //  initial setting of player
-Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(5) {
+Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(5) 
+{
 	setPosition(-0.90f, -0.95f);
 }
 
-void Player::drawPlayer() {
+void Player::drawPlayer() 
+{
 	if (blinkTime % 4 == 0 || blinkTime % 4 == 1) {
 		//  draw dragon facing left
 		if (direction == LEFT) {
@@ -26,7 +28,8 @@ void Player::drawPlayer() {
 	drawLife();
 }
 
-void Player::drawPixel(float x, float y, int n) {
+void Player::drawPixel(float x, float y, int n) 
+{
 	glBegin(GL_POLYGON);
 	glVertex2f(getPositionX() + x, getPositionY() + y);
 	glVertex2f(getPositionX() + x, getPositionY() + y + 0.01f);
@@ -34,7 +37,9 @@ void Player::drawPixel(float x, float y, int n) {
 	glVertex2f(getPositionX() + x + n * 0.01f, getPositionY() + y);
 	glEnd();
 }
-void Player::leftDragon() {
+
+void Player::leftDragon() 
+{
 	// black
 	glColor3f(0.0f, 0.0f, 0.0f);
 	float y = 0.0f;
@@ -270,7 +275,9 @@ void Player::leftDragon() {
 	y += 0.01f;
 	drawPixel(0.08f, y, 1);
 }
-void Player::rightDragon() {
+
+void Player::rightDragon() 
+{
 	// black pixel
 	glColor3f(0.0f, 0.0f, 0.0f);
 	float y = 0.0f;
@@ -506,7 +513,9 @@ void Player::rightDragon() {
 	y += 0.01f;
 	drawPixel(0.09f, y, 1);
 }
-void Player::leftDragonJUMP() {
+
+void Player::leftDragonJUMP() 
+{
 	float y = 0.073f;
 	glColor3f(1.0f, 1.0f, 1.0f);
 	drawPixel(0.04f, y, 1);
@@ -533,7 +542,9 @@ void Player::leftDragonJUMP() {
 	drawPixel(0.04f, y, 1);
 	drawPixel(0.06f, y, 1);
 }
-void Player::rightDragonJUMP() {
+
+void Player::rightDragonJUMP()
+{
 	float y =  0.073f;
 	glColor3f(1.0f, 1.0f, 1.0f);
 	drawPixel(0.11f, y, 1);
@@ -560,7 +571,9 @@ void Player::rightDragonJUMP() {
 	drawPixel(0.11f, y, 1);
 	drawPixel(0.13f, y, 1);
 }
-void Player::leftDragonFALL() {
+
+void Player::leftDragonFALL()
+{
 	float y = 0.074f;
 	glColor3f(0.0f, 0.0f, 0.0f);
 	drawPixel(0.04f, y, 1);
@@ -587,7 +600,9 @@ void Player::leftDragonFALL() {
 	drawPixel(0.04f, y, 1);
 	drawPixel(0.06f, y, 1);
 }
-void Player::rightDragonFALL() {
+
+void Player::rightDragonFALL()
+{
 	float y = 0.074f;
 	glColor3f(0.0f, 0.0f, 0.0f);
 	drawPixel(0.11f, y, 1);
@@ -615,7 +630,8 @@ void Player::rightDragonFALL() {
 	drawPixel(0.13f, y, 1);
 }
 
-void Player::updatePosition() {
+void Player::updatePosition()
+{
 	//  change player's x, y coordinates
 	//  when player is out of the window, change the position of player
 	//  out of the left side
@@ -668,6 +684,43 @@ Bubble Player::shoot()
 	return bubble;
 }
 
+void Player::setDirection(KEY dr)
+{
+	direction = dr;
+}
+
+
+void Player::setState(STATE st)
+{
+	state = st;
+}
+
+
+KEY Player::getDirection()
+{
+	return direction;
+}
+
+STATE Player::getState()
+{
+	return state;
+}
+
+float Player::getHeight()
+{
+	return height;
+}
+
+Hitbox Player::getHitbox()
+{
+	float xLeft = getPositionX() + 0.03f;
+	float xRight = getPositionX() + 0.16f;
+	float yBottom = getPositionY();
+	float yTop = getPositionY() + 0.15f;
+
+	return Hitbox(xLeft, xRight, yBottom, yTop);
+};
+
 void Player::drawHeartPixel(float x, float y, int n, int i) {
 	glBegin(GL_POLYGON);
 	glVertex2f(-0.99f + i * 0.08f + x, -0.995f + y);
@@ -677,7 +730,8 @@ void Player::drawHeartPixel(float x, float y, int n, int i) {
 	glEnd();
 }
 
-void Player::drawLife() {
+void Player::drawLife() 
+{
 	glColor3f(1.0f, 0.0f, 0.0f);
 	for (int i = 0; i < life; i++) {
 		drawHeartPixel(0.02f, 0.00f, 1, i);
@@ -687,12 +741,3 @@ void Player::drawLife() {
 		drawHeartPixel(0.03f, 0.03f, 1, i);
 	}
 }
-
-Hitbox Player::getHitbox() {
-	float xLeft = getPositionX() + 0.03f;
-	float xRight = getPositionX() + 0.16f;
-	float yBottom = getPositionY();
-	float yTop = getPositionY() + 0.15f;
-
-	return Hitbox(xLeft, xRight, yBottom, yTop);
-};

@@ -3,14 +3,19 @@
 class Light
 {
 public:
+	//  constructor
 	Light();
+
+	//  setter
 	void setLightID(int LID);
 	void setPosition(float x, float y, float z, float w);
 	void setAmbient(float r, float g, float b, float a);
 	void setDiffuse(float r, float g, float b, float a);
 	void setSpecular(float r, float g, float b, float a);
+
 	void draw() const;
 
+private:
 	int lightID;
 	float pos[4];
 	float ambient[4];

@@ -35,11 +35,6 @@ float Object::getPositionY()
 	return position[1];
 }
 
-void Object::translate(float x, float y)
-{
-	setPosition(getPositionX() + x, getPositionY() + y);
-}
-
 void Object::setVelocity(float v1, float v2)
 {
 	velocity[0] = v1; velocity[1] = v2;
@@ -70,17 +65,22 @@ float Object::getVelocityY()
 	return velocity[1];
 }
 
+Hitbox Object::getHitbox()
+{
+	Hitbox hitbox(0.0f, 0.0f, 0.0f, 0.0f);
+	cout << "this method should not be called" << endl;
+	return hitbox;
+}
+
+void Object::translate(float x, float y)
+{
+	setPosition(getPositionX() + x, getPositionY() + y);
+}
+
 bool Object::collisionDetection(Object& other)
 {
 	Hitbox hitbox1 = getHitbox();
 	Hitbox hitbox2 = other.getHitbox();
 
 	return hitbox1.collisionDetection(hitbox2);
-}
-
-Hitbox Object::getHitbox()
-{
-	Hitbox hitbox(0.0f, 0.0f, 0.0f, 0.0f);
-	cout << "this method should not be called" << endl;
-	return hitbox;
 }
