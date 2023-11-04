@@ -25,6 +25,7 @@ void Player::drawPlayer() {
 
 	drawLife();
 }
+
 void Player::drawPixel(float x, float y, int n) {
 	glBegin(GL_POLYGON);
 	glVertex2f(position[0] + x, position[1] + y);
@@ -686,3 +687,4 @@ void Player::drawLife() {
 		drawHeartPixel(0.03f, 0.03f, 1, i);
 	}
 }
+

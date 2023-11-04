@@ -178,40 +178,41 @@ void display() {
 			if (!player.isInvincible()) {
 				player.giveInvincibility();
 				player.decreaseLife();
+			}
 		}
+		player.drawPlayer();
+
+		glColor3f(0.3f, 0.9f, 0.2f);
+		int i = 0;
+		while (bubbles.begin() + i < bubbles.end()) {
+			if (bubbles[i].alive) {
+				bubbles[i].draw();
+				i++;
+			}
+			else {
+				bubbles.erase(bubbles.begin() + i);
+			}
+		}
+
+		int j = 0;
+		while (creature.begin() + j < creature.end()) {
+			if (!creature[j].getCaught()) {
+				creature[j].drawMonster();
+				j++;
+			}
+			else if (creature[j].getTime() > 0) {
+				creature[j].drawMonster();
+				j++;
+			}
+			else {
+				creature.erase(creature.begin() + j);
+			}
+		}
+
+		stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
+
+		glutSwapBuffers();
 	}
-	player.drawPlayer();
-
-	glColor3f(0.3f, 0.9f, 0.2f);
-	int i = 0;
-	while (bubbles.begin() + i < bubbles.end()) {
-		if (bubbles[i].alive) {
-			bubbles[i].draw();
-			i++;
-		}
-		else {
-			bubbles.erase(bubbles.begin() + i);
-		}
-	}
-
-	int j = 0;
-	while (creature.begin() + j < creature.end()) {
-		if (!creature[j].getCaught()) {
-			creature[j].drawMonster();
-			j++;
-		}
-		else if (creature[j].getTime() > 0) {
-			creature[j].drawMonster();
-			j++;
-		}
-		else {
-			creature.erase(creature.begin() + j);
-		}
-	}
-
-	stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
-
-	glutSwapBuffers();
 }
 
 int main(int argc, char** argv) {
