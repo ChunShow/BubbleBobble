@@ -6,9 +6,10 @@ clock_t lastCreationTime = clock();
 clock_t endTime;
 
 Player player;
+Player* playerPointer = &player;
 Map stage1(1);
 vector<Bubble> bubbles;
-vector<Monster> creature;
+vector<Monster> monsters;
 
 Texture stoneTexture(STONE);
 Texture brickTexture(BRICK);
@@ -18,11 +19,11 @@ bool keystates[5];
 
 void initialize() {
 	for (int i = 0; i < 3; i++) {
-		creature.push_back(Monster(CREATURE));
+		monsters.push_back(Monster(CREATURE));
 	}
-	creature[0].setPosition(0.0f, -0.53f);
-	creature[1].setPosition(0.0f, -0.11);
-	creature[2].setPosition(0.0f, 0.36f);
+	monsters[0].setPosition(0.0f, -0.53f);
+	monsters[1].setPosition(0.0f, -0.11);
+	monsters[2].setPosition(0.0f, 0.36f);
 
 	stoneTexture.initTexture();
 	brickTexture.initTexture();
@@ -32,29 +33,32 @@ void initialize() {
 void idle() {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
+
 		if (keystates[KEY::LEFT]) {
 			//  case of player's direction changes from RIGHT to LEFT
 			if (player.direction == KEY::RIGHT) player.direction = KEY::LEFT;
 			else {
-				if (player.state == FALL) player.setPosition(-0.015f, 0.0f);
-				else player.setPosition(-0.025f, 0.0f);
+				if (player.state == FALL) player.translate(-0.015f, 0.0f);
+				else player.translate(-0.025f, 0.0f);
 				stage1.checkLEFT();
 			}
 		}
+
 		if (keystates[KEY::RIGHT]) {
 			//  case of player's direction changes from LEFT to RIGHT
 			if (player.direction == KEY::LEFT) player.direction = KEY::RIGHT;
 			else {
-				if (player.state == FALL) player.setPosition(0.015f, 0.0f);
-				else player.setPosition(0.025f, 0.0f);
+				if (player.state == FALL) player.translate(0.015f, 0.0f);
+				else player.translate(0.025f, 0.0f);
 				stage1.checkRIGHT();
 			}
 		}
+
 		if (keystates[KEY::DOWN]) {
 			// case of player's state is JUMP or FALL
 			if (player.state != STAY) {
 				player.state = FALL;
-				player.setPosition(0.0f, -0.01f);
+				player.translate(0.0f, -0.01f);
 			}
 		}
 		if (keystates[KEY::SPACEBAR] && (endTime - lastCreationTime) > 300) {
@@ -71,70 +75,77 @@ void idle() {
 		}
 
 		else if (player.state == JUMP) {
-			if (player.velocity > 0) {
-				player.setPosition(0.0f, player.velocity);
+			if (player.getVelocityY() > 0) {
+				player.setVelocityY(player.getVelocityY()-0.008f);
+				player.translate(0.0f, player.getVelocityY());
 				stage1.checkJUMP();
-				player.velocity -= 0.008f;
 			}
 			else {
-				player.position[1] -= 0.01f;
+				player.translate(0.0f, -0.01f);
 				player.state = FALL;
 			}
 		}
+
 		else if (player.state == FALL) {
 			if (stage1.checkFALL()) {
-				player.setPosition(0.0f, -0.01f);
+				player.translate(0.0f, -0.01f);
 			}
 		}
 
+		player.updatePosition();
+
 		for (auto& bubble : bubbles) {
 			if (!bubble.isGrown()) continue;
-			vector<vector<float>> box = bubble.getHitBox();
-			if (player.checkHitBubble(bubble.getHitBox())) {
+			if (bubble.collisionDetection(*playerPointer)) {
 				bubble.alive = false;
 			}
 		}
 
-		for (auto monster = creature.begin(); monster < creature.end(); monster++) {
-			if ((*monster).direction == LEFT) {
-				if (stage1.checkMonster(*monster)) (*monster).setPosition(-0.015f, 0.0f);
+		for (auto& monster : monsters) {
+			if (monster.isTrapped()) {
+				Bubble bubble = *monster.getTrappedBubble();
+				float bubble_x = bubble.getPositionX(); float bubble_y = bubble.getPositionY();
+				monster.setPosition(bubble_x - bubble.max_radius, bubble_y - bubble.max_radius);
+				continue;
+			}
+			if (monster.direction == LEFT) {
+				if (stage1.checkMonster(monster)) monster.translate(-0.015f, 0.0f);
 				else {
-					(*monster).direction = RIGHT;
-					(*monster).setPosition(0.015f, 0.0f);
+					monster.direction = RIGHT;
+					monster.translate(0.015f, 0.0f);
 				}
 			}
 			else {
-				if (stage1.checkMonster(*monster)) (*monster).setPosition(0.015f, 0.0f);
+				if (stage1.checkMonster(monster)) monster.translate(0.015f, 0.0f);
 				else {
-					(*monster).direction = LEFT;
-					(*monster).setPosition(-0.015f, 0.0f);
+					monster.direction = LEFT;
+					monster.translate(-0.015f, 0.0f);
 				}
 			}
 		}
 
 		for (auto& bubble : bubbles) {
-			float speed = bubble.speed;
+			float speed = bubble.horizontal_speed;
 			float size = bubble.size;
 
 			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
 
-			float x = bubble.pos[0]; float y = bubble.pos[1];
-			if (bubble.direction == D_LEFT) bubble.setPos(x - speed, y);
-			if (bubble.direction == D_RIGHT) bubble.setPos(x + speed, y);
-			if (bubble.direction == D_UP) bubble.setPos(bubble.pos[0], bubble.pos[1] + speed * 0.1);
+			float x = bubble.getPositionX(); float y = bubble.getPositionY();
+			if (bubble.direction == D_LEFT) bubble.translate(-speed, 0.0f);
+			if (bubble.direction == D_RIGHT) bubble.translate(speed, 0.0f);
+			if (bubble.direction == D_UP) bubble.translate(0.0f, speed * 0.1);
 			if (bubble.mapCollision(stage1.borderHard) || bubble.isGrown()) bubble.direction = D_UP;
 
-			if (bubble.pos[0] < -1.0f) bubble.setPos(1.0f, bubble.pos[1]);
-			if (bubble.pos[0] > 1.0f) bubble.setPos(-1.0f, bubble.pos[1]);
-			if (bubble.pos[1] > 1.0f) bubble.setPos(bubble.pos[0], -1.0f);
+			if (bubble.getPositionX() < -1.0f) bubble.setPositionX(1.0f);
+			if (bubble.getPositionX() > 1.0f) bubble.setPositionX(-1.0f);
+			if (bubble.getPositionY() > 1.0f) bubble.setPositionY(-1.0f);
 
-			for (auto& monster : creature) {
-				if (bubble.characterCollisionCheck(monster.hitbox) && !monster.getCaught()) {
+			for (auto& monster : monsters) {
+				if (bubble.collisionDetection(monster) && !monster.isTrapped() && !bubble.isGrown()) {
 					bubble.direction = D_UP;
 					bubble.size = 1.0f;
 					bubble.capturing = true;
-					monster.setCaught();
-					monster.caughtBubble(bubble.pos);
+					monster.trap(bubble);
 				}
 			}
 			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
@@ -170,7 +181,14 @@ void display() {
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	for (auto monster : creature) player.checkHit(monster.hitbox);
+	for (auto& monster : monsters) {
+		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
+			if (!player.isInvincible()) {
+				player.giveInvincibility();
+				player.decreaseLife();
+			}
+		}
+	}
 	player.drawPlayer();
 
 	glColor3f(0.3f, 0.9f, 0.2f);
@@ -184,24 +202,21 @@ void display() {
 			bubbles.erase(bubbles.begin() + i);
 		}
 	}
-
 	int j = 0;
-	while (creature.begin() + j < creature.end()) {
-		if (!creature[j].getCaught()) {
-			creature[j].drawMonster();
+	while (monsters.begin() + j < monsters.end()) {
+		if (!monsters[j].isTrapped()) {
+			monsters[j].drawMonster();
 			j++;
 		}
-		else if (creature[j].getTime() > 0) {
-			creature[j].drawMonster();
-			j++;
+		else if (!monsters[j].isAlive()) {
+			monsters.erase(monsters.begin() + j);
 		}
 		else {
-			creature.erase(creature.begin() + j);
+			monsters[j].drawMonster();
+			j++;
 		}
 	}
-
 	stage1.drawMap(brickTexture, stoneTexture, defaultTexture);
-
 	glutSwapBuffers();
 }
 

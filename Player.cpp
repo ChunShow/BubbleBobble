@@ -2,11 +2,7 @@
 
 //  initial setting of player
 Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(5) {
-	position[0] = -0.9f; position[1] = -0.95f;
-	hitbox[0][0] = position[0] + 0.03f;
-	hitbox[0][1] = position[0] + 0.16f;
-	hitbox[1][0] = position[1];
-	hitbox[1][1] = position[1] + 0.15f;
+	setPosition(-0.90f, -0.95f);
 }
 
 void Player::drawPlayer() {
@@ -29,12 +25,13 @@ void Player::drawPlayer() {
 
 	drawLife();
 }
+
 void Player::drawPixel(float x, float y, int n) {
 	glBegin(GL_POLYGON);
-	glVertex2f(position[0] + x, position[1] + y);
-	glVertex2f(position[0] + x, position[1] + y + 0.01f);
-	glVertex2f(position[0] + x + n * 0.01f, position[1] + y + 0.01f);
-	glVertex2f(position[0] + x + n * 0.01f, position[1] + y);
+	glVertex2f(getPositionX() + x, getPositionY() + y);
+	glVertex2f(getPositionX() + x, getPositionY() + y + 0.01f);
+	glVertex2f(getPositionX() + x + n * 0.01f, getPositionY() + y + 0.01f);
+	glVertex2f(getPositionX() + x + n * 0.01f, getPositionY() + y);
 	glEnd();
 }
 void Player::leftDragon() {
@@ -618,86 +615,57 @@ void Player::rightDragonFALL() {
 	drawPixel(0.13f, y, 1);
 }
 
-void Player::setPosition(float x, float y) {
+void Player::updatePosition() {
 	//  change player's x, y coordinates
-	position[0] += x;
-	position[1] += y;
-
 	//  when player is out of the window, change the position of player
 	//  out of the left side
-	if ((direction == KEY::LEFT) && (position[0] + 0.01f < -1.2f)) {
-		player.position[0] = 1.05f;
+	if ((direction == KEY::LEFT) && (getPositionX() + 0.01f < -1.2f)) {
+		setPositionX(1.05f);
 	}
 	//  out of the right side
-	else if ((direction == KEY::RIGHT) && (position[0] + 0.16f > 1.2f)) {
-		player.position[0] = -1.18f;
+	else if ((direction == KEY::RIGHT) && (getPositionX()  + 0.16f > 1.2f)) {
+		setPositionX(-1.18f);
 	}
 
 	//  when player is dropped in the bottom hole
-	if (player.position[1] < -1.2f) {
-		player.position[1] = 1.0f;
+	if (getPositionY() < -1.2f) {
+		setPositionY(1.0f) ;
 	}
+}
 
-	//  change player's hitbox coordinate
-	if (direction == RIGHT) {
-		hitbox[0][0] = position[0] + 0.03f;
-		hitbox[0][1] = position[0] + 0.16f;
-	}
-	else {
-		hitbox[0][0] = position[0] + 0.01f;
-		hitbox[0][1] = position[0] + 0.14f;
-	}
-	hitbox[1][0] = position[1];
-	hitbox[1][1] = position[1] + 0.15f;
+void Player::decreaseLife()
+{
+	player.life -= 1;
+}
 
+void Player::giveInvincibility()
+{
+	player.blinkTime = 27;
+}
+
+bool Player::isInvincible()
+{
+	return blinkTime > 0;
 }
 
 Bubble Player::shoot()
 {
 	Bubble bubble;
 	bubble.initialize();
-	float x = player.position[0];
-	float y = player.position[1];
+	float x = getPositionX(); float y = getPositionY();
 
 	bubble.setSize(0.1f);
 	if (direction == KEY::LEFT) {
-		bubble.setPos(x, y + 0.1f);
+		bubble.setPosition(x, y + 0.1f);
 		bubble.setDirection(DIRECT::D_LEFT);
 	}
 	else {
-		bubble.setPos(x + 0.1f, y + 0.1f);
+		bubble.setPosition(x + 0.1f, y + 0.1f);
 		bubble.setDirection(DIRECT::D_RIGHT);
 	}
 	bubble.createdTime = clock();
 	bubble.draw();
 	return bubble;
-}
-
-void Player::checkHit(float box[2][2]) {
-	//  float box[2][2] means a Monster's hit box
-	//  only check when blinkTime is 0 
-	if (blinkTime == 0) {
-		//  check whether player's hit box contacts Monster's hit box
-		if ((box[0][0] <= player.hitbox[0][0] && player.hitbox[0][0] <= box[0][1]) ||
-			(box[0][0] <= player.hitbox[0][1] && player.hitbox[0][1] <= box[0][1])) {
-			if ((box[1][0] <= player.hitbox[1][0] && player.hitbox[1][0] <= box[1][1]) ||
-				(box[1][0] <= player.hitbox[1][1] && player.hitbox[1][1] <= box[1][1])) {
-				//  if player's hit box contacts Monster's hit box, decrease the number of life and generate blinkTime
-				life--;
-				blinkTime = 27;
-			}
-		}
-	}
-}
-
-bool Player::checkHitBubble(vector<vector<float>> box) {
-	if ((box[0][0] <= player.hitbox[0][0] && player.hitbox[0][0] <= box[0][1]) ||
-		(box[0][0] <= player.hitbox[0][1] && player.hitbox[0][1] <= box[0][1])) {
-		if ((box[1][0] <= player.hitbox[1][0] && player.hitbox[1][0] <= box[1][1]) ||
-			(box[1][0] <= player.hitbox[1][1] && player.hitbox[1][1] <= box[1][1])) {
-			return true;
-		}
-	}
 }
 
 void Player::drawHeartPixel(float x, float y, int n, int i) {
@@ -708,6 +676,7 @@ void Player::drawHeartPixel(float x, float y, int n, int i) {
 	glVertex2f(-0.99f + i * 0.08f + x + n * 0.01f, -0.995f + y);;
 	glEnd();
 }
+
 void Player::drawLife() {
 	glColor3f(1.0f, 0.0f, 0.0f);
 	for (int i = 0; i < life; i++) {
@@ -718,3 +687,12 @@ void Player::drawLife() {
 		drawHeartPixel(0.03f, 0.03f, 1, i);
 	}
 }
+
+Hitbox Player::getHitbox() {
+	float xLeft = getPositionX() + 0.03f;
+	float xRight = getPositionX() + 0.16f;
+	float yBottom = getPositionY();
+	float yTop = getPositionY() + 0.15f;
+
+	return Hitbox(xLeft, xRight, yBottom, yTop);
+};

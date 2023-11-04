@@ -1,9 +1,11 @@
 #pragma once
 #include "Bubble.h"
+#include "Object.h"
+
 enum KEY { LEFT, RIGHT, UP, DOWN, SPACEBAR };
 enum STATE { STAY, JUMP, FALL };
 
-class Player {
+class Player: public Object {
 public:
 	//  constructor
 	Player();
@@ -19,17 +21,15 @@ public:
 	void rightDragonJUMP();
 	void leftDragonFALL();
 	void rightDragonFALL();
+	void updatePosition();
 
-	//  change player's position (x, y coordinates)
-	void setPosition(float x, float y);
-	
+	void decreaseLife();
+	void giveInvincibility();
+	bool isInvincible();
+
+	virtual Hitbox getHitbox() override;
+
 	Bubble shoot();
-
-	//  check whether player contacts a monster
-	void checkHit(float box[2][2]);
-
-	// check whether player contacts with a bubble
-	bool checkHitBubble(vector<vector<float>> hitBox);
 
 	//  draw player's left lives
 	void drawHeartPixel(float x, float y, int n, int i);
@@ -37,20 +37,11 @@ public:
 
 	KEY direction;
 	STATE state;
-	float position[2];
 	float height;
-	float velocity;
-
-	/*  player's hit box setting
-		hitbox[0][0] : the left side of x coordinate
-		hitbox[0][1] : the right side of x coordinate
-		hitbox[1][0] : the bottom of y coordinate
-		hitbox[1][1] : the top of y coordinate
-	*/  
-	float hitbox[2][2];
 
 	//  blinkTime means a time for which player is blinking
 	int blinkTime;
+
 	//  life means the number of left lives of player
 	int life;
 };
