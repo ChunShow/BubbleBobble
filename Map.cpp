@@ -3,12 +3,13 @@
 //  initial setting of map
 Map::Map(int level) : stage(level), drawn(false) {}
 
-void Map::drawMap(Texture texture1, Texture texture2, Texture texture3) 
+void Map::drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field)
 {
 	//  draw map according to the level of stage
 	switch (stage) {
 	case 0:
 		drawStage0(texture1, texture2, texture3);
+		drawBackground(field);
 		break;
 	case 1:
 		drawStage1(texture1, texture2, texture3);
@@ -22,48 +23,50 @@ void Map::drawMap(Texture texture1, Texture texture2, Texture texture3)
 	}
 }
 
+void Map::drawBackground(Texture field)
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, field.getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
 void Map::drawBlock(float x, float y, float width, float height) 
 {
 	if (!drawn) setBorder(x, y, width);
 
-	glBegin(GL_POLYGON);
-	float ratio;
-	if (width > height) {
-		ratio = height / width;
-		glTexCoord2f(0.0f, ratio); glVertex2f(x, y);
-		glTexCoord2f(1.0f, ratio); glVertex2f(x + width, y);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y - height);
+	for (float i = 0.00f; i < width; i += 0.05f) {
+		for (float j = 0.00f; j < height; j += 0.05f) {
+			glBegin(GL_POLYGON);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(x + i, y - j);
+			glTexCoord2f(1.0f, 1.0f); glVertex2f(x + i + 0.05f, y - j);
+			glTexCoord2f(1.0f, 0.0f); glVertex2f(x + i + 0.05f, y - j - 0.05f);
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(x + i, y - j - 0.05f);
+			glEnd();
+		}
 	}
-	else {
-		ratio = width / height;
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
-		glTexCoord2f(ratio, 1.0f); glVertex2f(x + width, y);
-		glTexCoord2f(ratio, 0.0f); glVertex2f(x + width, y - height);
-	}
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y - height);
-	glEnd();
 }
 
 void Map::drawHard(float x, float y, float width, float height) 
 {
 	if (!drawn) setHard(x, y, width, height);
 
-	glBegin(GL_POLYGON);
-	float ratio;
-	if (width > height) {
-		ratio = height / width;
-		glTexCoord2f(0.0f, ratio); glVertex2f(x, y);
-		glTexCoord2f(1.0f, ratio); glVertex2f(x + width, y);
-		glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y - height);
+	for (float i = 0.00f; i < width; i += 0.05f) {
+		for (float j = 0.00f; j < height; j += 0.05f) {
+			glBegin(GL_POLYGON);
+			glTexCoord2f(0.0f, 1.0f); glVertex2f(x + i, y - j);
+			glTexCoord2f(1.0f, 1.0f); glVertex2f(x + i + 0.05f, y - j);
+			glTexCoord2f(1.0f, 0.0f); glVertex2f(x + i + 0.05f, y - j - 0.05f);
+			glTexCoord2f(0.0f, 0.0f); glVertex2f(x + i, y - j - 0.05f);
+			glEnd();
+		}
 	}
-	else {
-		ratio = width / height;
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y);
-		glTexCoord2f(ratio, 1.0f); glVertex2f(x + width, y);
-		glTexCoord2f(ratio, 0.0f); glVertex2f(x + width, y - height);
-	}
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y - height);
-	glEnd();
 }
 
 void Map::setBorder(float x, float y, float width) 
@@ -90,41 +93,41 @@ void Map::drawStage0(Texture texture1, Texture texture2, Texture texture3)
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
+	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
 	drawHard(-1.2f, -0.95f, 1.0f, 0.25f);
 	drawHard(0.2f, -0.95f, 1.0f, 0.25f);
 
 	//  the top layer
+	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
 	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
 
 	//  the side layer
 	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
-	drawHard(-1.2f, 1.0f, 0.25f, 1.16f);
-	drawHard(-1.2f, -0.53f, 0.25f, 0.47f);
-	drawHard(0.95f, 1.0f, 0.25f, 1.16f);
-	drawHard(0.95f, -0.53f, 0.25f, 0.47f);
+	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
+	drawHard(-1.2f, -0.45f, 0.25f, 0.50f);
+	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
+	drawHard(0.95f, -0.45f, 0.25f, 0.50f);
 
 	//  the first layer
 	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
-	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
-	drawBlock(0.7f, -0.53f, 0.5f, 0.05f);
-	drawBlock(-0.4f, -0.53f, 0.80f, 0.05f);
+	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
+	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
 
 	//  the second layer
-	drawBlock(-1.2f, -0.11f, 0.5f, 0.05f);
-	drawBlock(0.7f, -0.11f, 0.5f, 0.05f);
-	drawBlock(-0.4f, -0.11f, 0.8f, 0.05f);
+	drawBlock(-0.95f, 0.05f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.05f, 0.25f, 0.05f);
 
 	//  the third layer
-	drawBlock(-1.2f, 0.31f, 0.5f, 0.05f);
-	drawBlock(0.7f, 0.31f, 0.5f, 0.05f);
+	drawBlock(-0.95f, 0.55f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
 
 	//  the middle object
 	glBindTexture(GL_TEXTURE_2D, texture2.getTextureID());
-	drawHard(-0.4f, 0.66f, 0.10f, 0.40f);
-	drawHard(-0.3f, 0.36f, 0.6f, 0.10f);
-	drawHard(0.3f, 0.66f, 0.10f, 0.40f);
+	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
+	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
+	drawHard(0.3f, 0.40f, 0.10f, 0.40f);
 
 	glDisable(GL_TEXTURE_2D);
 	drawn = true;

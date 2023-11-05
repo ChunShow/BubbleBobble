@@ -10,7 +10,8 @@ public:
 	Map(int level);
 
 	//  draw pixel image of map according to the stage
-	void drawMap(Texture texture1, Texture texture2, Texture texture3);
+	void drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field);
+	void drawBackground(Texture field);
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
 	    drawHard draws hard block which player can't pass

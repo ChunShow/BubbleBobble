@@ -55,11 +55,20 @@ void Texture::initTexture()
 void Texture::setTextureFile(FIBITMAP*& bitmap) 
 {
 	switch (textureType) {
+	case GRASS:
+		bitmap = createBitMap("texture/grass.png");
+		break;
+	case LEAF:
+		bitmap = createBitMap("texture/leaf.png");
+		break;
 	case BRICK:
-		bitmap = createBitMap("texture/brick2.png");
+		bitmap = createBitMap("texture/brick1.png");
 		break;
 	case STONE:
-		bitmap = createBitMap("texture/stone1.png");
+		bitmap = createBitMap("texture/stone2.png");
+		break;
+	case FIELD:
+		bitmap = createBitMap("texture/field.png");
 		break;
 	default:
 		bitmap = createBitMap("texture/default.png");

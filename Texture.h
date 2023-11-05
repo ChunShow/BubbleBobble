@@ -2,7 +2,7 @@
 #include <GL/freeglut.h>
 #include <FreeImage.h>
 
-enum TEXTURE { BRICK, STONE, DEFAULT };
+enum TEXTURE { GRASS, LEAF, BRICK, STONE, DEFAULT, FIELD };
 
 class Texture{
 public:

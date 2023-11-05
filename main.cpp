@@ -14,27 +14,34 @@ int level;
 
 Texture stoneTexture(STONE);
 Texture brickTexture(BRICK);
+Texture grassTexture(GRASS);
+Texture leafTexture(LEAF);
 Texture defaultTexture;
+Texture fieldTexture(FIELD);
 
 bool keystates[5];
 
 void initialize() {
-	level = 1;
+	level = 0;
 
 	for (int i = 0; i < 3; i++) {
 		stages.push_back(Map(i));
 	}
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		monsters.push_back(Monster(CREATURE));
 	}
-	monsters[0].setPosition(0.0f, -0.53f);
-	monsters[1].setPosition(0.0f, -0.11);
-	monsters[2].setPosition(0.0f, 0.36f);
+	monsters[0].setPosition(0.0f, -0.45f);
+	monsters[1].setPosition(0.0f, 0.10f);
+	monsters[2].setPosition(-0.85f, 0.55f);
+	monsters[3].setPosition(0.85f, 0.55f);
 
 	stoneTexture.initTexture();
 	brickTexture.initTexture();
+	grassTexture.initTexture();
+	leafTexture.initTexture();
 	defaultTexture.initTexture();
+	fieldTexture.initTexture();
 }
 
 void idle() {
@@ -223,7 +230,7 @@ void display() {
 			j++;
 		}
 	}
-	stages[level].drawMap(brickTexture, stoneTexture, defaultTexture);
+	stages[level].drawMap(leafTexture, leafTexture, grassTexture, fieldTexture);
 	glutSwapBuffers();
 }
 
