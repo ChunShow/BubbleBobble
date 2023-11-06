@@ -4,7 +4,7 @@ using namespace std;
 
 Bubble::Bubble()
 {
-	capturing = false;
+	trapping = false;
 	alive = true;
 }
 
@@ -41,6 +41,11 @@ void Bubble::initialize()
 	setSize(1.0);
 }
 
+void Bubble::grow()
+{
+	setSize(min(size + 0.1f, 1.0f));
+}
+
 bool Bubble::checkVerticalBoundary()
 {
 	return (getPositionX() - getRadius() < -0.95f || getPositionX() + getRadius() > 0.95f);
@@ -56,9 +61,9 @@ bool Bubble::isGrown()
 	return size == 1.0f;
 }
 
-bool Bubble::isCapturing()
+bool Bubble::isTrapping()
 {
-	return capturing;
+	return trapping;
 }
 
 bool Bubble::mapCollision(vector<vector<float>> borderHard)

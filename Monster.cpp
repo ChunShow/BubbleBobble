@@ -27,7 +27,7 @@ void Monster::drawMonster()
 
 void Monster::drawRotate()
 {
-	if (isRotating()) {
+	if (isTrapped ()) {
 		//time -= 0.001f;
 		angle += 5.0f;
 		glTranslatef(getPositionX() + 0.085f, getPositionY() + 0.085f, 1.0f);
@@ -429,7 +429,6 @@ void Monster::trap(Bubble& bubble)
 {
 	trapped = true;
 	trappedBubble = &bubble;
-	setRotate();
 }
 
 bool Monster::isTrapped() 
@@ -437,26 +436,22 @@ bool Monster::isTrapped()
 	return trapped;
 }
 
-bool Monster::isRotating() 
-{
-	return rotation;
-}
-
 bool Monster::isAlive()
 {
 	return alive;
 }
 
+void Monster::free()
+{
+	trapped = false;
+	angle = 0.0f;
+	direction = DOWN;
+	trappedBubble = nullptr;
+}
+
 void Monster::kill()
 {
 	alive = false;
-}
-
-
-void Monster::setRotate()
-{
-	rotation = !rotation;
-	if (time == 0.0f) time = 50.0f;
 }
 
 void Monster::setDirection(KEY drt)

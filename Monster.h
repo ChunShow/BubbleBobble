@@ -20,12 +20,11 @@ public:
 
 	void trap(Bubble& bubble);
 	bool isTrapped();
-	bool isRotating();
 	bool isAlive();
+	void free();
 	void kill();
 
-	//  setter
-	void setRotate();
+	//  sette
 	void setDirection(KEY drt);
 
 	//  getter
