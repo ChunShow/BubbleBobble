@@ -114,23 +114,41 @@ void idle()
 		for (auto& monster : monsters) {
 			if (monster.isTrapped()) {
 				Bubble bubble = *monster.getTrappedBubble();
+
+				if (!bubble.alive && !(clock() - bubble.createdTime > 5000)) {
+					monster.kill();
+				}
+				else if (clock() - bubble.createdTime > 5000) {
+					monster.free();
+					bubble.alive = false;
+				}
+
 				float bubble_x = bubble.getPositionX(); float bubble_y = bubble.getPositionY();
 				monster.setPosition(bubble_x - bubble.max_radius, bubble_y - bubble.max_radius);
 				continue;
 			}
-			if (monster.getDirection() == LEFT) {
+
+			switch (monster.getDirection()) {
+			case(LEFT):
 				if (stages[level].checkMonster(monster)) monster.translate(-0.015f, 0.0f);
 				else {
 					monster.setDirection(RIGHT);
 					monster.translate(0.015f, 0.0f);
 				}
-			}
-			else {
+				break;
+			case(RIGHT):
 				if (stages[level].checkMonster(monster)) monster.translate(0.015f, 0.0f);
 				else {
 					monster.setDirection(LEFT);
 					monster.translate(-0.015f, 0.0f);
 				}
+				break;
+			case(DOWN):
+				if (stages[level].checkMonster(monster)) monster.translate(0.0f, -0.015f);
+				else {
+					monster.setDirection(LEFT);
+				}
+				break;
 			}
 		}
 
@@ -138,7 +156,7 @@ void idle()
 			float speed = bubble.horizontal_speed;
 			float size = bubble.size;
 
-			bubble.setSize(min(bubble.size + 0.1f, 1.0f));
+			bubble.grow();
 
 			float x = bubble.getPositionX(); float y = bubble.getPositionY();
 			if (bubble.direction == D_LEFT) bubble.translate(-speed, 0.0f);
@@ -154,11 +172,13 @@ void idle()
 				if (bubble.collisionDetection(monster) && !monster.isTrapped() && !bubble.isGrown()) {
 					bubble.direction = D_UP;
 					bubble.size = 1.0f;
-					bubble.capturing = true;
+					bubble.trapping = true;
 					monster.trap(bubble);
 				}
 			}
-			if (clock() - bubble.createdTime > 5000) bubble.alive = false;
+			if (clock() - bubble.createdTime > 5000) {
+				bubble.alive = false;
+			}
 		}
 		startTime = endTime;
 		glutPostRedisplay();

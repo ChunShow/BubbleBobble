@@ -16,12 +16,13 @@ public:
 	void setSize(float s);
 	void setDirection(DIRECT d);
 	void initialize();
+	void grow();
 	
 	bool checkVerticalBoundary();
 	bool checkUpperBoundary();
 	
 	bool isGrown();
-	bool isCapturing();
+	bool isTrapping();
 	bool mapCollision(vector<vector<float>> borderHard);
 
 	float getRadius();
@@ -30,7 +31,7 @@ public:
 	void draw();
 
 	float size;
-	bool capturing;
+	bool trapping;
 	bool alive;
 	clock_t createdTime;
 	DIRECT direction;
@@ -38,5 +39,6 @@ public:
 
 	float horizontal_speed = 0.09f;
 	float max_radius = 0.08f;
+	
 };
 

@@ -386,6 +386,8 @@ bool Map::checkMonster(Monster monster)
 {
 	float x, y, width;
 	float pos[2];
+	bool xLeftContaining, xRightContaining, ySupporting;
+	bool flag = false;
 	/*
 	monster's x coordinate range
 	pos[0] means the left side of monster's bottom
@@ -398,23 +400,40 @@ bool Map::checkMonster(Monster monster)
 		y = border[i][1];
 		width = border[i][2];
 		//  check whether monster's left side or right side in border's x coordinate range
-		if ((monster.getDirection() == LEFT) && (x <= pos[0] && pos[0] <= x + width)) {
-			//  check whether monster's y coordinate contacts border's y coordinate
-			if (y - 0.02f <= monster.getPositionY() && monster.getPositionY() <= y) {
+
+		xLeftContaining = (x <= pos[0] && pos[0] <= x + width);
+		xRightContaining = (x <= pos[1] && pos[1] <= x + width);
+		ySupporting = (y - 0.02f <= monster.getPositionY() && monster.getPositionY() <= y);
+
+		switch (monster.getDirection()) {
+		case(LEFT):
+			if (xLeftContaining && ySupporting) {
 				monster.setPositionY(y);
+				flag = true;
 				return true;
 			}
-		}
-		//  check whether monster's left side or right side in border's x coordinate range
-		else if ((monster.getDirection() == RIGHT) && (x <= pos[1] && pos[1] <= x + width)) {
-			//  check whether monster's y coordinate contacts border's y coordinate
-			if (y - 0.02f <= monster.getPositionY() && monster.getPositionY() <= y) {
+			break;
+		case(RIGHT):
+			if (xRightContaining && ySupporting) {
 				monster.setPositionY(y);
+				flag = true;
 				return true;
 			}
+			break;
+		case(DOWN):
+			if ((xLeftContaining || xRightContaining)) {
+				if (ySupporting) {
+					monster.setPositionY(y);
+					return false;
+				}
+				else {
+					flag = true;
+				}
+			}
+			break;
 		}
 	}
-	return false;
+	return flag;
 }
 
 vector<vector<float>> Map::getBorderHard() 
