@@ -180,7 +180,7 @@ void Map::drawStage1(Texture texture1, Texture texture2, Texture texture3)
 
 	//  the bottom layer
 	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
-	drawHard(-1.2f, -0.95f, 2.4f, 0.25f);
+	drawHard(-0.95f, -0.95f, 1.9f, 0.25f);
 
 	//  the top layer
 	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
