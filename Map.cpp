@@ -1,15 +1,19 @@
 #include "main.h"
 
 //  initial setting of map
-Map::Map(int level) : stage(level), drawn(false) {}
-
-void Map::drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field)
+Map::Map(int level) : stage(level)
 {
+	drawn = false;
+	time = 0.0f;
+}
+
+void Map::drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field, bool& clear)
+{
+	glTranslatef(0.0f, time, 0.0f);
 	//  draw map according to the level of stage
 	switch (stage) {
 	case 0:
 		drawStage0(texture1, texture2, texture3);
-		drawBackground(field);
 		break;
 	case 1:
 		drawStage1(texture1, texture2, texture3);
@@ -20,6 +24,27 @@ void Map::drawMap(Texture texture1, Texture texture2, Texture texture3, Texture 
 	default:
 		drawStage0(texture1, texture2, texture3);
 		break;
+	}
+	drawBackground(field);
+
+	if (clear) {
+		glTranslatef(0.0f, -2.4f, 0.0f);
+		switch (stage + 1) {
+		case 0:
+			drawStage0(texture1, texture2, texture3);
+			break;
+		case 1:
+			drawStage1(texture1, texture2, texture3);
+			break;
+		case 2:
+			drawStage2(texture1, texture2, texture3);
+			break;
+		default:
+			drawStage0(texture1, texture2, texture3);
+			break;
+		}
+		drawBackground(field);
+		changeMap(clear);
 	}
 }
 
@@ -35,6 +60,21 @@ void Map::drawBackground(Texture field)
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+}
+
+void Map::changeMap(bool& clear)
+{
+	if (clear) {
+		time += 0.01f;
+		if (time >= 2.4f) {
+			time = 0.0f;
+			stage++;
+			border.erase(border.begin(), border.end());
+			borderHard.erase(borderHard.begin(), borderHard.end());
+			drawn = false;
+			clear = false;
+		}
+	}
 }
 
 void Map::drawBlock(float x, float y, float width, float height) 
@@ -139,10 +179,11 @@ void Map::drawStage1(Texture texture1, Texture texture2, Texture texture3)
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, texture2.getTextureID());
+	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
 	drawHard(-1.2f, -0.95f, 2.4f, 0.25f);
 
 	//  the top layer
+	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
 	drawHard(-1.2f, 1.2f, 2.4f, 0.25f);
 
 	//  the side layer

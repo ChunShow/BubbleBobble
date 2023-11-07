@@ -65,7 +65,7 @@ void Texture::setTextureFile(FIBITMAP*& bitmap)
 		bitmap = createBitMap("texture/brick1.png");
 		break;
 	case STONE:
-		bitmap = createBitMap("texture/stone2.png");
+		bitmap = createBitMap("texture/stone2.png");	
 		break;
 	case FIELD:
 		bitmap = createBitMap("texture/field.png");

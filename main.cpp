@@ -8,21 +8,18 @@ clock_t endTime;
 Player player;
 Player* playerPointer = &player;
 vector<Map> stages;
+vector<Texture> textures;
 vector<Bubble> bubbles;
 vector<Monster> monsters;
+
 int level;
-
-Texture stoneTexture(STONE);
-Texture brickTexture(BRICK);
-Texture grassTexture(GRASS);
-Texture leafTexture(LEAF);
-Texture defaultTexture;
-Texture fieldTexture(FIELD);
-
+bool clear;
 bool keystates[5];
 
-void initialize() {
+void initialize()
+{
 	level = 0;
+	clear = false;
 
 	for (int i = 0; i < 3; i++) {
 		stages.push_back(Map(i));
@@ -36,15 +33,14 @@ void initialize() {
 	monsters[2].setPosition(-0.85f, 0.55f);
 	monsters[3].setPosition(0.85f, 0.55f);
 
-	stoneTexture.initTexture();
-	brickTexture.initTexture();
-	grassTexture.initTexture();
-	leafTexture.initTexture();
-	defaultTexture.initTexture();
-	fieldTexture.initTexture();
+	for (int i = 0; i < 6; i++) {
+		textures.push_back(Texture((TEXTURE)i));
+		textures[i].initTexture();
+	}
 }
 
-void idle() {
+void idle()
+{
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
 
@@ -169,7 +165,8 @@ void idle() {
 	}
 }
 
-void display() {
+void display()
+{
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -230,11 +227,18 @@ void display() {
 			j++;
 		}
 	}
-	stages[level].drawMap(leafTexture, leafTexture, grassTexture, fieldTexture);
+	
+	if (monsters.size() == 0) {
+		clear = true;
+		monsters.push_back(Monster(CREATURE));
+		monsters[0].setPosition(0.0f, -0.45f);
+	}
+	stages[level].drawMap(textures[LEAF], textures[LEAF], textures[GRASS], textures[FIELD], clear);
 	glutSwapBuffers();
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(WINDOW_X, WINDOW_Y);

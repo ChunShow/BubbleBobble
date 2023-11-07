@@ -10,8 +10,9 @@ public:
 	Map(int level);
 
 	//  draw pixel image of map according to the stage
-	void drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field);
+	void drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field, bool& clear);
 	void drawBackground(Texture field);
+	void changeMap(bool& clear);
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
 	    drawHard draws hard block which player can't pass
@@ -46,6 +47,9 @@ private:
 
 	// true if the map has been drawn
 	bool drawn;
+
+	//  time consumed moving motion
+	float time;
 	
 	//  border has information of map's layers on which player's state will be STAY from FALL
 	vector<vector<float>> border;
