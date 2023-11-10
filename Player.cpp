@@ -3,7 +3,8 @@
 //  initial setting of player
 Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(5) 
 {
-	setPosition(-0.90f, -0.95f);
+	setPosition(-0.95f, -0.95f);
+	setFinalPosition();
 }
 
 void Player::drawPlayer() 
@@ -26,6 +27,7 @@ void Player::drawPlayer()
 	else blinkTime--;
 
 	drawLife();
+	if (move) drawBubble();
 }
 
 void Player::drawPixel(float x, float y, int n) 
@@ -649,6 +651,134 @@ void Player::updatePosition()
 	}
 }
 
+void Player::drawBubble()
+{
+	float y = -0.06f;
+	glColor3f(0.0f, 1.0f, 0.1f);
+	drawPixel(0.06f, y, 7);
+
+	y += 0.01f;
+	drawPixel(0.03f, y, 13);
+
+	y += 0.01f;
+	drawPixel(0.01f, y, 5);
+	drawPixel(0.13f, y, 5);
+
+	y += 0.01f;
+	drawPixel(-0.01f, y, 4);
+	drawPixel(0.16f, y, 4);
+
+	y += 0.01f;
+	drawPixel(-0.02f, y, 3);
+	drawPixel(0.18f, y, 3);
+
+	y += 0.01f;
+	drawPixel(-0.03f, y, 3);
+	drawPixel(0.19f, y, 3);
+
+	y += 0.01f;
+	drawPixel(-0.04f, y, 3);
+	drawPixel(0.20f, y, 3);
+
+	y += 0.01f;
+	drawPixel(-0.04f, y, 2);
+	drawPixel(0.21f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.05f, y, 3);
+	drawPixel(0.21f, y, 3);
+
+	y += 0.01f;
+	drawPixel(-0.05f, y, 2);
+	drawPixel(0.22f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.05f, y, 2);
+	drawPixel(0.22f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.06f, y, 2);
+	drawPixel(0.23f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.06f, y, 2);
+	drawPixel(0.23f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.06f, y, 2);
+	drawPixel(0.23f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.06f, y, 2);
+	drawPixel(0.23f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.06f, y, 2);
+	drawPixel(0.23f, y, 2);
+
+	y += 0.01f;
+	drawPixel(-0.06f, y, 2);
+	drawPixel(0.23f, y, 2);
+	drawPixel(0.19f, y, 3);
+
+	y += 0.01f;
+	drawPixel(-0.05f, y, 2);
+	drawPixel(0.22f, y, 2);
+	drawPixel(0.18f, y, 2);
+	drawPixel(0.21f, y, 1);
+
+	y += 0.01f;
+	drawPixel(-0.05f, y, 2);
+	drawPixel(0.22f, y, 2);
+	drawPixel(0.17f, y, 2);
+	drawPixel(0.21f, y, 1);
+
+	y += 0.01f;
+	drawPixel(-0.05f, y, 3);
+	drawPixel(0.21f, y, 3);
+	drawPixel(0.16f, y, 2);
+	drawPixel(0.20f, y, 1);
+
+	y += 0.01f;
+	drawPixel(-0.04f, y, 2);
+	drawPixel(0.21f, y, 2);
+	drawPixel(0.15f, y, 2);
+	drawPixel(0.19f, y, 1);
+
+	y += 0.01f;
+	drawPixel(-0.04f, y, 3);
+	drawPixel(0.20f, y, 3);
+	drawPixel(0.15f, y, 1);
+	drawPixel(0.18f, y, 1);
+
+	y += 0.01f;
+	drawPixel(-0.03f, y, 3);
+	drawPixel(0.19f, y, 3);
+	drawPixel(0.15f, y, 3);
+	drawPixel(0.11f, y, 3);
+
+	y += 0.01f;
+	drawPixel(-0.02f, y, 3);
+	drawPixel(0.18f, y, 3);
+	drawPixel(0.11f, y, 1);
+	drawPixel(0.13f, y, 1);
+
+	y += 0.01f;
+	drawPixel(-0.01f, y, 4);
+	drawPixel(0.16f, y, 4);
+	drawPixel(0.11f, y, 3);
+
+	y += 0.01f;
+	drawPixel(0.01f, y, 5);
+	drawPixel(0.13f, y, 5);
+
+	y += 0.01f;
+	drawPixel(0.03f, y, 13);
+
+	y += 0.01f;
+	drawPixel(0.06f, y, 7);
+}
+
 void Player::decreaseLife()
 {
 	player.life -= 1;
@@ -684,6 +814,24 @@ Bubble Player::shoot()
 	return bubble;
 }
 
+void Player::initializePosition()
+{
+	move = true;
+	if ((getPositionX() <= -0.95f) && (getPositionY() <= -0.95f)) {
+		move = false;
+		setPosition(-0.95f, -0.95f);
+	}
+	else if (getPositionX() <= -0.95f) {
+		setPositionX(-0.95f);
+		translate(0.0f, -(finalPosition[1] + 0.95f) / 150);
+	}
+	else if (getPositionY() <= -0.95f) {
+		setPositionY(-0.95f);
+		translate(-(finalPosition[0] + 0.95f) / 150, 0.0f);
+	}
+	else translate(-(finalPosition[0] + 0.95f) / 150, -(finalPosition[1] + 0.95f) / 150);
+}
+
 void Player::setDirection(KEY dr)
 {
 	direction = dr;
@@ -693,6 +841,12 @@ void Player::setDirection(KEY dr)
 void Player::setState(STATE st)
 {
 	state = st;
+}
+
+void Player::setFinalPosition()
+{
+	finalPosition[0] = getPositionX();
+	finalPosition[1] = getPositionY();
 }
 
 

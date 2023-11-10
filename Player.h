@@ -2,9 +2,6 @@
 #include "Bubble.h"
 #include "Object.h"
 
-enum KEY { LEFT, RIGHT, UP, DOWN, SPACEBAR };
-enum STATE { STAY, JUMP, FALL };
-
 class Player: public Object 
 {
 public:
@@ -23,7 +20,8 @@ public:
 	void leftDragonFALL();
 	void rightDragonFALL();
 	void updatePosition();
-
+	void drawBubble();
+	
 	//  reflect player's contact with other monsters
 	void decreaseLife();
 	void giveInvincibility();
@@ -31,10 +29,15 @@ public:
 
 	//  draw bubble
 	Bubble shoot();
+
+
+	//  initialize player's position
+	void initializePosition();
 	
 	//  setter
 	void setDirection(KEY dr);
 	void setState(STATE st);
+	void setFinalPosition();
 
 	//  getter
 	KEY getDirection();
@@ -50,10 +53,13 @@ private:
 	KEY direction;
 	STATE state;
 	float height;
+	float finalPosition[2];
 
 	//  blinkTime means a time for which player is blinking
 	int blinkTime;
 
 	//  life means the number of left lives of player
 	int life;
+
+	bool move;
 };

@@ -10,8 +10,8 @@ public:
 	Map(int level);
 
 	//  draw pixel image of map according to the stage
-	void drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field, bool& clear);
-	void drawBackground(Texture field);
+	void drawMap(bool& clear);
+	void drawBackground();
 	void changeMap(bool& clear);
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
@@ -25,9 +25,9 @@ public:
 	void setHard(float x, float y, float width, float height);
 
 	//  stages' pixel image setting
-	void drawStage0(Texture texture1, Texture texture2, Texture texture3);
-	void drawStage1(Texture texture1, Texture texture2, Texture texture3);
-	void drawStage2(Texture texture1, Texture texture2, Texture texture3);
+	void drawStage0();
+	void drawStage1();
+	void drawStage2();
 
 	//  check whether player's movement is allowed or not
 	bool checkFALL();
@@ -39,7 +39,8 @@ public:
 	bool checkMonster(Monster monster);
 
 	//  getter
-	vector<vector<float>> getBorderHard();
+	vector<vector<float>> getBorderHard () const;
+	float getTime () const;
 
 private:
 	//  stage means the stage level
@@ -55,4 +56,7 @@ private:
 	vector<vector<float>> border;
 	//  borderHard has information of map's layers which player can't pass
 	vector<vector<float>> borderHard;
+
+	//  textures information used in map design
+	vector<Texture> textures;
 };

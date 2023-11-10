@@ -5,59 +5,64 @@ Map::Map(int level) : stage(level)
 {
 	drawn = false;
 	time = 0.0f;
+
+	for (int i = 0; i < 6; i++) {
+		textures.push_back(Texture((TEXTURE)i));
+		textures[i].initTexture();
+	}
 }
 
-void Map::drawMap(Texture texture1, Texture texture2, Texture texture3, Texture field, bool& clear)
+void Map::drawMap(bool& clear)
 {
-	glTranslatef(0.0f, time, 0.0f);
+	if (time >= 0.6f) glTranslatef(0.0f, time - 0.6f, 0.0f);
 	//  draw map according to the level of stage
 	switch (stage) {
 	case 0:
-		drawStage0(texture1, texture2, texture3);
+		drawStage0();
 		break;
 	case 1:
-		drawStage1(texture1, texture2, texture3);
+		drawStage1();
 		break;
 	case 2:
-		drawStage2(texture1, texture2, texture3);
+		drawStage2();
 		break;
 	default:
-		drawStage0(texture1, texture2, texture3);
+		drawStage0();
 		break;
 	}
-	drawBackground(field);
+	drawBackground();
 
 	if (clear) {
 		glTranslatef(0.0f, -2.4f, 0.0f);
 		switch (stage + 1) {
 		case 0:
-			drawStage0(texture1, texture2, texture3);
+			drawStage0();
 			break;
 		case 1:
-			drawStage1(texture1, texture2, texture3);
+			drawStage1();
 			break;
 		case 2:
-			drawStage2(texture1, texture2, texture3);
+			drawStage2();
 			break;
 		default:
-			drawStage0(texture1, texture2, texture3);
+			drawStage0();
 			break;
 		}
-		drawBackground(field);
+		drawBackground();
 		changeMap(clear);
 	}
 }
 
-void Map::drawBackground(Texture field)
+void Map::drawBackground()
 {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glBindTexture(GL_TEXTURE_2D, field.getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[FIELD].getTextureID());
 	glBegin(GL_POLYGON);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.2f, 1.2f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.2f, 1.2f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.2f, -1.2f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.2f, -1.2f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 }
@@ -65,8 +70,8 @@ void Map::drawBackground(Texture field)
 void Map::changeMap(bool& clear)
 {
 	if (clear) {
-		time += 0.01f;
-		if (time >= 2.4f) {
+		time += 0.015f;
+		if (time >= 3.0f) {
 			time = 0.0f;
 			stage++;
 			border.erase(border.begin(), border.end());
@@ -127,30 +132,33 @@ void Map::setHard(float x, float y, float width, float height)
 	borderHard.back().push_back(height);
 }
 
-void Map::drawStage0(Texture texture1, Texture texture2, Texture texture3) 
+void Map::drawStage0() 
 {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
+	//  the side layer
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
+	drawHard(-1.2f, -0.45f, 0.25f, 0.55f);
+	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
+	drawHard(0.95f, -0.45f, 0.25f, 0.55f);
+
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
-	drawHard(-1.2f, -0.95f, 1.0f, 0.25f);
-	drawHard(0.2f, -0.95f, 1.0f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	drawHard(-0.95f, -0.95f, 0.75f, 0.05f);
+	drawHard(0.2f, -0.95f, 0.75f, 0.05f);
+	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	drawHard(-1.2f, -1.0f, 1.0f, 0.2f);
+	drawHard(0.2f, -1.0f, 1.0f, 0.2f);
 
 	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
 	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
 
-	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
-	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
-	drawHard(-1.2f, -0.45f, 0.25f, 0.50f);
-	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
-	drawHard(0.95f, -0.45f, 0.25f, 0.50f);
-
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
 	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
 	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
 	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
@@ -164,7 +172,7 @@ void Map::drawStage0(Texture texture1, Texture texture2, Texture texture3)
 	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
 
 	//  the middle object
-	glBindTexture(GL_TEXTURE_2D, texture2.getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
 	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
 	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
 	drawHard(0.3f, 0.40f, 0.10f, 0.40f);
@@ -173,25 +181,32 @@ void Map::drawStage0(Texture texture1, Texture texture2, Texture texture3)
 	drawn = true;
 }
 
-void Map::drawStage1(Texture texture1, Texture texture2, Texture texture3) 
+void Map::drawStage1() 
 {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
-	drawHard(-0.95f, -0.95f, 1.9f, 0.25f);
-
-	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
-	drawHard(-1.2f, 1.2f, 2.4f, 0.25f);
+	//  the underground layer
+	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	drawHard(-1.2f, -1.0f, 2.4f, 0.2f);
 
 	//  the side layer
-	drawHard(-1.2f, 1.0f, 0.25f, 2.4f);
-	drawHard(0.95f, 1.0f, 0.25f, 2.4f);
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	drawHard(-1.2f, 1.0f, 0.25f, 2.0f);
+	drawHard(0.95f, 1.0f, 0.25f, 2.0f);
+
+	//  the bottom layer
+	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	drawHard(-0.95f, -0.95f, 1.9f, 0.05f);
+
+	//  the top layer
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	drawHard(-1.2f, 1.0f, 2.4f, 0.05f);
+	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	drawHard(-1.2f, 1.2f, 2.4f, 0.2f);
 
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
 	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
 	drawBlock(0.7f, -0.53f, 0.5f, 0.05f);
 	drawBlock(-0.4f, -0.53f, 0.80f, 0.05f);
@@ -210,47 +225,50 @@ void Map::drawStage1(Texture texture1, Texture texture2, Texture texture3)
 	drawn = true;
 }
 
-void Map::drawStage2(Texture texture1, Texture texture2, Texture texture3) 
+void Map::drawStage2()
 {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
+	//  the side layer
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
+	drawHard(-1.2f, -0.45f, 0.25f, 0.55f);
+	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
+	drawHard(0.95f, -0.45f, 0.25f, 0.55f);
+
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
-	drawHard(-1.2f, -0.95f, 1.0f, 0.25f);
-	drawHard(0.2f, -0.95f, 1.0f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	drawHard(-0.95f, -0.95f, 0.75f, 0.05f);
+	drawHard(0.2f, -0.95f, 0.75f, 0.05f);
+	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	drawHard(-1.2f, -1.0f, 1.0f, 0.2f);
+	drawHard(0.2f, -1.0f, 1.0f, 0.2f);
 
 	//  the top layer
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
 	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
 
-	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, texture1.getTextureID());
-	drawHard(-1.2f, 1.0f, 0.25f, 1.16f);
-	drawHard(-1.2f, -0.53f, 0.25f, 0.47f);
-	drawHard(0.95f, 1.0f, 0.25f, 1.16f);
-	drawHard(0.95f, -0.53f, 0.25f, 0.47f);
-
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, texture3.getTextureID());
-	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
-	drawBlock(0.7f, -0.53f, 0.5f, 0.05f);
-	drawBlock(-0.4f, -0.53f, 0.80f, 0.05f);
+	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
+	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
 
 	//  the second layer
-	drawBlock(-1.2f, -0.11f, 0.5f, 0.05f);
-	drawBlock(0.7f, -0.11f, 0.5f, 0.05f);
-	drawBlock(-0.4f, -0.11f, 0.8f, 0.05f);
+	drawBlock(-0.95f, 0.05f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.05f, 0.25f, 0.05f);
 
 	//  the third layer
-	drawBlock(-1.2f, 0.31f, 0.5f, 0.05f);
-	drawBlock(0.7f, 0.31f, 0.5f, 0.05f);
+	drawBlock(-0.95f, 0.55f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
 
 	//  the middle object
-	glBindTexture(GL_TEXTURE_2D, texture2.getTextureID());
-	drawHard(-0.4f, 0.66f, 0.10f, 0.40f);
-	drawHard(-0.3f, 0.36f, 0.6f, 0.10f);
-	drawHard(0.3f, 0.66f, 0.10f, 0.40f);
+	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
+	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
+	drawHard(0.3f, 0.40f, 0.10f, 0.40f);
 
 	glDisable(GL_TEXTURE_2D);
 	drawn = true;
@@ -436,7 +454,12 @@ bool Map::checkMonster(Monster monster)
 	return flag;
 }
 
-vector<vector<float>> Map::getBorderHard() 
+vector<vector<float>> Map::getBorderHard() const 
 {
 	return borderHard;
+}
+
+float Map::getTime() const
+{
+	return time;
 }
