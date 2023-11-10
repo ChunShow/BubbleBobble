@@ -42,4 +42,3 @@ private:
 	float position[2];
 	float velocity[2];
 };
-

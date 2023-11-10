@@ -1,7 +1,7 @@
 #pragma once
 #include <ctime>
 
-class Idle 
+class Idle
 {
 public:
 	Idle();
@@ -16,4 +16,3 @@ public:
 private:
 	clock_t endTime;
 };
-

@@ -8,4 +8,3 @@ public:
 private:
 	float xLeft; float xRight; float yBottom; float yTop;
 };
-
