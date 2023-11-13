@@ -1,12 +1,14 @@
 #include "main.h"
+#include <map>
 
 Player player;
 Player* playerPointer = &player;
 
 vector<Map> stages;
-vector<Bubble> bubbles;
+map<int, Bubble> bubbles;
 vector<Monster> monsters;
 
+int bubble_total_num=0;
 int level;
 bool clear;
 bool keystates[5];
@@ -76,16 +78,18 @@ void display()
 	player.drawPlayer();
 
 	glColor3f(0.3f, 0.9f, 0.2f);
-	int i = 0;
-	while (bubbles.begin() + i < bubbles.end()) {
-		if (bubbles[i].alive) {
-			bubbles[i].draw();
-			i++;
+
+	for (auto itr = bubbles.begin(); itr != bubbles.end();) {
+		int key = (*itr).first; Bubble& bubble = (*itr).second;
+		if (bubble.isAlive()) {
+			bubble.draw();
+			itr++;
 		}
 		else {
-			bubbles.erase(bubbles.begin() + i);
+			bubbles.erase(itr);
 		}
 	}
+
 	int j = 0;
 	while (monsters.begin() + j < monsters.end()) {
 		if (!monsters[j].isTrapped()) {
@@ -100,7 +104,6 @@ void display()
 			j++;
 		}
 	}
-	
 	if (monsters.size() == 0) {
 		clear = true;
 		monsters.push_back(Monster(CREATURE));

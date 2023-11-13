@@ -837,7 +837,6 @@ void Player::setDirection(KEY dr)
 	direction = dr;
 }
 
-
 void Player::setState(STATE st)
 {
 	state = st;

@@ -10,6 +10,8 @@
 #include "keyFunction.h"
 #include "Idle.h"
 
+#include <map>
+
 using namespace std;
 
 #define WINDOW_X 400
@@ -21,10 +23,11 @@ extern Player player;
 extern Player* playerPointer;
 
 extern vector<Map> stages;
-extern vector<Bubble> bubbles;
+extern map<int, Bubble> bubbles;
 extern vector<Monster> monsters;
 
 extern int level;
+extern int bubble_total_num;
 extern bool clear;
 extern bool keystates[5];
 

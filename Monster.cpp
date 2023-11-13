@@ -7,6 +7,7 @@ Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
 	rotation = false;
 	alive = true;
 	angle = 0.0f;
+	trappedBubble = -1;
 }
 
 void Monster::drawMonster() 
@@ -425,10 +426,10 @@ void Monster::rightCreature() {
 	drawPixel(0.09f, y, 1);
 }
 
-void Monster::trap(Bubble& bubble) 
+void Monster::trap(int key) 
 {
 	trapped = true;
-	trappedBubble = &bubble;
+	trappedBubble = key;
 }
 
 bool Monster::isTrapped() 
@@ -446,7 +447,7 @@ void Monster::free()
 	trapped = false;
 	angle = 0.0f;
 	direction = DOWN;
-	trappedBubble = nullptr;
+	trappedBubble = -1;
 }
 
 void Monster::kill()
@@ -469,11 +470,11 @@ float Monster::getTime()
 	return time;
 }
 
-Bubble* Monster::getTrappedBubble()
+int Monster::getTrappedBubble()
 {
 	if (!isTrapped()) {
 		cout << "This method should not be called" << endl;
-		return nullptr;
+		return -1;
 	}
 	return trappedBubble;
 }
