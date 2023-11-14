@@ -70,11 +70,12 @@ void display()
 	for (auto& monster : monsters) {
 		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
 			if (!player.isInvincible()) {
-				player.giveInvincibility();
+				player.giveInvincibility(27);
 				player.decreaseLife();
 			}
 		}
 	}
+
 	player.drawPlayer();
 
 	glColor3f(0.3f, 0.9f, 0.2f);
@@ -83,10 +84,10 @@ void display()
 		int key = (*itr).first; Bubble& bubble = (*itr).second;
 		if (bubble.isAlive()) {
 			bubble.draw();
-			itr++;
+			++itr;
 		}
 		else {
-			bubbles.erase(itr);
+			bubbles.erase(itr++);
 		}
 	}
 
@@ -104,6 +105,7 @@ void display()
 			j++;
 		}
 	}
+
 	if (monsters.size() == 0) {
 		clear = true;
 		monsters.push_back(Monster(CREATURE));
