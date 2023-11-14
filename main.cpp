@@ -80,11 +80,8 @@ void display()
 			}
 		}
 	}
-<<<<<<< HEAD
-=======
 
-	player.drawPlayer();
->>>>>>> a21887bb3932a2e92e57ba28dc9986cfa3e9f5eb
+	
 
 	glEnable(GL_DEPTH_TEST);
 	glColor3f(0.3f, 0.9f, 0.2f);
@@ -99,10 +96,7 @@ void display()
 			bubbles.erase(itr++);
 		}
 	}
-<<<<<<< HEAD
 	glDisable(GL_DEPTH_TEST);
-=======
->>>>>>> a21887bb3932a2e92e57ba28dc9986cfa3e9f5eb
 
 	int j = 0;
 	while (monsters.begin() + j < monsters.end()) {
@@ -118,6 +112,8 @@ void display()
 			j++;
 		}
 	}
+
+	player.drawPlayer();
 
 	if (monsters.size() == 0) {
 		clear = true;

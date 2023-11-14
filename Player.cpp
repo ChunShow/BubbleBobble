@@ -27,12 +27,14 @@ void Player::drawPlayer()
 			else if (state == FALL) left_FALL1();
 			else left_STAY1();
 		}
+
 		//  draw player's right image
 		else {
 			if (state == JUMP) right_JUMP();
 			else if (state == FALL) right_FALL1();
 			else right_STAY1();
 		}
+
 		if (blinkTime != 0) blinkTime--;
 		glBegin(GL_POLYGON);
 		glTexCoord2f(0.0f, 1.0f); glVertex2f(getPositionX() + 0.0f, getPositionY() + 0.2f);
@@ -142,12 +144,8 @@ void Player::decreaseLife()
 
 void Player::giveInvincibility(int frame)
 {
-<<<<<<< HEAD
 	right_DAMAGE();
-	player.blinkTime = 27;
-=======
 	player.blinkTime = frame;
->>>>>>> a21887bb3932a2e92e57ba28dc9986cfa3e9f5eb
 }
 
 bool Player::isInvincible()
