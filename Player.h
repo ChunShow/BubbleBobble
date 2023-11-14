@@ -1,6 +1,8 @@
 #pragma once
 #include "Bubble.h"
 #include "Object.h"
+#include "Texture.h"
+#include <vector>
 
 class Player: public Object 
 {
@@ -13,14 +15,24 @@ public:
 
 	//  dragon pixel image setting
 	void drawPixel(float x, float y, int n);
-	void leftDragon();
-	void rightDragon();
-	void leftDragonJUMP();
-	void rightDragonJUMP();
-	void leftDragonFALL();
-	void rightDragonFALL();
+
+	void left_ATTACK();
+	void left_DAMAGE();
+	void left_FALL1();
+	void left_FALL2();
+	void left_STAY1();
+	void left_STAY2();
+	void left_JUMP();
+
+	void right_ATTACK();
+	void right_DAMAGE();
+	void right_FALL1();
+	void right_FALL2();
+	void right_STAY1();
+	void right_STAY2();
+	void right_JUMP();
+
 	void updatePosition();
-	void drawBubble();
 	
 	//  reflect player's contact with other monsters
 	void decreaseLife();
@@ -60,6 +72,7 @@ private:
 
 	//  life means the number of left lives of player
 	int life;
-
 	bool move;
+	vector<Texture> leftImage;
+	vector<Texture> rightImage;
 };

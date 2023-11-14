@@ -17,6 +17,7 @@ clock_t lastCreationTime = clock();
 
 void initialize()
 {
+	player = Player();
 	level = 0;
 	clear = false;
 
@@ -43,6 +44,9 @@ void display()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -5.0f, 5.0f);
@@ -54,7 +58,6 @@ void display()
 
 	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	Light light1;
 	light1.setAmbient(1.0f, 1.0f, 1.0f, 1.0f);
@@ -65,6 +68,8 @@ void display()
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
+	stages[level].drawMap(clear);
+
 	for (auto& monster : monsters) {
 		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
 			if (!player.isInvincible()) {
@@ -73,8 +78,8 @@ void display()
 			}
 		}
 	}
-	player.drawPlayer();
 
+	glEnable(GL_DEPTH_TEST);
 	glColor3f(0.3f, 0.9f, 0.2f);
 	int i = 0;
 	while (bubbles.begin() + i < bubbles.end()) {
@@ -86,6 +91,8 @@ void display()
 			bubbles.erase(bubbles.begin() + i);
 		}
 	}
+	glDisable(GL_DEPTH_TEST);
+
 	int j = 0;
 	while (monsters.begin() + j < monsters.end()) {
 		if (!monsters[j].isTrapped()) {
@@ -106,7 +113,9 @@ void display()
 		monsters.push_back(Monster(CREATURE));
 		monsters[0].setPosition(0.0f, -0.95f);
 	}
-	stages[level].drawMap(clear);
+
+	player.drawPlayer();
+
 	glutSwapBuffers();
 }
 

@@ -96,7 +96,6 @@ void Idle::idleBubbleAlive()
 	}
 }
 
-
 void Idle::idleMonster()
 {
 	for (auto& monster : monsters) {
