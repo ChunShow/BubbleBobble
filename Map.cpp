@@ -6,14 +6,15 @@ Map::Map(int level) : stage(level)
 	drawn = false;
 	time = 0.0f;
 
-	for (int i = 0; i < 6; i++) {
-		textures.push_back(Texture((TEXTURE)i));
+	for (int i = 0; i < 7; i++) {
+		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
 	}
 }
 
 void Map::drawMap(bool& clear)
 {
+	drawBackground();
 	if (time >= 0.6f) glTranslatef(0.0f, time - 0.6f, 0.0f);
 	//  draw map according to the level of stage
 	switch (stage) {
@@ -30,7 +31,6 @@ void Map::drawMap(bool& clear)
 		drawStage0();
 		break;
 	}
-	drawBackground();
 
 	if (clear) {
 		glTranslatef(0.0f, -2.4f, 0.0f);
@@ -55,9 +55,12 @@ void Map::drawMap(bool& clear)
 
 void Map::drawBackground()
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glBindTexture(GL_TEXTURE_2D, textures[FIELD].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_FIELD].getTextureID());
 	glBegin(GL_POLYGON);
 	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.2f, 1.2f);
 	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.2f, 1.2f);
@@ -65,6 +68,8 @@ void Map::drawBackground()
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.2f, -1.2f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+
+	glFinish();
 }
 
 void Map::changeMap(bool& clear)
@@ -138,27 +143,27 @@ void Map::drawStage0()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
 	drawHard(-1.2f, -0.45f, 0.25f, 0.55f);
 	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
 	drawHard(0.95f, -0.45f, 0.25f, 0.55f);
 
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
 	drawHard(-0.95f, -0.95f, 0.75f, 0.05f);
 	drawHard(0.2f, -0.95f, 0.75f, 0.05f);
-	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
 	drawHard(-1.2f, -1.0f, 1.0f, 0.2f);
 	drawHard(0.2f, -1.0f, 1.0f, 0.2f);
 
 	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
 
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
 	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
 	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
 	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
@@ -172,7 +177,7 @@ void Map::drawStage0()
 	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
 
 	//  the middle object
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
 	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
 	drawHard(0.3f, 0.40f, 0.10f, 0.40f);
@@ -187,26 +192,26 @@ void Map::drawStage1()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//  the underground layer
-	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
 	drawHard(-1.2f, -1.0f, 2.4f, 0.2f);
 
 	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-1.2f, 1.0f, 0.25f, 2.0f);
 	drawHard(0.95f, 1.0f, 0.25f, 2.0f);
 
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
 	drawHard(-0.95f, -0.95f, 1.9f, 0.05f);
 
 	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-1.2f, 1.0f, 2.4f, 0.05f);
-	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
 	drawHard(-1.2f, 1.2f, 2.4f, 0.2f);
 
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
 	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
 	drawBlock(0.7f, -0.53f, 0.5f, 0.05f);
 	drawBlock(-0.4f, -0.53f, 0.80f, 0.05f);
@@ -231,27 +236,27 @@ void Map::drawStage2()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
 	drawHard(-1.2f, -0.45f, 0.25f, 0.55f);
 	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
 	drawHard(0.95f, -0.45f, 0.25f, 0.55f);
 
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
 	drawHard(-0.95f, -0.95f, 0.75f, 0.05f);
 	drawHard(0.2f, -0.95f, 0.75f, 0.05f);
-	glBindTexture(GL_TEXTURE_2D, textures[STONE].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
 	drawHard(-1.2f, -1.0f, 1.0f, 0.2f);
 	drawHard(0.2f, -1.0f, 1.0f, 0.2f);
 
 	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
 
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, textures[GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
 	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
 	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
 	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
@@ -265,7 +270,7 @@ void Map::drawStage2()
 	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
 
 	//  the middle object
-	glBindTexture(GL_TEXTURE_2D, textures[LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
 	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
 	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
 	drawHard(0.3f, 0.40f, 0.10f, 0.40f);

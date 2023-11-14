@@ -5,29 +5,49 @@ Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(
 {
 	setPosition(-0.95f, -0.95f);
 	setFinalPosition();
+	for (int i = 0; i < 8; i++) {
+		leftImage.push_back(Texture(_PLAYER, _LEFT, (TEXTURE_MOTION)i));
+		leftImage[i].initTexture();
+	}
+	for (int i = 0; i < 8; i++) {
+		rightImage.push_back(Texture(_PLAYER, _RIGHT, (TEXTURE_MOTION)i));
+		rightImage[i].initTexture();
+	}
 }
 
 void Player::drawPlayer() 
 {
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
 	if (blinkTime % 4 == 0 || blinkTime % 4 == 1) {
-		//  draw dragon facing left
+		//  draw player's left image
 		if (direction == LEFT) {
-			if (state == JUMP) leftDragonJUMP();
-			else if (state == FALL) leftDragonFALL();
-			leftDragon();
+			if (state == JUMP) left_JUMP();
+			else if (state == FALL) left_FALL1();
+			else left_STAY1();
 		}
-		//  draw dragon facing right
+
+		//  draw player's right image
 		else {
-			if (state == JUMP) rightDragonJUMP();
-			else if (state == FALL) rightDragonFALL();
-			rightDragon();
+			if (state == JUMP) right_JUMP();
+			else if (state == FALL) right_FALL1();
+			else right_STAY1();
 		}
+
 		if (blinkTime != 0) blinkTime--;
+		glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(getPositionX() + 0.0f, getPositionY() + 0.2f);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(getPositionX() + 0.2f, getPositionY() + 0.2f);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(getPositionX() + 0.2f, getPositionY() + 0.0f);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(getPositionX() + 0.0f, getPositionY() + 0.0f);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
 	}
 	else blinkTime--;
 
 	drawLife();
-	if (move) drawBubble();
 }
 
 void Player::drawPixel(float x, float y, int n) 
@@ -40,596 +60,62 @@ void Player::drawPixel(float x, float y, int n)
 	glEnd();
 }
 
-void Player::leftDragon() 
+void Player::left_ATTACK()
 {
-	// black
-	glColor3f(0.0f, 0.0f, 0.0f);
-	float y = 0.0f;
-	drawPixel(0.01f, y, 15);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 2);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.17f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 2);
-	drawPixel(0.14f, y, 2);
-	drawPixel(0.17f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.14f, y, 1);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 3);
-	drawPixel(0.06f, y, 3);
-	drawPixel(0.13f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.13f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.13f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 2);
-	drawPixel(0.10f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 1);
-	drawPixel(0.09f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-
-	// green pixel
-	glColor3f(0.4f, 1.0f, 0.15f);
-	y = 0.0f;;
-	y += 0.01f;
-	drawPixel(0.11f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.10f, y, 6);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 2);
-	drawPixel(0.13f, y, 1);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 2);
-	drawPixel(0.13f, y, 1);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 7);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 2);
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 2);
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.08f, y, 5);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.09f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.09f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.09f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.09f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.08f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 7);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 5);
-
-	// white pixel
-	glColor3f(1.0f, 1.0f, 1.0f);
-	y = 0.0f;
-	y += 0.01f;
-	drawPixel(0.04f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 5);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 6);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 4);
-
-	y += 0.02f;
-	drawPixel(0.05f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.07f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.07f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.07f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.07f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 2);
-
-	// orange pixel
-	glColor3f(1.0f, 0.4f, 0.2f);
-	y = 0.0f;
-	y += 0.01f;
-	drawPixel(0.01f, y, 3);
-	drawPixel(0.07f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 2);
-	drawPixel(0.14f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.10f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.10f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.13f, y, 2);
-
-	y += 0.02f;
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.12f, y, 3);
-
-	y += 0.02f;
-	drawPixel(0.11f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.10f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
+	glBindTexture(GL_TEXTURE_2D, leftImage[_ATTACK].getTextureID());
+}
+void Player::left_DAMAGE()
+{
+	glBindTexture(GL_TEXTURE_2D, leftImage[_DAMAGE].getTextureID());
+}
+void Player::left_FALL1()
+{
+	glBindTexture(GL_TEXTURE_2D, leftImage[_FALL1].getTextureID());
+}
+void Player::left_FALL2()
+{
+	glBindTexture(GL_TEXTURE_2D, leftImage[_FALL2].getTextureID());
+}
+void Player::left_STAY1()
+{
+	glBindTexture(GL_TEXTURE_2D, leftImage[_STAY1].getTextureID());
+}
+void Player::left_STAY2()
+{
+	glBindTexture(GL_TEXTURE_2D, leftImage[_STAY2].getTextureID());
+}
+void Player::left_JUMP()
+{
+	glBindTexture(GL_TEXTURE_2D, leftImage[_JUMP].getTextureID());
 }
 
-void Player::rightDragon() 
+void Player::right_ATTACK() 
 {
-	// black pixel
-	glColor3f(0.0f, 0.0f, 0.0f);
-	float y = 0.0f;
-	drawPixel(0.02f, y, 15);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.17f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.15f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.02f, y, 2);
-	drawPixel(0.14f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 2);
-	drawPixel(0.09f, y, 3);
-	drawPixel(0.13f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 2);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 4);
-	drawPixel(0.11f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.1f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 1);
-
-	// green pixel
-	glColor3f(0.4f, 1.0f, 0.15f);
-	y = 0.0f;
-	y += 0.01f;
-	drawPixel(0.03f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 6);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.07f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.08f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.08f, y, 7);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 1);
-	drawPixel(0.07f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 5);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.14f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 4);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 4);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 4);
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.06f, y, 3);
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.06f, y, 4);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 7);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 5);
-
-	// white pixel
-	glColor3f(1.0f, 1.0f, 1.0f);
-	y = 0.0f;
-	y += 0.01f;
-	drawPixel(0.11f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.1f, y, 5);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 6);
-
-	y += 0.01f;
-	drawPixel(0.1f, y, 4);
-
-	y += 0.02f;
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.1f, y, 2);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 2);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 2);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 2);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 2);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.1f, y, 2);
-	drawPixel(0.13f, y, 1);
-
-	// orange pixel
-	glColor3f(1.0f, 0.4f, 0.2f);
-	y = 0.0f;
-	y += 0.01f;
-	drawPixel(0.07f, y, 4);
-	drawPixel(0.14f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 2);
-	drawPixel(0.05f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 2);
-
-	y += 0.02f;
-	drawPixel(0.04f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 3);
-
-	y += 0.02f;
-	drawPixel(0.05f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 1);
+	glBindTexture(GL_TEXTURE_2D, rightImage[_ATTACK].getTextureID());
 }
-
-void Player::leftDragonJUMP() 
+void Player::right_DAMAGE()
 {
-	float y = 0.073f;
-	glColor3f(1.0f, 1.0f, 1.0f);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	glColor3f(0.0f, 0.0f, 0.0f);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
+	glBindTexture(GL_TEXTURE_2D, rightImage[_DAMAGE].getTextureID());
 }
-
-void Player::rightDragonJUMP()
+void Player::right_FALL1()
 {
-	float y =  0.073f;
-	glColor3f(1.0f, 1.0f, 1.0f);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	glColor3f(0.0f, 0.0f, 0.0f);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
+	glBindTexture(GL_TEXTURE_2D, rightImage[_FALL1].getTextureID());
 }
-
-void Player::leftDragonFALL()
+void Player::right_FALL2()
 {
-	float y = 0.074f;
-	glColor3f(0.0f, 0.0f, 0.0f);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	glColor3f(1.0f, 1.0f, 1.0f);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.06f, y, 1);
+	glBindTexture(GL_TEXTURE_2D, rightImage[_FALL2].getTextureID());
 }
-
-void Player::rightDragonFALL()
+void Player::right_STAY1()
 {
-	float y = 0.074f;
-	glColor3f(0.0f, 0.0f, 0.0f);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	glColor3f(1.0f, 1.0f, 1.0f);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
+	glBindTexture(GL_TEXTURE_2D, rightImage[_STAY1].getTextureID());
+}
+void Player::right_STAY2()
+{
+	glBindTexture(GL_TEXTURE_2D, rightImage[_STAY2].getTextureID());
+}
+void Player::right_JUMP()
+{
+	glBindTexture(GL_TEXTURE_2D, rightImage[_JUMP].getTextureID());
 }
 
 void Player::updatePosition()
@@ -651,134 +137,6 @@ void Player::updatePosition()
 	}
 }
 
-void Player::drawBubble()
-{
-	float y = -0.06f;
-	glColor3f(0.0f, 1.0f, 0.1f);
-	drawPixel(0.06f, y, 7);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 13);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 5);
-	drawPixel(0.13f, y, 5);
-
-	y += 0.01f;
-	drawPixel(-0.01f, y, 4);
-	drawPixel(0.16f, y, 4);
-
-	y += 0.01f;
-	drawPixel(-0.02f, y, 3);
-	drawPixel(0.18f, y, 3);
-
-	y += 0.01f;
-	drawPixel(-0.03f, y, 3);
-	drawPixel(0.19f, y, 3);
-
-	y += 0.01f;
-	drawPixel(-0.04f, y, 3);
-	drawPixel(0.20f, y, 3);
-
-	y += 0.01f;
-	drawPixel(-0.04f, y, 2);
-	drawPixel(0.21f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.05f, y, 3);
-	drawPixel(0.21f, y, 3);
-
-	y += 0.01f;
-	drawPixel(-0.05f, y, 2);
-	drawPixel(0.22f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.05f, y, 2);
-	drawPixel(0.22f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.06f, y, 2);
-	drawPixel(0.23f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.06f, y, 2);
-	drawPixel(0.23f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.06f, y, 2);
-	drawPixel(0.23f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.06f, y, 2);
-	drawPixel(0.23f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.06f, y, 2);
-	drawPixel(0.23f, y, 2);
-
-	y += 0.01f;
-	drawPixel(-0.06f, y, 2);
-	drawPixel(0.23f, y, 2);
-	drawPixel(0.19f, y, 3);
-
-	y += 0.01f;
-	drawPixel(-0.05f, y, 2);
-	drawPixel(0.22f, y, 2);
-	drawPixel(0.18f, y, 2);
-	drawPixel(0.21f, y, 1);
-
-	y += 0.01f;
-	drawPixel(-0.05f, y, 2);
-	drawPixel(0.22f, y, 2);
-	drawPixel(0.17f, y, 2);
-	drawPixel(0.21f, y, 1);
-
-	y += 0.01f;
-	drawPixel(-0.05f, y, 3);
-	drawPixel(0.21f, y, 3);
-	drawPixel(0.16f, y, 2);
-	drawPixel(0.20f, y, 1);
-
-	y += 0.01f;
-	drawPixel(-0.04f, y, 2);
-	drawPixel(0.21f, y, 2);
-	drawPixel(0.15f, y, 2);
-	drawPixel(0.19f, y, 1);
-
-	y += 0.01f;
-	drawPixel(-0.04f, y, 3);
-	drawPixel(0.20f, y, 3);
-	drawPixel(0.15f, y, 1);
-	drawPixel(0.18f, y, 1);
-
-	y += 0.01f;
-	drawPixel(-0.03f, y, 3);
-	drawPixel(0.19f, y, 3);
-	drawPixel(0.15f, y, 3);
-	drawPixel(0.11f, y, 3);
-
-	y += 0.01f;
-	drawPixel(-0.02f, y, 3);
-	drawPixel(0.18f, y, 3);
-	drawPixel(0.11f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(-0.01f, y, 4);
-	drawPixel(0.16f, y, 4);
-	drawPixel(0.11f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 5);
-	drawPixel(0.13f, y, 5);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 13);
-
-	y += 0.01f;
-	drawPixel(0.06f, y, 7);
-}
-
 void Player::decreaseLife()
 {
 	player.life -= 1;
@@ -786,6 +144,7 @@ void Player::decreaseLife()
 
 void Player::giveInvincibility(int frame)
 {
+	right_DAMAGE();
 	player.blinkTime = frame;
 }
 
@@ -847,7 +206,6 @@ void Player::setFinalPosition()
 	finalPosition[0] = getPositionX();
 	finalPosition[1] = getPositionY();
 }
-
 
 KEY Player::getDirection()
 {
