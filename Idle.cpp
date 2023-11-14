@@ -52,9 +52,9 @@ void Idle::idlePlayer()
 		}
 	}
 	if (keystates[KEY::SPACEBAR] && (endTime - lastCreationTime) > 300) {
-
 		Bubble bubble = player.shoot();
-		bubbles.push_back(bubble);
+		bubble_total_num += 1;
+		bubbles.insert(make_pair(bubble_total_num, bubble));
 		lastCreationTime = endTime;
 	}
 
@@ -88,7 +88,8 @@ void Idle::idlePlayer()
 
 void Idle::idleBubbleAlive()
 {
-	for (auto& bubble : bubbles) {
+	for (auto& pair : bubbles) {
+		Bubble& bubble = pair.second;
 		if (!bubble.isGrown()) continue;
 		if (bubble.collisionDetection(*playerPointer)) {
 			bubble.alive = false;
@@ -96,12 +97,11 @@ void Idle::idleBubbleAlive()
 	}
 }
 
-
 void Idle::idleMonster()
 {
 	for (auto& monster : monsters) {
 		if (monster.isTrapped()) {
-			Bubble bubble = *monster.getTrappedBubble();
+			Bubble& bubble = bubbles[monster.getTrappedBubble()];
 
 			if (!bubble.alive && !(clock() - bubble.createdTime > 5000)) {
 				monster.kill();
@@ -143,7 +143,8 @@ void Idle::idleMonster()
 
 void Idle::idleBubble()
 {
-	for (auto& bubble : bubbles) {
+	for (auto& pair : bubbles) {
+		Bubble& bubble = pair.second;
 		float speed = bubble.horizontal_speed;
 		float size = bubble.size;
 
@@ -164,7 +165,7 @@ void Idle::idleBubble()
 				bubble.direction = D_UP;
 				bubble.size = 1.0f;
 				bubble.trapping = true;
-				monster.trap(bubble);
+				monster.trap(pair.first);
 			}
 		}
 		if (clock() - bubble.createdTime > 5000) {

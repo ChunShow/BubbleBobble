@@ -784,9 +784,9 @@ void Player::decreaseLife()
 	player.life -= 1;
 }
 
-void Player::giveInvincibility()
+void Player::giveInvincibility(int frame)
 {
-	player.blinkTime = 27;
+	player.blinkTime = frame;
 }
 
 bool Player::isInvincible()
@@ -836,7 +836,6 @@ void Player::setDirection(KEY dr)
 {
 	direction = dr;
 }
-
 
 void Player::setState(STATE st)
 {
