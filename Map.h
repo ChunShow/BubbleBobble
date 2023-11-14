@@ -42,6 +42,9 @@ public:
 	vector<vector<float>> getBorderHard () const;
 	float getTime () const;
 
+	// reset stage number
+	void resetStage();
+
 private:
 	//  stage means the stage level
 	int stage;

@@ -63,6 +63,9 @@ void Texture::setTextureFile(FIBITMAP*& bitmap) {
 	case FIELD:
 		bitmap = createBitMap("texture/field.png");
 		break;
+	case GAMEOVER:
+		bitmap = createBitMap("texture/gameover.png");
+		break;
 	default:
 		bitmap = createBitMap("texture/default.png");
 		break;

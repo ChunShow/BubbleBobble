@@ -30,7 +30,6 @@ public:
 	//  draw bubble
 	Bubble shoot();
 
-
 	//  initialize player's position
 	void initializePosition();
 	
@@ -48,6 +47,12 @@ public:
 	//  draw player's left lives
 	void drawHeartPixel(float x, float y, int n, int i);
 	void drawLife();
+
+	// determine whether player is alive or not;
+	bool isAlive();
+
+	// reset player
+	void reset();
 
 private:
 	KEY direction;

@@ -496,5 +496,6 @@ Hitbox Monster::getHitbox()
 		yTop = getPositionY() + 0.15f;
 		break;
 	}
+
 	return Hitbox(xLeft, xRight, yBottom, yTop);
 }
