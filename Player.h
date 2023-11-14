@@ -36,7 +36,7 @@ public:
 	
 	//  reflect player's contact with other monsters
 	void decreaseLife();
-	void giveInvincibility();
+	void giveInvincibility(int frame);
 	bool isInvincible();
 
 	//  draw bubble

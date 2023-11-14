@@ -18,7 +18,7 @@ public:
 	void leftCreature();
 	void rightCreature();
 
-	void trap(Bubble& bubble);
+	void trap(int key);
 	bool isTrapped();
 	bool isAlive();
 	void free();
@@ -30,7 +30,7 @@ public:
 	//  getter
 	KEY getDirection();
 	float getTime();
-	Bubble* getTrappedBubble();
+	int getTrappedBubble();
 	virtual Hitbox getHitbox() override;
 
 private:
@@ -43,5 +43,5 @@ private:
 	float angle;
 	float time;
 
-	Bubble* trappedBubble;
+	int trappedBubble;
 };

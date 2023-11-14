@@ -66,6 +66,16 @@ bool Bubble::isTrapping()
 	return trapping;
 }
 
+bool Bubble::isAlive()
+{
+	return alive;
+}
+
+void Bubble::kill()
+{
+	alive = false;
+}
+
 bool Bubble::mapCollision(vector<vector<float>> borderHard)
 {
 	float x, y, width, height;

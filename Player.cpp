@@ -140,10 +140,14 @@ void Player::decreaseLife()
 	player.life -= 1;
 }
 
-void Player::giveInvincibility()
+void Player::giveInvincibility(int frame)
 {
+<<<<<<< HEAD
 	right_DAMAGE();
 	player.blinkTime = 27;
+=======
+	player.blinkTime = frame;
+>>>>>>> a21887bb3932a2e92e57ba28dc9986cfa3e9f5eb
 }
 
 bool Player::isInvincible()

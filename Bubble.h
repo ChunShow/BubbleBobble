@@ -23,6 +23,9 @@ public:
 	
 	bool isGrown();
 	bool isTrapping();
+	bool isAlive();
+
+	void kill();
 	bool mapCollision(vector<vector<float>> borderHard);
 
 	float getRadius();

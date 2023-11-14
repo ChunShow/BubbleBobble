@@ -1,12 +1,14 @@
 #include "main.h"
+#include <map>
 
 Player player;
 Player* playerPointer = &player;
 
 vector<Map> stages;
-vector<Bubble> bubbles;
+map<int, Bubble> bubbles;
 vector<Monster> monsters;
 
+int bubble_total_num=0;
 int level;
 bool clear;
 bool keystates[5];
@@ -73,25 +75,34 @@ void display()
 	for (auto& monster : monsters) {
 		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
 			if (!player.isInvincible()) {
-				player.giveInvincibility();
+				player.giveInvincibility(27);
 				player.decreaseLife();
 			}
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	player.drawPlayer();
+>>>>>>> a21887bb3932a2e92e57ba28dc9986cfa3e9f5eb
 
 	glEnable(GL_DEPTH_TEST);
 	glColor3f(0.3f, 0.9f, 0.2f);
-	int i = 0;
-	while (bubbles.begin() + i < bubbles.end()) {
-		if (bubbles[i].alive) {
-			bubbles[i].draw();
-			i++;
+
+	for (auto itr = bubbles.begin(); itr != bubbles.end();) {
+		int key = (*itr).first; Bubble& bubble = (*itr).second;
+		if (bubble.isAlive()) {
+			bubble.draw();
+			++itr;
 		}
 		else {
-			bubbles.erase(bubbles.begin() + i);
+			bubbles.erase(itr++);
 		}
 	}
+<<<<<<< HEAD
 	glDisable(GL_DEPTH_TEST);
+=======
+>>>>>>> a21887bb3932a2e92e57ba28dc9986cfa3e9f5eb
 
 	int j = 0;
 	while (monsters.begin() + j < monsters.end()) {
@@ -107,7 +118,7 @@ void display()
 			j++;
 		}
 	}
-	
+
 	if (monsters.size() == 0) {
 		clear = true;
 		monsters.push_back(Monster(CREATURE));
