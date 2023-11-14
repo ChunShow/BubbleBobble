@@ -79,8 +79,8 @@ void Map::changeMap(bool& clear)
 		if (time >= 3.0f) {
 			time = 0.0f;
 			stage++;
-			border.erase(border.begin(), border.end());
-			borderHard.erase(borderHard.begin(), borderHard.end());
+			border.clear();
+			borderHard.clear();
 			drawn = false;
 			clear = false;
 		}
@@ -467,4 +467,9 @@ vector<vector<float>> Map::getBorderHard() const
 float Map::getTime() const
 {
 	return time;
+}
+
+void Map::resetStage()
+{
+	stage = 0;
 }

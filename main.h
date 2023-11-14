@@ -29,7 +29,9 @@ extern vector<Monster> monsters;
 extern int level;
 extern int bubble_total_num;
 extern bool clear;
-extern bool keystates[5];
+extern bool gameover;
+extern bool restarted;
+extern bool keystates[6];
 
 extern clock_t startTime;
 extern clock_t lastCreationTime;

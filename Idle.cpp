@@ -8,7 +8,10 @@ void Idle::operate()
 {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
-		if (!clear) {
+		if (gameover) {
+			idleGameover();
+		}
+		else if (!clear) {
 			idlePlayer();
 			idleBubbleAlive();
 			idleMonster();
@@ -177,4 +180,12 @@ void Idle::idleBubble()
 void Idle::idleClear()
 {
 	if (stages[level].getTime() >= 0.6f) player.initializePosition();
+}
+
+void Idle::idleGameover()
+{
+	if (keystates[KEY::RESTART]) {
+		gameover = false;
+		restarted = true;
+	}
 }

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum KEY { LEFT, RIGHT, UP, DOWN, SPACEBAR };
+enum KEY { LEFT, RIGHT, UP, DOWN, SPACEBAR, RESTART };
 enum STATE { STAY, JUMP, FALL };
 
 class Object

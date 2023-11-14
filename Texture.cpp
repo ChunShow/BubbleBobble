@@ -116,6 +116,9 @@ void Texture::setPlayerFile(FIBITMAP*& bitmap) {
 			break;
 		}
 		break;
+	case GAMEOVER:
+		bitmap = createBitMap("texture/gameover.png");
+		break;
 	default:
 		bitmap = createBitMap("texture/character/Dragon_left_stay1.png");
 		break;

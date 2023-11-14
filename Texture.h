@@ -2,7 +2,7 @@
 #include <GL/freeglut.h>
 #include <FreeImage.h>
 
-enum TEXTURE { _PLAYER, _MONSTER, _MAP };
+enum TEXTURE { _PLAYER, _MONSTER, _MAP, GAMEOVER };
 enum TEXTURE_BLOCK { _GRASS, _LEAF, _BRICK, _STONE, _DEFAULT, _FIELD, };
 enum TEXTURE_DIRECTION { _LEFT, _RIGHT };
 enum TEXTURE_MOTION { _ATTACK, _DAMAGE, _FALL1, _FALL2, _JUMP, _STAY1, _STAY2, _CLEAR };

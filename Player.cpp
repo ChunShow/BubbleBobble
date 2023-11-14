@@ -1,7 +1,7 @@
 #include "main.h"
 
 //  initial setting of player
-Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(5) 
+Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(1) 
 {
 	setPosition(-0.95f, -0.95f);
 	setFinalPosition();
@@ -251,4 +251,20 @@ void Player::drawLife()
 		drawHeartPixel(0.01f, 0.03f, 1, i);
 		drawHeartPixel(0.03f, 0.03f, 1, i);
 	}
+}
+
+bool Player::isAlive()
+{
+	return (life >= 1);
+}
+
+void Player::reset()
+{
+	direction = KEY::RIGHT;
+	state = STAY;
+	height = 0.18f;
+	blinkTime = 0;
+	life = 1;
+	setPosition(-0.95f, -0.95f);
+	setFinalPosition();
 }

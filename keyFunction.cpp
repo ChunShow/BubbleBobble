@@ -17,7 +17,10 @@ void specialKeyDown(int key, int x, int y)
 		}
 		break;
 	case GLUT_KEY_DOWN:
-		keystates[DOWN] = 1;
+		keystates[KEY::DOWN] = 1;
+		break;
+	case GLUT_KEY_CTRL_L:
+		keystates[KEY::RESTART] = 1;
 		break;
 	}
 	glutPostRedisplay();
@@ -37,6 +40,9 @@ void specialKeyUp(int key, int x, int y)
 		break;
 	case GLUT_KEY_DOWN:
 		keystates[KEY::DOWN] = 0;
+		break;
+	case GLUT_KEY_CTRL_L:
+		keystates[KEY::RESTART] = 0;
 		break;
 	}
 	glutPostRedisplay();

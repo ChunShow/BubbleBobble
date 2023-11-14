@@ -12,6 +12,7 @@ public:
 	void idleMonster();
 	void idleBubble();
 	void idleClear();
+	void idleGameover();
 
 private:
 	clock_t endTime;

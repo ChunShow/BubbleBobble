@@ -1,4 +1,5 @@
 #include "main.h"
+#include "Texture.h"
 #include <map>
 
 Player player;
@@ -11,25 +12,32 @@ vector<Monster> monsters;
 int bubble_total_num=0;
 int level;
 bool clear;
-bool keystates[5];
+bool gameover = false;
+bool restarted = false;
+bool keystates[6];
 
 Idle idleFunc;
 clock_t startTime = clock();
 clock_t lastCreationTime = clock();
 
-void initialize()
+Texture gmover(GAMEOVER);
+
+void initialize(bool restarted)
 {
 	player = Player();
 	level = 0;
 	clear = false;
 
-	for (int i = 0; i < 3; i++) {
-		stages.push_back(Map(i));
+	if (!restarted) {
+		for (int i = 0; i < 3; i++) {
+			stages.push_back(Map(i));
+		}
 	}
 
 	for (int i = 0; i < 4; i++) {
 		monsters.push_back(Monster(CREATURE));
 	}
+
 	monsters[0].setPosition(0.0f, -0.45f);
 	monsters[1].setPosition(0.0f, 0.10f);
 	monsters[2].setPosition(-0.85f, 0.55f);
@@ -39,6 +47,30 @@ void initialize()
 void idle()
 {
 	idleFunc.operate();
+}
+
+//Erase everything and get ready to restart;
+void clearAll() {
+	stages[level].resetStage();
+	bubbles.clear();
+	monsters.clear();
+	bubble_total_num = 0;
+}
+
+void displayGameover()
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, gmover.getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 0.6f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 0.6f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 0.0f);
+	glEnd();
 }
 
 void display()
@@ -61,6 +93,7 @@ void display()
 	glEnable(GL_COLOR_MATERIAL);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
+
 	Light light1;
 	light1.setAmbient(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
@@ -80,9 +113,6 @@ void display()
 			}
 		}
 	}
-
-	
-
 	glEnable(GL_DEPTH_TEST);
 	glColor3f(0.3f, 0.9f, 0.2f);
 
@@ -120,9 +150,25 @@ void display()
 		monsters.push_back(Monster(CREATURE));
 		monsters[0].setPosition(0.0f, -0.95f);
 	}
+  
+	//Detect clear
+	stages[level].drawMap(clear);
 
-	player.drawPlayer();
+	//Detect gameover
+	if (!player.isAlive()) {
+		player.reset();
+		gameover = true;
+	}
 
+	if (gameover == true){
+		displayGameover();
+	}
+
+	if (restarted == true) {
+		clearAll();
+		initialize(restarted);
+		restarted = false;
+	}
 	glutSwapBuffers();
 }
 
@@ -134,7 +180,9 @@ int main(int argc, char** argv)
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Bubble Bobble");
 
-	initialize();
+	initialize(false);
+
+	gmover.initTexture();
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyDown);
