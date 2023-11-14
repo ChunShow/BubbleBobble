@@ -9,6 +9,7 @@ class Player: public Object
 public:
 	//  constructor
 	Player();
+	Player(int max_life);
 
 	//  draw player's dragon pixel image
 	void drawPlayer();
@@ -77,6 +78,7 @@ private:
 
 	//  life means the number of left lives of player
 	int life;
+	int max_life;
 	bool move;
 	vector<Texture> leftImage;
 	vector<Texture> rightImage;

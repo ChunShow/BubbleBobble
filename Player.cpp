@@ -1,7 +1,11 @@
 #include "main.h"
 
+Player::Player()
+{
+}
+
 //  initial setting of player
-Player::Player() : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), life(1) 
+Player::Player(int max_life) : direction(KEY::RIGHT), state(STAY), height(0.18f), blinkTime(0), max_life(max_life), life(max_life)
 {
 	setPosition(-0.95f, -0.95f);
 	setFinalPosition();
@@ -264,7 +268,7 @@ void Player::reset()
 	state = STAY;
 	height = 0.18f;
 	blinkTime = 0;
-	life = 1;
+	life = max_life;
 	setPosition(-0.95f, -0.95f);
 	setFinalPosition();
 }

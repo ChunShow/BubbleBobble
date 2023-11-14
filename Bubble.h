@@ -42,6 +42,5 @@ public:
 
 	float horizontal_speed = 0.09f;
 	float max_radius = 0.08f;
-	
 };
 

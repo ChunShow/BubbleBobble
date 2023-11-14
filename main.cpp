@@ -20,11 +20,11 @@ Idle idleFunc;
 clock_t startTime = clock();
 clock_t lastCreationTime = clock();
 
-Texture gmover(GAMEOVER);
+Texture gmover(_MAP, _GAMEOVER);
 
 void initialize(bool restarted)
 {
-	player = Player();
+	player = Player(5);
 	level = 0;
 	clear = false;
 
@@ -103,6 +103,7 @@ void display()
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
+	//Detect clear
 	stages[level].drawMap(clear);
 
 	for (auto& monster : monsters) {
@@ -113,6 +114,7 @@ void display()
 			}
 		}
 	}
+
 	glEnable(GL_DEPTH_TEST);
 	glColor3f(0.3f, 0.9f, 0.2f);
 
@@ -150,9 +152,6 @@ void display()
 		monsters.push_back(Monster(CREATURE));
 		monsters[0].setPosition(0.0f, -0.95f);
 	}
-  
-	//Detect clear
-	stages[level].drawMap(clear);
 
 	//Detect gameover
 	if (!player.isAlive()) {
