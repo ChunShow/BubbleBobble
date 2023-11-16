@@ -14,7 +14,8 @@ Map::Map(int level) : stage(level)
 
 void Map::drawMap(bool& clear)
 {
-	drawBackground();
+	//drawBackground();
+	glPushMatrix();
 	if (time >= 0.6f) glTranslatef(0.0f, time - 0.6f, 0.0f);
 	//  draw map according to the level of stage
 	switch (stage) {
@@ -48,9 +49,10 @@ void Map::drawMap(bool& clear)
 			drawStage0();
 			break;
 		}
-		drawBackground();
+		//drawBackground();
 		changeMap(clear);
 	}
+	glPopMatrix();
 }
 
 void Map::drawBackground()

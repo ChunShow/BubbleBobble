@@ -108,10 +108,7 @@ void display()
 
 	for (auto& monster : monsters) {
 		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
-			if (!player.isInvincible()) {
-				player.giveInvincibility(27);
-				player.decreaseLife();
-			}
+			if (!player.isInvincible()) player.giveInvincibility(27);
 		}
 	}
 
@@ -145,7 +142,9 @@ void display()
 		}
 	}
 
-	player.drawPlayer();
+	
+	if (!player.isBlink()) player.drawPlayer();
+	player.drawLife();
 
 	if (monsters.size() == 0) {
 		clear = true;

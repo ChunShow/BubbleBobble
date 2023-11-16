@@ -18,7 +18,7 @@ void Idle::operate()
 			idleBubble();
 		}
 		else {
-			idleClear();
+			idleStageClear();
 		}
 		startTime = endTime;
 		glutPostRedisplay();
@@ -36,7 +36,6 @@ void Idle::idlePlayer()
 			stages[level].checkLEFT();
 		}
 	}
-
 	if (keystates[KEY::RIGHT]) {
 		//  case of player's direction changes from LEFT to RIGHT
 		if (player.getDirection() == KEY::LEFT) player.setDirection(KEY::RIGHT);
@@ -46,7 +45,6 @@ void Idle::idlePlayer()
 			stages[level].checkRIGHT();
 		}
 	}
-
 	if (keystates[KEY::DOWN]) {
 		// case of player's state is JUMP or FALL
 		if (player.getState() != STAY) {
@@ -66,7 +64,6 @@ void Idle::idlePlayer()
 			player.setState(FALL);
 		}
 	}
-
 	else if (player.getState() == JUMP) {
 		if (player.getVelocityY() > 0) {
 			player.setVelocityY(player.getVelocityY() - 0.008f);
@@ -78,7 +75,6 @@ void Idle::idlePlayer()
 			player.setState(FALL);
 		}
 	}
-
 	else if (player.getState() == FALL) {
 		if (stages[level].checkFALL()) {
 			player.translate(0.0f, -0.01f);
@@ -86,7 +82,6 @@ void Idle::idlePlayer()
 	}
 
 	player.updatePosition();
-	player.setFinalPosition();
 }
 
 void Idle::idleBubbleAlive()
@@ -177,7 +172,7 @@ void Idle::idleBubble()
 	}
 }
 
-void Idle::idleClear()
+void Idle::idleStageClear()
 {
 	if (stages[level].getTime() >= 0.6f) player.initializePosition();
 }

@@ -1,85 +1,79 @@
 #pragma once
 #include "Bubble.h"
 #include "Object.h"
-#include "Texture.h"
-#include <vector>
 
 class Player: public Object 
 {
 public:
 	//  constructor
 	Player();
-	Player(int max_life);
+	Player(int maxLife);
 
-	//  draw player's dragon pixel image
-	void drawPlayer();
-
-	//  dragon pixel image setting
+	//  draw mothods
 	void drawPixel(float x, float y, int n);
+	void drawPlayer();
+	void drawHeartPixel(float x, float y, int n, int i);
+	void drawLife();
 
-	void left_ATTACK();
-	void left_DAMAGE();
-	void left_FALL1();
-	void left_FALL2();
-	void left_STAY1();
-	void left_STAY2();
-	void left_JUMP();
+	//  texture methods
+	void initTextureImage();
+	void initTextureTime();
+	void setTextureID(KEY dir, TEXTURE_MOTION motion);
+	void setPlayerTexture();
 
-	void right_ATTACK();
-	void right_DAMAGE();
-	void right_FALL1();
-	void right_FALL2();
-	void right_STAY1();
-	void right_STAY2();
-	void right_JUMP();
-
-	void updatePosition();
-	
-	//  reflect player's contact with other monsters
-	void decreaseLife();
+	//  reflect player's collision with a monster
 	void giveInvincibility(int frame);
 	bool isInvincible();
+	bool isBlink();
+
+	/*	change player's x, y coordinates
+		when player is out of the window, change the position of player
+	*/
+	void updatePosition();
 
 	//  draw bubble
 	Bubble shoot();
 
 	//  initialize player's position
+	void setClearPosition(float x, float y);
 	void initializePosition();
-	
-	//  setter
-	void setDirection(KEY dr);
-	void setState(STATE st);
-	void setFinalPosition();
 
-	//  getter
+	//  gameover and restart methods
+	//  determine whether player is alive or not
+	bool isAlive();
+	//  reset player
+	void reset();
+
+	void setDirection(KEY dr);
 	KEY getDirection();
+	void setState(STATE st);
 	STATE getState();
 	float getHeight();
 	virtual Hitbox getHitbox() override;
-
-	//  draw player's left lives
-	void drawHeartPixel(float x, float y, int n, int i);
-	void drawLife();
-
-	// determine whether player is alive or not;
-	bool isAlive();
-
-	// reset player
-	void reset();
 
 private:
 	KEY direction;
 	STATE state;
 	float height;
-	float finalPosition[2];
 
-	//  blinkTime means a time for which player is blinking
-	int blinkTime;
-
-	//  life means the number of left lives of player
-	int life;
-	int max_life;
-	bool move;
+	//  variables of texture 
+	GLuint textureID;
 	vector<Texture> leftImage;
 	vector<Texture> rightImage;
+
+	//  variables of stage clear 
+	bool moveStage;
+	float clearPosition[2];
+
+	//  variables of time
+	int blinkTime;
+	int attackTime;
+	int damageTime;
+	int fallTime;
+	int stayTime;
+	float previousX;
+
+	//  the number of left lives of player
+	int maxLife;
+	int life;
 };

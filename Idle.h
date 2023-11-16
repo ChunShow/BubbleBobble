@@ -11,7 +11,7 @@ public:
 	void idleBubbleAlive();
 	void idleMonster();
 	void idleBubble();
-	void idleClear();
+	void idleStageClear();
 	void idleGameover();
 
 private:

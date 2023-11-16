@@ -1,7 +1,9 @@
 #pragma once
 #include "GL/freeglut.h"
 #include "Hitbox.h"
+#include "Texture.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
