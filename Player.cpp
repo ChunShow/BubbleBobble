@@ -114,9 +114,9 @@ void Player::setPlayerTexture()
 		else setTextureID(direction, _FALL2);
 		break;
 	case STAY:
-		if (previousX == getPositionX()) setTextureID(direction, _STAY1);
-		else if ((stayTime++ % 16) < 8) setTextureID(direction, _STAY1);
+		if ((stayTime++ % 16) < 8) setTextureID(direction, _STAY1);
 		else setTextureID(direction, _STAY2);
+		if (previousX == getPositionX()) stayTime--;
 		previousX = getPositionX();
 		break;
 	}
@@ -201,8 +201,9 @@ void Player::initializePosition()
 	moveStage = true;
 	if ((getPositionX() <= -0.95f) && (getPositionY() <= -0.95f)) {
 		moveStage = false;
-		setClearPosition(1.0f, 1.0f);
+		direction = RIGHT;
 		setPosition(-0.95f, -0.95f);
+		setClearPosition(1.0f, 1.0f);
 	}
 	else if (getPositionX() <= -0.95f) {
 		setPositionX(-0.95f);
@@ -251,9 +252,9 @@ float Player::getHeight()
 Hitbox Player::getHitbox()
 {
 	float xLeft = getPositionX() + 0.03f;
-	float xRight = getPositionX() + 0.16f;
+	float xRight = getPositionX() + 0.14f;
 	float yBottom = getPositionY();
-	float yTop = getPositionY() + 0.15f;
+	float yTop = getPositionY() + 0.13f;
 
 	return Hitbox(xLeft, xRight, yBottom, yTop);
 };

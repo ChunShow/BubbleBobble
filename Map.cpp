@@ -12,9 +12,9 @@ Map::Map(int level) : stage(level)
 	}
 }
 
-void Map::drawMap(bool& clear)
+void Map::drawMap(vector<Monster>& monsters, bool& clear)
 {
-	//drawBackground();
+	drawBackground();
 	glPushMatrix();
 	if (time >= 0.6f) glTranslatef(0.0f, time - 0.6f, 0.0f);
 	//  draw map according to the level of stage
@@ -27,6 +27,12 @@ void Map::drawMap(bool& clear)
 		break;
 	case 2:
 		drawStage2();
+		break;
+	case 3:
+		drawStage3();
+		break;
+	case 4:
+		drawStage4();
 		break;
 	default:
 		drawStage0();
@@ -45,12 +51,18 @@ void Map::drawMap(bool& clear)
 		case 2:
 			drawStage2();
 			break;
+		case 3:
+			drawStage3();
+			break;
+		case 4:
+			drawStage4();
+			break;
 		default:
 			drawStage0();
 			break;
 		}
 		//drawBackground();
-		changeMap(clear);
+		changeMap(monsters, clear);
 	}
 	glPopMatrix();
 }
@@ -62,7 +74,7 @@ void Map::drawBackground()
 
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glBindTexture(GL_TEXTURE_2D, textures[_FIELD].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_FIELD_SKY].getTextureID());
 	glBegin(GL_POLYGON);
 	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.2f, 1.2f);
 	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.2f, 1.2f);
@@ -74,7 +86,7 @@ void Map::drawBackground()
 	glFinish();
 }
 
-void Map::changeMap(bool& clear)
+void Map::changeMap(vector<Monster>& monsters, bool& clear)
 {
 	if (clear) {
 		time += 0.015f;
@@ -85,6 +97,8 @@ void Map::changeMap(bool& clear)
 			borderHard.clear();
 			drawn = false;
 			clear = false;
+			monsters.push_back(Monster(CREATURE));
+			monsters[0].setPosition(-0.04f, 0.5f);
 		}
 	}
 }
@@ -139,33 +153,158 @@ void Map::setHard(float x, float y, float width, float height)
 	borderHard.back().push_back(height);
 }
 
-void Map::drawStage0() 
+void Map::drawStage0()
 {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
-	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
-	drawHard(-1.2f, -0.45f, 0.25f, 0.55f);
-	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
-	drawHard(0.95f, -0.45f, 0.25f, 0.55f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.0f, 0.25f, 2.2f);
+	drawHard(0.95f, 1.0f, 0.25f, 2.2f);
 
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
-	drawHard(-0.95f, -0.95f, 0.75f, 0.05f);
-	drawHard(0.2f, -0.95f, 0.75f, 0.05f);
-	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
-	drawHard(-1.2f, -1.0f, 1.0f, 0.2f);
-	drawHard(0.2f, -1.0f, 1.0f, 0.2f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-0.95f, -0.95f, 1.9f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, -1.0f, 2.4f, 0.2f);
 
 	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
-	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
-	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.2f, 2.4f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, 1.2f, 2.4f, 0.2f);
 
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
+	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
+	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
+
+	//  the second layer
+	drawBlock(-0.95f, 0.05f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.05f, 0.25f, 0.05f);
+	drawBlock(-0.4f, 0.05f, 0.8f, 0.05f);
+
+	//  the third layer
+	drawBlock(-0.95f, 0.55f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
+	drawBlock(-0.4f, 0.55f, 0.8f, 0.05f);
+
+	glDisable(GL_TEXTURE_2D);
+	drawn = true;
+}
+void Map::drawStage1()
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	//  the side layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.0f, 0.25f, 2.2f);
+	drawHard(0.95f, 1.0f, 0.25f, 2.2f);
+
+	//  the bottom layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-0.95f, -0.95f, 1.9f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, -1.0f, 2.4f, 0.2f);
+
+	//  the top layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.2f, 2.4f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, 1.2f, 2.4f, 0.2f);
+
+	//  the first layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
+	drawBlock(-0.95f, -0.5f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.5f, 0.25f, 0.05f);
+	drawBlock(-0.4f, -0.3f, 0.8f, 0.05f);
+
+	//  the second layer
+	drawBlock(-0.95f, -0.05f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.05f, 0.25f, 0.05f);
+	drawBlock(-0.4f, 0.15f, 0.8f, 0.05f);
+
+	//  the third layer
+	drawBlock(-0.95f, 0.4f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.4f, 0.25f, 0.05f);
+
+	glDisable(GL_TEXTURE_2D);
+	drawn = true;
+}
+void Map::drawStage2()
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	//  the side layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.0f, 0.25f, 2.2f);
+	drawHard(0.95f, 1.0f, 0.25f, 2.2f);
+
+	//  the bottom layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-0.95f, -0.95f, 1.9f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, -1.0f, 2.4f, 0.2f);
+
+	//  the top layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.2f, 2.4f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, 1.2f, 2.4f, 0.2f);
+
+	//  the first layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
+	drawBlock(-0.95f, -0.5f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.5f, 0.25f, 0.05f);
+	drawBlock(-0.4f, -0.5f, 0.8f, 0.05f);
+
+	//  the second layer
+	drawBlock(-0.95f, -0.05f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.05f, 0.25f, 0.05f);
+	drawBlock(-0.4f, -0.05f, 0.8f, 0.05f);
+
+	//  the third layer
+	drawBlock(-0.95f, 0.4f, 0.25f, 0.05f);
+	drawBlock(0.7f, 0.4f, 0.25f, 0.05f);
+	drawBlock(-0.4f, 0.4f, 0.8f, 0.05f);
+
+	glDisable(GL_TEXTURE_2D);
+	drawn = true;
+}
+void Map::drawStage3() 
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+	//  the side layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
+	drawHard(-1.2f, -0.45f, 0.25f, 0.75f);
+	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
+	drawHard(0.95f, -0.45f, 0.25f, 0.75f);
+
+	//  the bottom layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-0.95f, -0.95f, 0.75f, 0.25f);
+	drawHard(0.2f, -0.95f, 0.75f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, -1.0f, 1.0f, 0.2f);
+	drawBlock(0.2f, -1.0f, 1.0f, 0.2f);
+
+	//  the top layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
+	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, 1.2f, 1.0f, 0.2f);
+	drawBlock(0.2f, 1.2f, 1.0f, 0.2f);
+
+	//  the first layer
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
 	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
 	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
 	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
@@ -179,7 +318,7 @@ void Map::drawStage0()
 	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
 
 	//  the middle object
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
 	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
 	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
 	drawHard(0.3f, 0.40f, 0.10f, 0.40f);
@@ -187,78 +326,36 @@ void Map::drawStage0()
 	glDisable(GL_TEXTURE_2D);
 	drawn = true;
 }
-
-void Map::drawStage1() 
-{
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-	//  the underground layer
-	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
-	drawHard(-1.2f, -1.0f, 2.4f, 0.2f);
-
-	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
-	drawHard(-1.2f, 1.0f, 0.25f, 2.0f);
-	drawHard(0.95f, 1.0f, 0.25f, 2.0f);
-
-	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
-	drawHard(-0.95f, -0.95f, 1.9f, 0.05f);
-
-	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
-	drawHard(-1.2f, 1.0f, 2.4f, 0.05f);
-	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
-	drawHard(-1.2f, 1.2f, 2.4f, 0.2f);
-
-	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
-	drawBlock(-1.2f, -0.53f, 0.5f, 0.05f);
-	drawBlock(0.7f, -0.53f, 0.5f, 0.05f);
-	drawBlock(-0.4f, -0.53f, 0.80f, 0.05f);
-
-	//  the second layer
-	drawBlock(-1.2f, -0.11f, 0.5f, 0.05f);
-	drawBlock(0.7f, -0.11f, 0.5f, 0.05f);
-	drawBlock(-0.4f, -0.11f, 0.8f, 0.05f);
-
-	//  the third layer
-	drawBlock(-1.2f, 0.36f, 0.5f, 0.05f);
-	drawBlock(0.7f, 0.36f, 0.5f, 0.05f);
-	drawBlock(-0.4f, 0.36f, 0.8f, 0.05f);
-
-	glDisable(GL_TEXTURE_2D);
-	drawn = true;
-}
-
-void Map::drawStage2()
+void Map::drawStage4()
 {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
 	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
-	drawHard(-1.2f, -0.45f, 0.25f, 0.55f);
+	drawHard(-1.2f, -0.45f, 0.25f, 0.75f);
 	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
-	drawHard(0.95f, -0.45f, 0.25f, 0.55f);
+	drawHard(0.95f, -0.45f, 0.25f, 0.75f);
 
 	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
-	drawHard(-0.95f, -0.95f, 0.75f, 0.05f);
-	drawHard(0.2f, -0.95f, 0.75f, 0.05f);
-	glBindTexture(GL_TEXTURE_2D, textures[_STONE].getTextureID());
-	drawHard(-1.2f, -1.0f, 1.0f, 0.2f);
-	drawHard(0.2f, -1.0f, 1.0f, 0.2f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
+	drawHard(-0.95f, -0.95f, 0.75f, 0.25f);
+	drawHard(0.2f, -0.95f, 0.75f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, -1.0f, 1.0f, 0.2f);
+	drawBlock(0.2f, -1.0f, 1.0f, 0.2f);
 
 	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
 	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
 	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
+	drawBlock(-1.2f, 1.2f, 1.0f, 0.2f);
+	drawBlock(0.2f, 1.2f, 1.0f, 0.2f);
 
 	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, textures[_GRASS].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
 	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
 	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
 	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
@@ -272,7 +369,7 @@ void Map::drawStage2()
 	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
 
 	//  the middle object
-	glBindTexture(GL_TEXTURE_2D, textures[_LEAF].getTextureID());
+	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
 	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
 	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
 	drawHard(0.3f, 0.40f, 0.10f, 0.40f);
@@ -292,11 +389,11 @@ bool Map::checkFALL()
 	*/
 	if (player.getDirection() == RIGHT) {
 		pos[0] = player.getPositionX() + 0.02f;
-		pos[1] = player.getPositionX() + 0.16f;
+		pos[1] = player.getPositionX() + 0.15f;
 	}
 	else {
-		pos[0] = player.getPositionX() + 0.01f;
-		pos[1] = player.getPositionX() + 0.15f;
+		pos[0] = player.getPositionX();
+		pos[1] = player.getPositionX() + 0.13f;
 	}
 	for (auto i = 0; i < border.size(); i++) {
 		x = border[i][0];
@@ -328,11 +425,11 @@ void Map::checkJUMP()
 	*/
 	if (player.getDirection() == RIGHT) {
 		pos[0] = player.getPositionX() + 0.02f;
-		pos[1] = player.getPositionX() + 0.16f;
+		pos[1] = player.getPositionX() + 0.15f;
 	}
 	else {
-		pos[0] = player.getPositionX() + 0.01f;
-		pos[1] = player.getPositionX() + 0.15f;
+		pos[0] = player.getPositionX();
+		pos[1] = player.getPositionX() + 0.13f;
 	}
 	for (auto i = 0; i < borderHard.size(); i++) {
 		x = borderHard[i][0];
@@ -360,8 +457,8 @@ void Map::checkLEFT()
 	pos[1] means the right side of player's bottom
 	*/
 
-	pos[0] = player.getPositionX() + 0.01f;
-	pos[1] = player.getPositionX() + 0.15f;
+	pos[0] = player.getPositionX();
+	pos[1] = player.getPositionX() + 0.13f;
 	for (auto i = 0; i < borderHard.size(); i++) {
 		x = borderHard[i][0];
 		y = borderHard[i][1];
@@ -389,7 +486,7 @@ void Map::checkRIGHT()
 	pos[1] means the right side of player's bottom
 	*/
 	pos[0] = player.getPositionX() + 0.02f;
-	pos[1] = player.getPositionX() + 0.16f;
+	pos[1] = player.getPositionX() + 0.15f;
 	for (auto i = 0; i < borderHard.size(); i++) {
 		x = borderHard[i][0];
 		y = borderHard[i][1];
@@ -401,13 +498,13 @@ void Map::checkRIGHT()
 			(y - height < player.getPositionY() + player.getHeight() && player.getPositionY() + player.getHeight() <= y)) {
 			//  check whether player's left side contacts borderHard's (x coordinate + width)
 			if (x <= pos[1] && pos[1] <= x + 0.025f) {
-				player.setPositionX(x - 0.17f);
+				player.setPositionX(x - 0.15f);
 			}
 		}
 	}
 }
 
-bool Map::checkMonster(Monster monster) 
+bool Map::checkMonster(Monster& monster) 
 {
 	float x, y, width;
 	float pos[2];
@@ -418,8 +515,23 @@ bool Map::checkMonster(Monster monster)
 	pos[0] means the left side of monster's bottom
 	pos[1] means the right side of monster's bottom
 	*/
-	pos[0] = monster.getPositionX() + 0.01f;
-	pos[1] = monster.getPositionX() + 0.16f;
+	float i, j;
+	switch (monster.getType()) {
+	case(ROBOT):
+		i = 0.03f;
+		j = 0.14f;
+		break;
+	case(CREATURE):
+		i = 0.0f;
+		j = 0.15f;
+		break;
+	case(GHOST):
+		i = 0.04f;
+		j = 0.15f;
+		break;
+	}
+	pos[0] = monster.getPositionX() + i;
+	pos[1] = monster.getPositionX() + j;
 	for (auto i = 0; i < border.size(); i++) {
 		x = border[i][0];
 		y = border[i][1];
@@ -434,14 +546,12 @@ bool Map::checkMonster(Monster monster)
 		case(LEFT):
 			if (xLeftContaining && ySupporting) {
 				monster.setPositionY(y);
-				flag = true;
 				return true;
 			}
 			break;
 		case(RIGHT):
 			if (xRightContaining && ySupporting) {
 				monster.setPositionY(y);
-				flag = true;
 				return true;
 			}
 			break;

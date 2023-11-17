@@ -34,14 +34,12 @@ void initialize(bool restarted)
 		}
 	}
 
-	for (int i = 0; i < 4; i++) {
-		monsters.push_back(Monster(CREATURE));
+	for (int i = 0; i < 2; i++) {
+		monsters.push_back(Monster(ROBOT));
 	}
 
-	monsters[0].setPosition(0.0f, -0.45f);
-	monsters[1].setPosition(0.0f, 0.10f);
-	monsters[2].setPosition(-0.85f, 0.55f);
-	monsters[3].setPosition(0.85f, 0.55f);
+	monsters[0].setPosition(-0.08f, 0.0f);
+	monsters[1].setPosition(-0.08f, 0.5f);
 }
 
 void idle()
@@ -104,7 +102,7 @@ void display()
 	light1.draw();
 
 	//Detect clear
-	stages[level].drawMap(clear);
+	stages[level].drawMap(monsters, clear);
 
 	for (auto& monster : monsters) {
 		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
@@ -148,8 +146,6 @@ void display()
 
 	if (monsters.size() == 0) {
 		clear = true;
-		monsters.push_back(Monster(CREATURE));
-		monsters[0].setPosition(0.0f, -0.95f);
 	}
 
 	//Detect gameover

@@ -9,27 +9,24 @@ public:
 	//  constructor
 	Monster(MONSTER Type);
 
-	//  draw monster's pixel image according to the type
+	//  draw methods
 	void drawMonster();
 	void drawRotate();
 
-	//  monster pixel image setting
-	void drawPixel(float x, float y, int n);
-	void leftCreature();
-	void rightCreature();
+	//  texture methods
+	void initTextureImage();
+	void setTextureID(KEY dir);
 
+	//  reflect monster's collision with a bubble
 	void trap(int key);
 	bool isTrapped();
 	bool isAlive();
-	void free();
 	void kill();
+	void free();
 
-	//  sette
 	void setDirection(KEY drt);
-
-	//  getter
 	KEY getDirection();
-	float getTime();
+	MONSTER getType();
 	int getTrappedBubble();
 	virtual Hitbox getHitbox() override;
 
@@ -37,11 +34,15 @@ private:
 	MONSTER type;
 	KEY direction;
 
+	//  variables of texture 
+	GLuint textureID;
+	Texture leftImage;
+	Texture rightImage;
+
 	bool trapped;
+	int trappedBubble;
 	bool rotation;
 	bool alive;
-	float angle;
-	float time;
+	float rotateAngle;
 
-	int trappedBubble;
 };

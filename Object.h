@@ -13,28 +13,25 @@ enum STATE { STAY, JUMP, FALL };
 class Object
 {
 public:
+	//  constructor
 	Object();
 
-	//  setter
-	//  set position of object
+	//  position methods
 	void setPosition(float x, float y);
-	void setPositionX(float x);
-	void setPositionY(float y);
-	//  set velocity of object
-	void setVelocity(float v1, float v2);
-	void setVelocityX(float v1);
-	void setVelocityY(float v2);
-
-	//  getter
-	//  get position of object
 	float* getPosition();
+	void setPositionX(float x);
 	float getPositionX();
+	void setPositionY(float y);
 	float getPositionY();
-	//  get velocity of object
+
+	//  velocity methods
+	void setVelocity(float v1, float v2);
 	float* getVelocity();
+	void setVelocityX(float v1);
 	float getVelocityX();
+	void setVelocityY(float v2);
 	float getVelocityY();
-	//  get hitbox of object
+	
 	virtual Hitbox getHitbox();
 
 	void translate(float x, float y);

@@ -4,6 +4,8 @@
 Texture::Texture() {}
 Texture::Texture(TEXTURE type, TEXTURE_BLOCK block) : textureType(type), textureBlock(block) {}
 Texture::Texture(TEXTURE type, TEXTURE_DIRECTION dir, TEXTURE_MOTION motion) : textureType(type), textureDir(dir), textureMotion(motion) {}
+Texture::Texture(TEXTURE type, TEXTURE_MONSTER monster, TEXTURE_DIRECTION dir) : textureType(type), textureMonster(monster), textureDir(dir) {}
+
 
 FIBITMAP* Texture::createBitMap(char const* filename) {
 	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename, 0);
@@ -52,6 +54,8 @@ void Texture::initTexture() {
 GLuint Texture::getTextureID() const {
 	return textureID;
 }
+
+//  .png file path setting
 void Texture::setPlayerFile(FIBITMAP*& bitmap) {
 	switch (textureDir) {
 	case _RIGHT:
@@ -122,90 +126,61 @@ void Texture::setPlayerFile(FIBITMAP*& bitmap) {
 	}
 }
 void Texture::setMonsterFile(FIBITMAP*& bitmap) {
-	switch (textureDir) {
-	case _RIGHT:
-		switch (textureMotion) {
-		case _ATTACK:
-			bitmap = createBitMap("texture/character/Dragon_right_attack.png");
+	switch (textureMonster) {
+	case _ROBOT:
+		switch (textureDir) {
+		case _RIGHT:
+			bitmap = createBitMap("texture/character/Robot_right.png");
 			break;
-		case _DAMAGE:
-			bitmap = createBitMap("texture/character/Dragon_right_damage.png");
-			break;
-		case _FALL1:
-			bitmap = createBitMap("texture/character/Dragon_right_fall1.png");
-			break;
-		case _FALL2:
-			bitmap = createBitMap("texture/character/Dragon_right_fall2.png");
-			break;
-		case _JUMP:
-			bitmap = createBitMap("texture/character/Dragon_right_jump.png");
-			break;
-		case _STAY1:
-			bitmap = createBitMap("texture/character/Dragon_right_stay1.png");
-			break;
-		case _STAY2:
-			bitmap = createBitMap("texture/character/Dragon_right_stay2.png");
-			break;
-		case _CLEAR:
-			bitmap = createBitMap("texture/character/Dragon_clearStage.png");
+		case _LEFT:
+			bitmap = createBitMap("texture/character/Robot_left.png");
 			break;
 		default:
-			bitmap = createBitMap("texture/character/Dragon_right_stay1.png");
+			bitmap = createBitMap("texture/character/Robot_left.png");
 			break;
 		}
 		break;
-	case _LEFT:
-		switch (textureMotion) {
-		case _ATTACK:
-			bitmap = createBitMap("texture/character/Dragon_left_attack.png");
+	case _CREATURE:
+		switch (textureDir) {
+		case _RIGHT:
+			bitmap = createBitMap("texture/character/Creature_right.png");
 			break;
-		case _DAMAGE:
-			bitmap = createBitMap("texture/character/Dragon_left_damage.png");
-			break;
-		case _FALL1:
-			bitmap = createBitMap("texture/character/Dragon_left_fall1.png");
-			break;
-		case _FALL2:
-			bitmap = createBitMap("texture/character/Dragon_left_fall2.png");
-			break;
-		case _JUMP:
-			bitmap = createBitMap("texture/character/Dragon_left_jump.png");
-			break;
-		case _STAY1:
-			bitmap = createBitMap("texture/character/Dragon_left_stay1.png");
-			break;
-		case _STAY2:
-			bitmap = createBitMap("texture/character/Dragon_left_stay2.png");
-			break;
-		case _CLEAR:
-			bitmap = createBitMap("texture/character/Dragon_clearStage.png");
+		case _LEFT:
+			bitmap = createBitMap("texture/character/Creature_left.png");
 			break;
 		default:
-			bitmap = createBitMap("texture/character/Dragon_left_stay1.png");
+			bitmap = createBitMap("texture/character/Creature_left.png");
 			break;
 		}
 		break;
-	default:
-		bitmap = createBitMap("texture/character/Dragon_right_stay1.png");
+	case _GHOST:
+		switch (textureDir) {
+		case _RIGHT:
+			bitmap = createBitMap("texture/character/Ghost_right.png");
+			break;
+		case _LEFT:
+			bitmap = createBitMap("texture/character/Ghost_left.png");
+			break;
+		default:
+			bitmap = createBitMap("texture/character/Ghost_left.png");
+			break;
+		}
 		break;
 	}
 }
 void Texture::setMapFile(FIBITMAP*& bitmap) {
 	switch (textureBlock) {
-	case _BRICK:
-		bitmap = createBitMap("texture/brick1.png");
+	case _BRICK_RED:
+		bitmap = createBitMap("texture/Brick_red.png");
 		break;
-	case _STONE:
-		bitmap = createBitMap("texture/stone2.png");
+	case _BRICK_BLUE:
+		bitmap = createBitMap("texture/Brick_blue.png");
 		break;
-	case _GRASS:
-		bitmap = createBitMap("texture/grass.png");
+	case _BRICK_BLACK:
+		bitmap = createBitMap("texture/Brick_black.png");
 		break;
-	case _LEAF:
-		bitmap = createBitMap("texture/leaf.png");
-		break;
-	case _FIELD:
-		bitmap = createBitMap("texture/field.png");
+	case _FIELD_SKY:
+		bitmap = createBitMap("texture/Field_sky.png");
 		break;
 	case _GAMEOVER:
 		bitmap = createBitMap("texture/gameover.png");

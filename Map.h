@@ -10,9 +10,9 @@ public:
 	Map(int level);
 
 	//  draw pixel image of map according to the stage
-	void drawMap(bool& clear);
+	void drawMap(vector<Monster>& monsters, bool& clear);
 	void drawBackground();
-	void changeMap(bool& clear);
+	void changeMap(vector<Monster>& monsters, bool& clear);
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
 	    drawHard draws hard block which player can't pass
@@ -28,6 +28,8 @@ public:
 	void drawStage0();
 	void drawStage1();
 	void drawStage2();
+	void drawStage3();
+	void drawStage4();
 
 	//  check whether player's movement is allowed or not
 	bool checkFALL();
@@ -36,7 +38,7 @@ public:
 	void checkRIGHT();
 
 	//  restrict monster's movement range
-	bool checkMonster(Monster monster);
+	bool checkMonster(Monster& monster);
 
 	//  getter
 	vector<vector<float>> getBorderHard () const;

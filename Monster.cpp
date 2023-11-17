@@ -1,475 +1,109 @@
 #include "main.h"
 
-//  initial setting of monster
-Monster::Monster(MONSTER Type) : type(Type), direction(LEFT) {
+//  constructor
+Monster::Monster(MONSTER Type) : type(Type), direction(DOWN), trapped(false), rotation(false), alive(true), rotateAngle(0.0f), trappedBubble(-1) {
 	setPosition(0.0f, 0.0f);
-	trapped = false;
-	rotation = false;
-	alive = true;
-	angle = 0.0f;
-	trappedBubble = -1;
+	initTextureImage();
 }
 
+//  draw mothods
 void Monster::drawMonster() 
 {
+	setTextureID(direction);
+
 	glPushMatrix();
 	drawRotate();
-	//  draw monster according to the type
-	switch (type) {
-	case CREATURE:
-		//  draw creature facing left
-		if (direction == LEFT) leftCreature();
-		//  draw creature facing right
-		else rightCreature();
-		break;
-	}
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(getPositionX() + 0.0f, getPositionY() + 0.2f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(getPositionX() + 0.2f, getPositionY() + 0.2f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(getPositionX() + 0.2f, getPositionY() + 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(getPositionX() + 0.0f, getPositionY() + 0.0f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 }
-
 void Monster::drawRotate()
 {
 	if (isTrapped ()) {
-		//time -= 0.001f;
-		angle += 5.0f;
+		rotateAngle += 5.0f;
 		glTranslatef(getPositionX() + 0.085f, getPositionY() + 0.085f, 1.0f);
-		glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		glScalef(0.7f, 0.7f, 0.7f);
+		glRotatef(rotateAngle, 0.0f, 0.0f, 1.0f);
+		glScalef(0.65f, 0.65f, 0.65f);
 		glTranslatef(-getPositionX() - 0.085f, -getPositionY() - 0.085f, 0.0f);
 	}
 }
 
-void Monster::drawPixel(float x, float y, int n)
+//  texture methods
+void Monster::initTextureImage()
 {
-	float x_pos = getPositionX();
-	float y_pos = getPositionY();
-	glBegin(GL_POLYGON);
-	glVertex2f(x_pos + x, y_pos + y);
-	glVertex2f(x_pos + x, y_pos + y + 0.01f);
-	glVertex2f(x_pos + x + n * 0.01f, y_pos + y + 0.01f);
-	glVertex2f(x_pos + x + n * 0.01f, y_pos + y);
-	glEnd();
+	switch (type) {
+	case(ROBOT):
+		leftImage = Texture(_MONSTER, _ROBOT, _LEFT);
+		rightImage = Texture(_MONSTER, _ROBOT, _RIGHT);
+		break;
+	case(CREATURE):
+		leftImage = Texture(_MONSTER, _CREATURE, _LEFT);
+		rightImage = Texture(_MONSTER, _CREATURE, _RIGHT);
+		break;
+	case(GHOST):
+		leftImage = Texture(_MONSTER, _GHOST, _LEFT);
+		rightImage = Texture(_MONSTER, _GHOST, _RIGHT);
+		break;
+	}
+
+	leftImage.initTexture();
+	rightImage.initTexture();
+}
+void Monster::setTextureID(KEY dir)
+{
+	if (dir == LEFT) {
+		textureID = leftImage.getTextureID();
+	}
+	else textureID = rightImage.getTextureID();
 }
 
-void Monster::leftCreature() {
-	//  black
-	glColor3f(0.0f, 0.0f, 0.0f);
-	float y = 0.0f;
-	drawPixel(0.02f, y, 4);
-	drawPixel(0.08f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.06f, y, 2);
-	drawPixel(0.12f, y, 5);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.17f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.17f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.05f, y, 7);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 8);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 7);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.02f, y, 5);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.11f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 2);
-	drawPixel(0.09f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 4);
-
-	//  white
-	glColor3f(1.0f, 1.0f, 1.0f);
-	y = 0.01f;
-	drawPixel(0.02f, y, 4);
-	drawPixel(0.08f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 14);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 3);
-	drawPixel(0.07f, y, 2);
-	drawPixel(0.10f, y, 7);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.12f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.10f, y, 2);
-	drawPixel(0.13f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 2);
-	drawPixel(0.13f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.07f, y, 8);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 2);
-	drawPixel(0.04f, y, 2);
-	drawPixel(0.07f, y, 2);
-	drawPixel(0.12f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 7);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 6);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 6);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 5);
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 6);
-	drawPixel(0.11f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 8);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 4);
-
-	//  red
-	glColor3f(1.0f, 0.0f, 0.0f);
-	y = 0.08f;
-	drawPixel(0.09f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 1);
-	drawPixel(0.11f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 1);
-	drawPixel(0.11f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 2);
-	drawPixel(0.10f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 3);
-
-	//  orange
-	glColor3f(1.0f, 0.5f, 0.3f);
-	y = 0.09f;
-	drawPixel(0.09f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 1);
-}
-
-void Monster::rightCreature() {
-	//  black
-	glColor3f(0.0f, 0.0f, 0.0f);
-	float y = 0.0f;
-	drawPixel(0.02f, y, 4);
-	drawPixel(0.08f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.06f, y, 2);
-	drawPixel(0.12f, y, 5);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.17f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.17f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.05f, y, 7);
-	drawPixel(0.16f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 8);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 7);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.12f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.02f, y, 5);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.03f, y, 1);
-	drawPixel(0.06f, y, 1);
-	drawPixel(0.15f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.00f, y, 1);
-	drawPixel(0.14f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.11f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 2);
-	drawPixel(0.09f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 4);
-
-	//  white
-	glColor3f(1.0f, 1.0f, 1.0f);
-	y = 0.01f;
-	drawPixel(0.02f, y, 4);
-	drawPixel(0.08f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 14);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 3);
-	drawPixel(0.07f, y, 2);
-	drawPixel(0.10f, y, 7);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 1);
-	drawPixel(0.04f, y, 1);
-	drawPixel(0.12f, y, 4);
-
-	y += 0.01f;
-	drawPixel(0.10f, y, 2);
-	drawPixel(0.13f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 2);
-	drawPixel(0.13f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 1);
-	drawPixel(0.07f, y, 8);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 2);
-	drawPixel(0.04f, y, 2);
-	drawPixel(0.07f, y, 2);
-	drawPixel(0.12f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 7);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 6);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.01f, y, 6);
-	drawPixel(0.09f, y, 1);
-	drawPixel(0.13f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 5);
-	drawPixel(0.12f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.02f, y, 6);
-	drawPixel(0.11f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.03f, y, 8);
-
-	y += 0.01f;
-	drawPixel(0.05f, y, 4);
-
-	//  red
-	glColor3f(1.0f, 0.0f, 0.0f);
-	y = 0.08f;
-	drawPixel(0.09f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 3);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 1);
-	drawPixel(0.11f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 1);
-	drawPixel(0.11f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.07f, y, 2);
-	drawPixel(0.10f, y, 2);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 3);
-
-	//  orange
-	glColor3f(1.0f, 0.5f, 0.3f);
-	y = 0.09f;
-	drawPixel(0.09f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.08f, y, 1);
-	drawPixel(0.10f, y, 1);
-
-	y += 0.01f;
-	drawPixel(0.09f, y, 1);
-}
-
+//  reflect monster's collision with a bubble
 void Monster::trap(int key) 
 {
 	trapped = true;
 	trappedBubble = key;
 }
-
 bool Monster::isTrapped() 
 {
 	return trapped;
 }
-
 bool Monster::isAlive()
 {
 	return alive;
 }
-
-void Monster::free()
-{
-	trapped = false;
-	angle = 0.0f;
-	direction = DOWN;
-	trappedBubble = -1;
-}
-
 void Monster::kill()
 {
 	alive = false;
 }
+void Monster::free()
+{
+	trapped = false;
+	rotateAngle = 0.0f;
+	direction = DOWN;
+	trappedBubble = -1;
+}
+
 
 void Monster::setDirection(KEY drt)
 {
 	direction = drt;
 }
-
 KEY Monster::getDirection()
 {
 	return direction;
 }
-
-float Monster::getTime()
+MONSTER Monster::getType()
 {
-	return time;
+	return type;
 }
-
 int Monster::getTrappedBubble()
 {
 	if (!isTrapped()) {
@@ -478,22 +112,27 @@ int Monster::getTrappedBubble()
 	}
 	return trappedBubble;
 }
-
 Hitbox Monster::getHitbox() 
 {
 	float xLeft, xRight, yBottom, yTop;
 	switch (type) {
-	case(CREATURE):
-		xLeft = getPositionX() + 0.01f;
+	case(ROBOT):
+		xLeft = getPositionX() + 0.03f;
 		xRight = getPositionX() + 0.14f;
 		yBottom = getPositionY();
-		yTop = getPositionY() + 0.13f;
+		yTop = getPositionY() + 0.14f;
 		break;
-	default:
-		xLeft = getPositionX();
-		xRight = getPositionX() + 0.15f;
+	case(CREATURE):
+		xLeft = getPositionX() + 0.03f;
+		xRight = getPositionX() + 0.16f;
 		yBottom = getPositionY();
-		yTop = getPositionY() + 0.15f;
+		yTop = getPositionY() + 0.14f;
+		break;
+	case(GHOST):
+		xLeft = getPositionX() + 0.04f;
+		xRight = getPositionX() + 0.16f;
+		yBottom = getPositionY();
+		yTop = getPositionY() + 0.16f;
 		break;
 	}
 
