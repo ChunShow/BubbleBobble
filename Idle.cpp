@@ -159,9 +159,9 @@ void Idle::idleBubble()
 
 		for (auto& monster : monsters) {
 			if (bubble.collisionDetection(monster) && !monster.isTrapped() && !bubble.isGrown()) {
+				bubble.size = 1.0f;
 				bubble.mapCollision(stages.getBorderHard());
 				bubble.direction = D_UP;
-				bubble.size = 1.0f;
 				bubble.trapping = true;
 				monster.trap(pair.first);
 			}
