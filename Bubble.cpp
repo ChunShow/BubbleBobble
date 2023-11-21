@@ -78,16 +78,11 @@ void Bubble::kill()
 
 bool Bubble::mapCollision(vector<vector<float>> borderHard)
 {
-	float x, y, width, height;
-	float r = getRadius();
-	float b_x=0.0f, b_y=0.0f;
-
+	float bb_x = getPositionX(); float bb_y = getPositionY();
 	for (const auto& border : borderHard) {
 
 		float xLeft = border[0]; float yTop = border[1];
 		float xRight = xLeft + border[2]; float yBottom = yTop - border[3];
-
-		float bb_x = getPositionX(); float bb_y = getPositionY();
 
 		if (getHitbox().collisionDetection(Hitbox(border))) {
 			size = 1.0f;
