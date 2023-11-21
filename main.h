@@ -6,9 +6,11 @@
 #include "Monster.h"
 #include "Map.h"
 #include "Bubble.h"
+#include "Explosion.h"
 
 #include "keyFunction.h"
 #include "Idle.h"
+
 
 #include <map>
 
@@ -25,6 +27,7 @@ extern Player* playerPointer;
 extern Map stages;
 extern map<int, Bubble> bubbles;
 extern vector<Monster> monsters;
+extern vector<Explosion> explosions;
 
 extern int level;
 extern int bubble_total_num;
