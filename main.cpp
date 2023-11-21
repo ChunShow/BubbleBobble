@@ -8,6 +8,7 @@ Player* playerPointer = &player;
 Map stages(0) ;
 map<int, Bubble> bubbles;
 vector<Monster> monsters;
+vector<Explosion> explosions;
 
 int bubble_total_num=0;
 int level;
@@ -49,6 +50,7 @@ void clearAll() {
 	stages.resetStage();
 	bubbles.clear();
 	monsters.clear();
+	explosions.clear();
 	bubble_total_num = 0;
 }
 
@@ -118,9 +120,22 @@ void display()
 			++itr;
 		}
 		else {
+			explosions.push_back(Explosion(bubble.getPositionX(), bubble.getPositionY(), bubble.isTrapping()));
 			bubbles.erase(itr++);
 		}
 	}
+
+	int k = 0;
+	while (explosions.begin() + k < explosions.end()) {
+		if (explosions[k].isAlive()) {
+			explosions[k].draw();
+			k++;
+		}
+		else {
+			explosions.erase(explosions.begin() + k);
+		}
+	}
+
 	glDisable(GL_DEPTH_TEST);
 
 	int j = 0;
@@ -137,6 +152,7 @@ void display()
 			j++;
 		}
 	}
+
 
 	if (!player.isBlink()) player.drawPlayer();
 	player.drawLife();

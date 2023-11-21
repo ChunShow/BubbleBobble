@@ -16,6 +16,7 @@ void Idle::operate()
 			idleBubbleAlive();
 			idleMonster();
 			idleBubble();
+			idleExplosion();
 		}
 		else {
 			idleStageClear();
@@ -169,6 +170,13 @@ void Idle::idleBubble()
 		if (clock() - bubble.createdTime > 5000) {
 			bubble.alive = false;
 		}
+	}
+}
+
+void Idle::idleExplosion()
+{
+	for (auto& exps : explosions) {
+		exps.increase(0.05f);
 	}
 }
 
