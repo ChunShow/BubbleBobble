@@ -81,29 +81,28 @@ bool Bubble::mapCollision(vector<vector<float>> borderHard)
 	float x, y, width, height;
 	float r = getRadius();
 	float b_x=0.0f, b_y=0.0f;
-	
-	bool hitLeft, hitRight, hitBottom, hitTop; // detects the collision side of border
-
 
 	for (const auto& border : borderHard) {
-		x = border[0]; y = border[1]; width = border[2]; height = border[3];
-		b_x = getPositionX(); b_y = getPositionY();
 
-		if (y - height - r < b_y && b_y  < y + r) {
-			if (x - r < b_x && b_x< x + width + r) {
-				switch (direction) {
-				case(D_LEFT):
-					size = 1.0f;
-					setPositionX(x + width + max_radius);
-					return true;
-				case(D_RIGHT):
-					size = 1.0f;
-					setPositionX(x - max_radius);
-					return true;
-				case(D_UP):
-					setPositionY(y - height - max_radius);
-					return true;
-				}
+		float xLeft = border[0]; float yTop = border[1];
+		float xRight = xLeft + border[2]; float yBottom = yTop - border[3];
+
+		float bb_x = getPositionX(); float bb_y = getPositionY();
+
+		if (getHitbox().collisionDetection(Hitbox(border))) {
+			size = 1.0f;
+			switch (direction) {
+			case (D_LEFT):
+				if (bb_y - max_radius < yBottom && yBottom < bb_y + max_radius) setPositionY(yBottom - max_radius);
+				else setPositionX(xRight + max_radius);
+				return true;
+			case (D_RIGHT):
+				if (bb_y - max_radius < yBottom && yBottom < bb_y + max_radius) setPositionY(yBottom - max_radius);
+				else setPositionX(xLeft - max_radius);
+				return true;
+			case (D_UP):
+				setPositionY(yBottom - max_radius);
+				return true;
 			}
 		}
 	}

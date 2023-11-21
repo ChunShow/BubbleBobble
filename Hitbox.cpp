@@ -12,8 +12,8 @@ Hitbox::Hitbox(vector<float> borderBox)
 
 bool Hitbox::collisionDetection(Hitbox other)
 {
-    bool xCollision = ((xLeft <= other.xRight) && (xRight >= other.xLeft));
-    bool yCollision = ((yTop >= other.yBottom) && (yBottom <= other.yTop));
+    bool xCollision = ((xLeft < other.xRight) && (xRight > other.xLeft));
+    bool yCollision = ((yTop > other.yBottom) && (yBottom < other.yTop));
 
     return xCollision && yCollision;
 }

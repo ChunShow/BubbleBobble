@@ -60,8 +60,7 @@ float Object::getVelocityY()
 
 Hitbox Object::getHitbox()
 {
-	Hitbox hitbox(0.0f, 0.0f, 0.0f, 0.0f);
-	cout << "this method should not be called" << endl;
+	Hitbox hitbox = Hitbox(0.0f, 0.0f, 0.0f, 0.0f);
 	return hitbox;
 }
 
@@ -69,6 +68,7 @@ void Object::translate(float x, float y)
 {
 	setPosition(getPositionX() + x, getPositionY() + y);
 }
+
 bool Object::collisionDetection(Object& other)
 {
 	Hitbox hitbox1 = getHitbox();
