@@ -24,6 +24,11 @@ public:
 	void kill();
 	void free();
 
+	/*	change monster's x, y coordinates
+		when monster is out of the window, change the position of player
+	*/
+	void updatePosition();
+
 	void setDirection(KEY drt);
 	KEY getDirection();
 	MONSTER getType();

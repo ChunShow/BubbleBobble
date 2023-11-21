@@ -91,6 +91,25 @@ void Monster::free()
 	trappedBubble = -1;
 }
 
+/*	change monster's x, y coordinates
+	when monster is out of the window, change the position of player
+*/
+void Monster::updatePosition()
+{
+	//  out of the left side
+	if ((direction == KEY::LEFT) && (getPositionX() + 0.01f < -1.2f)) {
+		setPositionX(1.05f);
+	}
+	//  out of the right side
+	else if ((direction == KEY::RIGHT) && (getPositionX() + 0.16f > 1.2f)) {
+		setPositionX(-1.18f);
+	}
+
+	//  out of the bottom side
+	if (getPositionY() < -1.2f) {
+		setPositionY(1.0f);
+	}
+}
 
 void Monster::setDirection(KEY drt)
 {

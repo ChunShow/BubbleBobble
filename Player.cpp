@@ -199,21 +199,21 @@ void Player::initializePosition()
 	if (clearPosition[0] == 1.0f && clearPosition[1] == 1.0f) setClearPosition(getPositionX(), getPositionY());
 
 	moveStage = true;
-	if ((getPositionX() <= -0.95f) && (getPositionY() <= -0.95f)) {
+	if ((getPositionX() <= -0.92f) && (getPositionY() <= -0.92f)) {
 		moveStage = false;
 		direction = RIGHT;
-		setPosition(-0.95f, -0.95f);
+		state = FALL;
 		setClearPosition(1.0f, 1.0f);
 	}
 	else if (getPositionX() <= -0.95f) {
 		setPositionX(-0.95f);
-		translate(0.0f, -(clearPosition[1] + 0.95f) / 150);
+		translate(0.0f, -(clearPosition[1] + 0.95f) / 160);
 	}
 	else if (getPositionY() <= -0.95f) {
 		setPositionY(-0.95f);
-		translate(-(clearPosition[0] + 0.95f) / 150, 0.0f);
+		translate(-(clearPosition[0] + 0.95f) / 160, 0.0f);
 	}
-	else translate(-(clearPosition[0] + 0.95f) / 150, -(clearPosition[1] + 0.95f) / 150);
+	else translate(-(clearPosition[0] + 0.95f) / 160, -(clearPosition[1] + 0.95f) / 160);
 }
 
 //  gameover and restart methods

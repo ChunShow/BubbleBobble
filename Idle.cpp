@@ -135,6 +135,7 @@ void Idle::idleMonster()
 			}
 			break;
 		}
+		monster.updatePosition();
 	}
 }
 
