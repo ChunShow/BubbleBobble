@@ -41,6 +41,8 @@ void Map::drawMap(vector<Monster>& monsters, bool& clear)
 
 	if (clear) {
 		glTranslatef(0.0f, -2.4f, 0.0f);
+		border.clear();
+		borderHard.clear();
 		switch (stage + 1) {
 		case 0:
 			drawStage0();
@@ -93,8 +95,6 @@ void Map::changeMap(vector<Monster>& monsters, bool& clear)
 		if (time >= 3.0f) {
 			time = 0.0f;
 			stage++;
-			border.clear();
-			borderHard.clear();
 			drawn = false;
 			clear = false;
 			monsters.push_back(Monster(CREATURE));
@@ -510,6 +510,7 @@ bool Map::checkMonster(Monster& monster)
 	float pos[2];
 	bool xLeftContaining, xRightContaining, ySupporting;
 	bool flag = false;
+	bool notFloating = false;
 	/*
 	monster's x coordinate range
 	pos[0] means the left side of monster's bottom
@@ -530,6 +531,7 @@ bool Map::checkMonster(Monster& monster)
 		j = 0.15f;
 		break;
 	}
+
 	pos[0] = monster.getPositionX() + i;
 	pos[1] = monster.getPositionX() + j;
 	for (auto i = 0; i < border.size(); i++) {
@@ -541,6 +543,8 @@ bool Map::checkMonster(Monster& monster)
 		xLeftContaining = (x <= pos[0] && pos[0] <= x + width);
 		xRightContaining = (x <= pos[1] && pos[1] <= x + width);
 		ySupporting = (y - 0.02f <= monster.getPositionY() && monster.getPositionY() <= y);
+
+		if (ySupporting) notFloating = true;
 
 		switch (monster.getDirection()) {
 		case(LEFT):
@@ -568,6 +572,10 @@ bool Map::checkMonster(Monster& monster)
 			break;
 		}
 	}
+	if (!notFloating) {
+		monster.setDirection(DOWN);
+		return true;
+	}
 	return flag;
 }
 
@@ -584,4 +592,5 @@ float Map::getTime() const
 void Map::resetStage()
 {
 	stage = 0;
+	drawn = false;
 }

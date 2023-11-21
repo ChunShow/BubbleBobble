@@ -5,7 +5,7 @@
 Player player;
 Player* playerPointer = &player;
 
-vector<Map> stages;
+Map stages(1) ;
 map<int, Bubble> bubbles;
 vector<Monster> monsters;
 
@@ -28,11 +28,7 @@ void initialize(bool restarted)
 	level = 0;
 	clear = false;
 
-	if (!restarted) {
-		for (int i = 0; i < 3; i++) {
-			stages.push_back(Map(i));
-		}
-	}
+	stages = Map(1);
 
 	for (int i = 0; i < 2; i++) {
 		monsters.push_back(Monster(ROBOT));
@@ -49,7 +45,7 @@ void idle()
 
 //Erase everything and get ready to restart;
 void clearAll() {
-	stages[level].resetStage();
+	stages.resetStage();
 	bubbles.clear();
 	monsters.clear();
 	bubble_total_num = 0;
@@ -102,7 +98,8 @@ void display()
 	light1.draw();
 
 	//Detect clear
-	stages[level].drawMap(monsters, clear);
+	stages.drawMap(monsters, clear);
+	if (clear) bubbles.clear();
 
 	for (auto& monster : monsters) {
 		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
@@ -140,7 +137,6 @@ void display()
 		}
 	}
 
-	
 	if (!player.isBlink()) player.drawPlayer();
 	player.drawLife();
 

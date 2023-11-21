@@ -33,7 +33,7 @@ void Idle::idlePlayer()
 		else {
 			if (player.getState() == FALL) player.translate(-0.015f, 0.0f);
 			else player.translate(-0.025f, 0.0f);
-			stages[level].checkLEFT();
+			stages.checkLEFT();
 		}
 	}
 	if (keystates[KEY::RIGHT]) {
@@ -42,7 +42,7 @@ void Idle::idlePlayer()
 		else {
 			if (player.getState() == FALL) player.translate(0.015f, 0.0f);
 			else player.translate(0.025f, 0.0f);
-			stages[level].checkRIGHT();
+			stages.checkRIGHT();
 		}
 	}
 	if (keystates[KEY::DOWN]) {
@@ -60,7 +60,7 @@ void Idle::idlePlayer()
 	}
 
 	if (player.getState() == STAY) {
-		if (stages[level].checkFALL()) {
+		if (stages.checkFALL()) {
 			player.setState(FALL);
 		}
 	}
@@ -68,7 +68,7 @@ void Idle::idlePlayer()
 		if (player.getVelocityY() > 0) {
 			player.setVelocityY(player.getVelocityY() - 0.008f);
 			player.translate(0.0f, player.getVelocityY());
-			stages[level].checkJUMP();
+			stages.checkJUMP();
 		}
 		else {
 			player.translate(0.0f, -0.01f);
@@ -76,11 +76,10 @@ void Idle::idlePlayer()
 		}
 	}
 	else if (player.getState() == FALL) {
-		if (stages[level].checkFALL()) {
+		if (stages.checkFALL()) {
 			player.translate(0.0f, -0.01f);
 		}
 	}
-
 	player.updatePosition();
 }
 
@@ -116,21 +115,21 @@ void Idle::idleMonster()
 
 		switch (monster.getDirection()) {
 		case(LEFT):
-			if (stages[level].checkMonster(monster)) monster.translate(-0.015f, 0.0f);
+			if (stages.checkMonster(monster)) monster.translate(-0.015f, 0.0f);
 			else {
 				monster.setDirection(RIGHT);
 				monster.translate(0.015f, 0.0f);
 			}
 			break;
 		case(RIGHT):
-			if (stages[level].checkMonster(monster)) monster.translate(0.015f, 0.0f);
+			if (stages.checkMonster(monster)) monster.translate(0.015f, 0.0f);
 			else {
 				monster.setDirection(LEFT);
 				monster.translate(-0.015f, 0.0f);
 			}
 			break;
 		case(DOWN):
-			if (stages[level].checkMonster(monster)) monster.translate(0.0f, -0.015f);
+			if (stages.checkMonster(monster)) monster.translate(0.0f, -0.015f);
 			else {
 				monster.setDirection(LEFT);
 			}
@@ -152,7 +151,7 @@ void Idle::idleBubble()
 		if (bubble.direction == D_LEFT) bubble.translate(-speed, 0.0f);
 		if (bubble.direction == D_RIGHT) bubble.translate(speed, 0.0f);
 		if (bubble.direction == D_UP) bubble.translate(0.0f, speed * 0.1);
-		if (bubble.mapCollision(stages[level].getBorderHard()) || bubble.isGrown()) bubble.direction = D_UP;
+		if (bubble.mapCollision(stages.getBorderHard()) || bubble.isGrown()) bubble.direction = D_UP;
 
 		if (bubble.getPositionX() < -1.0f) bubble.setPositionX(1.0f);
 		if (bubble.getPositionX() > 1.0f) bubble.setPositionX(-1.0f);
@@ -174,7 +173,7 @@ void Idle::idleBubble()
 
 void Idle::idleStageClear()
 {
-	if (stages[level].getTime() >= 0.6f) player.initializePosition();
+	if (stages.getTime() >= 0.6f) player.initializePosition();
 }
 
 void Idle::idleGameover()

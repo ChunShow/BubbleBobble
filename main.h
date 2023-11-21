@@ -22,7 +22,7 @@ using namespace std;
 extern Player player;
 extern Player* playerPointer;
 
-extern vector<Map> stages;
+extern Map stages;
 extern map<int, Bubble> bubbles;
 extern vector<Monster> monsters;
 
