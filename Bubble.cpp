@@ -81,9 +81,14 @@ bool Bubble::mapCollision(vector<vector<float>> borderHard)
 	float x, y, width, height;
 	float r = getRadius();
 	float b_x=0.0f, b_y=0.0f;
+	
+	bool hitLeft, hitRight, hitBottom, hitTop; // detects the collision side of border
+
+
 	for (const auto& border : borderHard) {
 		x = border[0]; y = border[1]; width = border[2]; height = border[3];
 		b_x = getPositionX(); b_y = getPositionY();
+
 		if (y - height - r < b_y && b_y  < y + r) {
 			if (x - r < b_x && b_x< x + width + r) {
 				switch (direction) {
