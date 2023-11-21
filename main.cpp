@@ -5,7 +5,7 @@
 Player player;
 Player* playerPointer = &player;
 
-Map stages(1) ;
+Map stages(0) ;
 map<int, Bubble> bubbles;
 vector<Monster> monsters;
 
@@ -28,14 +28,15 @@ void initialize(bool restarted)
 	level = 0;
 	clear = false;
 
-	stages = Map(1);
+	stages = Map(level);
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 3; i++) {
 		monsters.push_back(Monster(ROBOT));
 	}
 
-	monsters[0].setPosition(-0.08f, 0.0f);
-	monsters[1].setPosition(-0.08f, 0.5f);
+	monsters[0].setPosition(-0.4f, -0.25f);
+	monsters[1].setPosition(0.25f, 0.25);
+	monsters[2].setPosition(-0.4f, 0.75f);
 }
 
 void idle()

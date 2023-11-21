@@ -1,11 +1,8 @@
 #include "main.h"
 
 //  initial setting of map
-Map::Map(int level) : stage(level)
+Map::Map(int level) : stage(level), drawn(false), time(0.0f)
 {
-	drawn = false;
-	time = 0.0f;
-
 	for (int i = 0; i < 7; i++) {
 		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
@@ -17,8 +14,20 @@ void Map::drawMap(vector<Monster>& monsters, bool& clear)
 	drawBackground();
 	glPushMatrix();
 	if (time >= 0.6f) glTranslatef(0.0f, time - 0.6f, 0.0f);
-	//  draw map according to the level of stage
-	switch (stage) {
+	//  draw map according to the level
+	drawStage(stage);
+
+	if (clear) {
+		glTranslatef(0.0f, -2.4f, 0.0f);
+		border.clear();
+		borderHard.clear();
+		drawStage(stage + 1);
+		changeMap(monsters, clear);
+	}
+	glPopMatrix();
+}
+void Map::drawStage(int level) {
+	switch (level) {
 	case 0:
 		drawStage0();
 		break;
@@ -38,37 +47,7 @@ void Map::drawMap(vector<Monster>& monsters, bool& clear)
 		drawStage0();
 		break;
 	}
-
-	if (clear) {
-		glTranslatef(0.0f, -2.4f, 0.0f);
-		border.clear();
-		borderHard.clear();
-		switch (stage + 1) {
-		case 0:
-			drawStage0();
-			break;
-		case 1:
-			drawStage1();
-			break;
-		case 2:
-			drawStage2();
-			break;
-		case 3:
-			drawStage3();
-			break;
-		case 4:
-			drawStage4();
-			break;
-		default:
-			drawStage0();
-			break;
-		}
-		//drawBackground();
-		changeMap(monsters, clear);
-	}
-	glPopMatrix();
 }
-
 void Map::drawBackground()
 {
 	glEnable(GL_BLEND);
@@ -87,7 +66,6 @@ void Map::drawBackground()
 
 	glFinish();
 }
-
 void Map::changeMap(vector<Monster>& monsters, bool& clear)
 {
 	if (clear) {
@@ -97,9 +75,83 @@ void Map::changeMap(vector<Monster>& monsters, bool& clear)
 			stage++;
 			drawn = false;
 			clear = false;
-			monsters.push_back(Monster(CREATURE));
-			monsters[0].setPosition(-0.04f, 0.5f);
+			setMonsters(monsters);
 		}
+	}
+}
+void Map::setMonsters(vector<Monster>& monsters) {
+	switch (stage) {
+	case 0:
+		break;
+	case 1:
+		for (int i = 0; i < 4; i++) {
+			monsters.push_back(Monster(CREATURE));
+		}
+		monsters[0].setPosition(0.0f, -0.1f);
+		monsters[1].setPosition(0.0f, 0.35f);
+		monsters[2].setPosition(-0.8f, 0.25f);
+		monsters[3].setPosition(0.8f, 0.25f);
+		break;
+	case 2:
+		for (int i = 0; i < 3; i++) {
+			monsters.push_back(Monster(GHOST));
+		}
+		monsters[0].setPosition(-0.4f, -0.25f);
+		monsters[1].setPosition(0.25f, 0.25);
+		monsters[2].setPosition(-0.4f, 0.75f);
+
+		for (int i = 0; i < 6; i++) {
+			monsters.push_back(Monster(CREATURE));
+		}
+		monsters[3].setPosition(-0.8f, -0.25f);
+		monsters[4].setPosition(0.8f, -0.25f);
+		monsters[5].setPosition(-0.8, 0.25);
+		monsters[6].setPosition(0.8f, 0.25);
+		monsters[7].setPosition(-0.8f, 0.75f);
+		monsters[8].setPosition(0.8f, 0.75f);
+		break;
+	case 3:
+		monsters.push_back(Monster(CREATURE));
+		monsters[0].setPosition(0.08f, 0.4f);
+
+		for (int i = 0; i < 6; i++) {
+			monsters.push_back(Monster(ROBOT));
+		}
+		monsters[1].setPosition(-0.8f, -0.15f);
+		monsters[2].setPosition(0.8f, -0.15f);
+		monsters[3].setPosition(-0.8, 0.35);
+		monsters[4].setPosition(0.8f, 0.35);
+		monsters[5].setPosition(-0.8f, 0.85f);
+		monsters[6].setPosition(0.8f, 0.85f);
+		break;
+	case 4:
+		monsters.push_back(Monster(CREATURE));
+		monsters[0].setPosition(0.08f, 0.4f);
+
+		for (int i = 0; i < 6; i++) {
+			monsters.push_back(Monster(ROBOT));
+		}
+		monsters[1].setPosition(-0.8f, -0.15f);
+		monsters[2].setPosition(0.8f, -0.15f);
+		monsters[3].setPosition(-0.8, 0.35);
+		monsters[4].setPosition(0.8f, 0.35);
+		monsters[5].setPosition(-0.8f, 0.85f);
+		monsters[6].setPosition(0.8f, 0.85f);
+		break;
+	default:
+		monsters.push_back(Monster(CREATURE));
+		monsters[0].setPosition(0.08f, 0.4f);
+
+		for (int i = 0; i < 6; i++) {
+			monsters.push_back(Monster(ROBOT));
+		}
+		monsters[1].setPosition(-0.8f, -0.15f);
+		monsters[2].setPosition(0.8f, -0.15f);
+		monsters[3].setPosition(-0.8, 0.35);
+		monsters[4].setPosition(0.8f, 0.35);
+		monsters[5].setPosition(-0.8f, 0.85f);
+		monsters[6].setPosition(0.8f, 0.85f);
+		break;
 	}
 }
 
@@ -118,7 +170,6 @@ void Map::drawBlock(float x, float y, float width, float height)
 		}
 	}
 }
-
 void Map::drawHard(float x, float y, float width, float height) 
 {
 	if (!drawn) setHard(x, y, width, height);
@@ -134,7 +185,6 @@ void Map::drawHard(float x, float y, float width, float height)
 		}
 	}
 }
-
 void Map::setBorder(float x, float y, float width) 
 {
 	border.push_back(vector<float>());
@@ -142,7 +192,6 @@ void Map::setBorder(float x, float y, float width)
 	border.back().push_back(y);
 	border.back().push_back(width);
 }
-
 void Map::setHard(float x, float y, float width, float height) 
 {
 	setBorder(x, y, width);

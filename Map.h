@@ -11,8 +11,10 @@ public:
 
 	//  draw pixel image of map according to the stage
 	void drawMap(vector<Monster>& monsters, bool& clear);
+	void drawStage(int level);
 	void drawBackground();
 	void changeMap(vector<Monster>& monsters, bool& clear);
+	void setMonsters(vector<Monster>& monsters);
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
 	    drawHard draws hard block which player can't pass
