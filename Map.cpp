@@ -310,7 +310,7 @@ void Map::drawStage2()
 	drawBlock(-0.4f, -0.05f, 0.8f, 0.05f);
 
 	//  the third layer
-	drawBlock(-0.95f, 0.4f, 1.9f, 0.05f);
+	drawBlock(-0.8f, 0.4f, 1.8f, 0.05f);
 
 	//  the side layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());

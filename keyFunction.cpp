@@ -23,7 +23,6 @@ void specialKeyDown(int key, int x, int y)
 		keystates[KEY::RESTART] = 1;
 		break;
 	}
-	glutPostRedisplay();
 }
 
 void specialKeyUp(int key, int x, int y)
@@ -45,7 +44,6 @@ void specialKeyUp(int key, int x, int y)
 		keystates[KEY::RESTART] = 0;
 		break;
 	}
-	glutPostRedisplay();
 }
 
 void keyDown(unsigned char key, int x, int y)
