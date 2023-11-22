@@ -1,6 +1,6 @@
 #include "Explosion.h"
 
-const float PI = 3.14159265358979323846;
+const float PI = 3.14159265358979323846f;
 
 Explosion::Explosion(float x, float y, bool trapping)
 {
@@ -9,8 +9,6 @@ Explosion::Explosion(float x, float y, bool trapping)
 	this->trapping = trapping;
 	creationTime = clock();
 	alive = true;
-	color[0] = (float)rand() / RAND_MAX; color[1] = (float)rand() / RAND_MAX; color[2] = (float)rand() / RAND_MAX;
-
 	Material mtl;
 	mtl.setEmission(0.0f, 0.0f, 0.0f, 1.0f);
 	mtl.setAmbient(0.0f, 0.1f, 0.06f, 1.0f);

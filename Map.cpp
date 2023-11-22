@@ -97,15 +97,15 @@ void Map::setMonsters(vector<Monster>& monsters) {
 			monsters.push_back(Monster(GHOST));
 		}
 		monsters[0].setPosition(-0.4f, -0.25f);
-		monsters[1].setPosition(0.25f, 0.25);
+		monsters[1].setPosition(0.25f, 0.25f);
 
 		for (int i = 0; i < 4; i++) {
 			monsters.push_back(Monster(CREATURE));
 		}
 		monsters[2].setPosition(-0.8f, -0.25f);
 		monsters[3].setPosition(0.8f, -0.25f);
-		monsters[4].setPosition(-0.8, 0.25);
-		monsters[5].setPosition(0.8f, 0.25);
+		monsters[4].setPosition(-0.8f, 0.25f);
+		monsters[5].setPosition(0.8f, 0.25f);
 
 		for (int i = 0; i < 4; i++) {
 			monsters.push_back(Monster(ROBOT));
@@ -123,13 +123,13 @@ void Map::setMonsters(vector<Monster>& monsters) {
 			monsters.push_back(Monster(ROBOT));
 		}
 		monsters[1].setPosition(-0.8f, -0.15f);
-		monsters[2].setPosition(-0.8, 0.35);
+		monsters[2].setPosition(-0.8f, 0.35f);
 		monsters[3].setPosition(-0.95f, 0.85f);
 
 		for (int i = 0; i < 3; i++) {
 			monsters.push_back(Monster(GHOST));
 		}
-		monsters[4].setPosition(0.8f, 0.35);
+		monsters[4].setPosition(0.8f, 0.35f);
 		monsters[5].setPosition(0.8f, 0.85f);
 		monsters[6].setPosition(0.8f, -0.15f);
 
@@ -143,8 +143,8 @@ void Map::setMonsters(vector<Monster>& monsters) {
 		}
 		monsters[1].setPosition(-0.8f, -0.15f);
 		monsters[2].setPosition(0.8f, -0.15f);
-		monsters[3].setPosition(-0.8, 0.35);
-		monsters[4].setPosition(0.8f, 0.35);
+		monsters[3].setPosition(-0.8f, 0.35f);
+		monsters[4].setPosition(0.8f, 0.35f);
 		monsters[5].setPosition(-0.8f, 0.85f);
 		monsters[6].setPosition(0.8f, 0.85f);
 		break;
@@ -157,8 +157,8 @@ void Map::setMonsters(vector<Monster>& monsters) {
 		}
 		monsters[1].setPosition(-0.8f, -0.15f);
 		monsters[2].setPosition(0.8f, -0.15f);
-		monsters[3].setPosition(-0.8, 0.35);
-		monsters[4].setPosition(0.8f, 0.35);
+		monsters[3].setPosition(-0.8f, 0.35f);
+		monsters[4].setPosition(0.8f, 0.35f);
 		monsters[5].setPosition(-0.8f, 0.85f);
 		monsters[6].setPosition(0.8f, 0.85f);
 		break;

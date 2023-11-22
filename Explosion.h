@@ -15,12 +15,11 @@ public:
 private:
 	float center[2];
 	float distance;
-	float color[3];
 	bool trapping;
 	bool alive;
 	clock_t creationTime;
-	float radius = 0.02f;
-	clock_t lifeTime = 300;
+	float radius = 0.01f;
+	clock_t lifeTime = 200;
 	
 	Material mtl;
 };
