@@ -10,7 +10,7 @@ public:
 	Map(int level);
 
 	//  draw pixel image of map according to the stage
-	void drawMap(vector<Monster>& monsters, bool& clear);
+	void drawMap(vector<Monster>& monsters, bool& clear, bool gamestart);
 	void drawStage(int level);
 	void drawBackground();
 	void changeMap(vector<Monster>& monsters, bool& clear);
