@@ -151,7 +151,7 @@ bool Player::isBlink()
 void Player::updatePosition()
 {
 	//  out of the left side
-	if ((direction == KEY::LEFT) && (getPositionX() + 0.01f < -1.2f)) {
+	if ((direction == KEY::LEFT) && (getPositionX() + 0.16f < -1.2f)) {
 		setPositionX(1.05f);
 	}
 	//  out of the right side
@@ -257,4 +257,37 @@ Hitbox Player::getHitbox()
 	float yTop = getPositionY() + 0.13f;
 
 	return Hitbox(xLeft, xRight, yBottom, yTop);
-};
+}
+float Player::getSpeedScale()
+{
+	return speedScale;
+}
+void Player::setSpeedScale(float sc)
+{
+	speedScale = sc;
+}
+bool Player::isDoubleShot()
+{
+	return doubleShot;
+}
+void Player::onDoubleShot()
+{
+	doubleShot = true;
+}
+void Player::offDoubleShot()
+{
+	doubleShot = false;
+}
+float Player::getDelay()
+{
+	return delay;
+}
+float Player::setDelay(float de)
+{
+	return delay = de;
+}
+void Player::increaseLife()
+{
+	life += 1;
+}
+;

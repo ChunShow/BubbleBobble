@@ -37,7 +37,7 @@ public:
 	void translate(float x, float y);
 	bool collisionDetection(Object& other);
 
-private:
+protected:
 	float position[2];
 	float velocity[2];
 };

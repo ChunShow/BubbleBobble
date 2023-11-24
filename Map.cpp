@@ -526,7 +526,7 @@ void Map::checkLEFT()
 			(y - height <= player.getPositionY() + 0.09f && player.getPositionY() + 0.09f <= y) ||
 			(y - height < player.getPositionY() + player.getHeight() && player.getPositionY() + player.getHeight() <= y)) {
 			//  check whether player's left side contacts borderHard's (x coordinate + width)
-			if (x + width - 0.025f <= pos[0] && pos[0] <= x + width) {
+			if (x + width - 0.025f*player.getSpeedScale() <= pos[0] && pos[0] <= x + width) {
 				player.setPositionX(x + width);
 			}
 		}
@@ -554,7 +554,7 @@ void Map::checkRIGHT()
 			(y - height <= player.getPositionY() + 0.09f && player.getPositionY() + 0.09f <= y) ||
 			(y - height < player.getPositionY() + player.getHeight() && player.getPositionY() + player.getHeight() <= y)) {
 			//  check whether player's left side contacts borderHard's (x coordinate + width)
-			if (x <= pos[1] && pos[1] <= x + 0.025f) {
+			if (x <= pos[1] && pos[1] <= x + 0.025f * player.getSpeedScale()) {
 				player.setPositionX(x - 0.15f);
 			}
 		}
@@ -639,6 +639,11 @@ bool Map::checkMonster(Monster& monster)
 vector<vector<float>> Map::getBorderHard() const 
 {
 	return borderHard;
+}
+
+vector<vector<float>> Map::getBorder() const
+{
+	return border;
 }
 
 float Map::getTime() const

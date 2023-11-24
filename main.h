@@ -7,10 +7,10 @@
 #include "Map.h"
 #include "Bubble.h"
 #include "Explosion.h"
+#include "Item.h"
 
 #include "keyFunction.h"
 #include "Idle.h"
-
 
 #include <map>
 
@@ -28,6 +28,7 @@ extern Map stages;
 extern map<int, Bubble> bubbles;
 extern vector<Monster> monsters;
 extern vector<Explosion> explosions;
+extern vector<Item> items;
 
 extern int level;
 extern int bubble_total_num;
@@ -38,4 +39,5 @@ extern bool restarted;
 extern bool keystates[6];
 
 extern clock_t startTime;
-extern clock_t lastCreationTime;
+extern clock_t lastBubbleCreationTime;
+extern clock_t lastItemCreationTime;
