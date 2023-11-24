@@ -19,7 +19,9 @@ public:
 	bool isDisposable();
 	void release();
 
+
 	virtual Hitbox getHitbox() override;
+	float getSize();
 
 private:
 	ITEM_TYPE type;
@@ -31,6 +33,6 @@ private:
 
 	bool disposable;
 
-	float size = 0.1f;
+	float size = 0.05f;
 };
 

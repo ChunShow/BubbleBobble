@@ -151,7 +151,7 @@ bool Player::isBlink()
 void Player::updatePosition()
 {
 	//  out of the left side
-	if ((direction == KEY::LEFT) && (getPositionX() + 0.01f < -1.2f)) {
+	if ((direction == KEY::LEFT) && (getPositionX() + 0.16f < -1.2f)) {
 		setPositionX(1.05f);
 	}
 	//  out of the right side

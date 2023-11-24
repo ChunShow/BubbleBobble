@@ -44,6 +44,7 @@ public:
 
 	//  getter
 	vector<vector<float>> getBorderHard () const;
+	vector<vector<float>> getBorder() const;
 	float getTime () const;
 
 	// reset stage number

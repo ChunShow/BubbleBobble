@@ -20,7 +20,8 @@ bool keystates[6];
 
 Idle idleFunc;
 clock_t startTime = clock();
-clock_t lastCreationTime = clock();
+clock_t lastBubbleCreationTime = clock();
+clock_t lastItemCreationTime = clock();
 
 Texture gmover(_MAP, _GAMEOVER);
 
@@ -51,12 +52,31 @@ void idle()
 }
 
 //Erase everything and get ready to restart;
-void clearAll() {
+void clearDataToRestart() {
 	stages.resetStage();
 	bubbles.clear();
 	monsters.clear();
 	explosions.clear();
+	items.clear();
 	bubble_total_num = 0;
+}
+
+void clearDataToChangeStage() {
+	bubbles.clear();
+	for (auto& item : items) {
+		switch (item.getType()) {
+		case SPEED:
+			player.setSpeedScale(1.0f);
+			break;
+		case DOUBLE:
+			player.offDoubleShot();
+			break;
+		case RAPID:
+			player.setDelay(300.0f);
+			break;
+		}
+	}
+	items.clear();
 }
 
 void displayGameover()
@@ -105,9 +125,10 @@ void display()
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	//Detect clear
 	stages.drawMap(monsters, clear);
-	if (clear) bubbles.clear();
+
+	//Detect clear
+	if (clear) clearDataToChangeStage();
 
 	for (auto& monster : monsters) {
 		if (monster.collisionDetection(player) && !monster.isTrapped()) {
@@ -184,7 +205,7 @@ void display()
 	}
 
 	if (restarted == true) {
-		clearAll();
+		clearDataToRestart();
 		initialize(restarted);
 		restarted = false;
 	}

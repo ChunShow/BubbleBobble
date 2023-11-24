@@ -12,7 +12,6 @@
 #include "keyFunction.h"
 #include "Idle.h"
 
-
 #include <map>
 
 using namespace std;
@@ -39,4 +38,5 @@ extern bool restarted;
 extern bool keystates[6];
 
 extern clock_t startTime;
-extern clock_t lastCreationTime;
+extern clock_t lastBubbleCreationTime;
+extern clock_t lastItemCreationTime;

@@ -4,9 +4,10 @@ Item::Item(ITEM_TYPE item_type, float x, float y)
 {
 	type = item_type;
 	achived = false;
+	achivedTime = -LONG_MAX;
 	creationTime = clock();
 	setPosition(x, y);
-	itemExistenceDuration = 5000;
+	itemExistenceDuration = 10000;
 
 	switch (type) {
 	case SPEED:
@@ -27,12 +28,28 @@ Item::Item(ITEM_TYPE item_type, float x, float y)
 		itemEffectDuration = 10000;
 		disposable = false;
 	}
-
 }
 
 void Item::draw()
 {
-	glColor3f(0.0f, 1.0f, 1.0f);
+	switch (type) {
+	case SPEED:
+		glColor3f(0.0f, 1.0f, 1.0f);
+		break;
+	case HEART:
+		glColor3f(1.0f, 0.0f, 1.0f);
+		break;
+	case SCORE:
+		glColor3f(1.0f, 1.0f, 0.0f);
+		break;
+	case DOUBLE:
+		glColor3f(1.0f, 0.0f, 0.0f);
+		break;
+	case RAPID:
+		glColor3f(0.0f, 1.0f, 0.0f);
+		break;
+	}
+	
 	glBegin(GL_QUADS);
 	glVertex2f(position[0] - size, position[1] - size);
 	glVertex2f(position[0] + size, position[1] - size);
@@ -86,6 +103,11 @@ void Item::release()
 
 Hitbox Item::getHitbox()
 {
-	return Hitbox(position[0] - size, position[0] + size, position[1] - size, position[1] - size);
+	return Hitbox(position[0] - size, position[0] + size, position[1] - size, position[1] + size);
+}
+
+float Item::getSize()
+{
+	return size;
 }
 
