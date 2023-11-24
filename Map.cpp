@@ -66,6 +66,7 @@ void Map::drawBackground()
 
 	glFinish();
 }
+
 void Map::changeMap(vector<Monster>& monsters, bool& clear)
 {
 	if (clear) {

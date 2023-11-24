@@ -32,7 +32,7 @@ void Idle::operate()
 
 void Idle::idleItem()
 {
-	if (endTime - lastItemCreationTime > 3000) {
+	if (endTime - lastItemCreationTime > 1000) {
 		srand((int)clock());
 		float x = 1.6 * (float)rand() / RAND_MAX - 0.8; float y = 1.6 * (float)rand() / RAND_MAX - 0.8;
 		Item item(ITEM_TYPE(rand() % 5), x, y);
@@ -49,16 +49,17 @@ void Idle::idleItem()
 		for (const auto& border : stages.getBorder()) {
 			float borderLeft = border[0]; float borderRight = borderLeft + border[2]; float borderTop = border[1];
 			bool xInclude = (borderLeft < xCenter && xCenter < borderRight);
-			bool ySupporting = (borderTop - 0.03 <= yBottom && yBottom <= borderTop);
+			bool ySupporting = (borderTop - 0.04 < yBottom && yBottom <= borderTop+0.0001f);
 
 			if (xInclude && ySupporting) {
 				falling = false;
 				item.setPositionY(borderTop + item.getSize());
-				break;
 			}
 		}
 
-		if (falling) item.translate(0.0f, -0.02f);
+		if (falling) {
+			item.translate(0.0f, -0.01f);
+		}
 	}
 
 	for (auto& item : items) { //controls getting item and effect of the item
