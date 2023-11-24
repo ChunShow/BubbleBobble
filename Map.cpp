@@ -69,15 +69,20 @@ void Map::changeMap(vector<Monster>& monsters, bool& clear)
 {
 	if (clear) {
 		time += 0.015f;
+		moving = true;
 		if (time >= 3.0f) {
 			time = 0.0f;
 			stage++;
 			drawn = false;
 			clear = false;
+			moving = false;
+			dataClearedForMoving = false;
+			lastClearTime = clock();
 			setMonsters(monsters);
 		}
 	}
 }
+
 void Map::setMonsters(vector<Monster>& monsters) {
 	switch (stage) {
 	case 0:
@@ -622,6 +627,11 @@ vector<vector<float>> Map::getBorder() const
 float Map::getTime() const
 {
 	return time;
+}
+
+bool Map::isMoving()
+{
+	return moving;
 }
 
 void Map::resetStage()

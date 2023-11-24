@@ -10,24 +10,32 @@ void Idle::operate()
 	if (endTime - startTime > 1000 / 30) {
 		if (!gamestart) {
 			idleGamestart();
+			idlePlayer();
 		}
 		if (gameover) {
 			idleGameover();
 		}
-		else if (!gamestart || !clear) {
-			idleItem();
-			idlePlayer();
-			idleBubbleAlive();
-			idleMonster();
-			idleBubble();
-			idleExplosion();
-		}
 		else {
-			idleStageClear();
+			idleBoard();
+			if (!clear) {
+				idleItem();
+				idlePlayer();
+				idleBubbleAlive();
+				idleMonster();
+				idleBubble();
+				idleExplosion();
+			}
+			else {
+				idleStageClear();
+			}
 		}
 		startTime = endTime;
 		glutPostRedisplay();
 	}
+}
+
+void Idle::idleBoard() {
+	board.addScoreByTime();
 }
 
 void Idle::idleItem()
@@ -88,6 +96,7 @@ void Idle::idleItem()
 					player.increaseLife();
 					break;
 				case SCORE:
+					board.addScore(10);
 					break;
 				}
 				item.release(); // disable the disposable item
@@ -197,6 +206,7 @@ void Idle::idleMonster()
 			Bubble& bubble = bubbles[monster.getTrappedBubble()];
 
 			if (!bubble.alive && !(clock() - bubble.createdTime > 5000)) {
+				board.addScore(30);
 				monster.kill();
 			}
 			else if (clock() - bubble.createdTime > 5000) {
@@ -291,6 +301,7 @@ void Idle::idleGameover()
 
 void Idle::idleGamestart()
 {
+	board.reset();
 	if (keystates[KEY::SPACEBAR]) {
 		gamestart = true;
 	}
