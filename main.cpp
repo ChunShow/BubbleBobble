@@ -14,6 +14,7 @@ int bubble_total_num=0;
 int level;
 bool clear;
 bool gameover = false;
+bool gamestart = true;
 bool restarted = false;
 bool keystates[6];
 
@@ -22,6 +23,7 @@ clock_t startTime = clock();
 clock_t lastCreationTime = clock();
 
 Texture gmover(_MAP, _GAMEOVER);
+Texture title(_MAP, _TITLE);
 
 void initialize(bool restarted)
 {
@@ -38,6 +40,9 @@ void initialize(bool restarted)
 	monsters[0].setPosition(-0.4f, -0.25f);
 	monsters[1].setPosition(0.25f, 0.25);
 	monsters[2].setPosition(-0.4f, 0.75f);
+
+	gmover.initTexture();
+	title.initTexture();
 }
 
 void idle()
@@ -54,6 +59,21 @@ void clearAll() {
 	bubble_total_num = 0;
 }
 
+void displayTitle()
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, title.getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
+	glEnd();
+}
 void displayGameover()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -166,6 +186,8 @@ void display()
 		player.reset();
 		gameover = true;
 	}
+	
+	if (gamestart) displayTitle();
 
 	if (gameover == true){
 		displayGameover();
@@ -188,8 +210,6 @@ int main(int argc, char** argv)
 	glutCreateWindow("Bubble Bobble");
 
 	initialize(false);
-
-	gmover.initTexture();
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyDown);

@@ -185,6 +185,9 @@ void Texture::setMapFile(FIBITMAP*& bitmap) {
 	case _GAMEOVER:
 		bitmap = createBitMap("texture/gameover.png");
 		break;
+	case _TITLE:
+		bitmap = createBitMap("texture/title.png");
+		break;
 	default:
 		bitmap = createBitMap("texture/Dragon.png");
 		break;

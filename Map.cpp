@@ -301,7 +301,7 @@ void Map::drawStage2()
 	//  the first layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
 	drawBlock(-0.95f, -0.5f, 0.25f, 0.05f);
-	drawBlock(0.7f, -0.5f, 0.25f, 0.05f);
+	drawBlock(0.7f, -0.5f, 0.25f, 0.05f);	
 	drawBlock(-0.4f, -0.5f, 0.8f, 0.05f);
 
 	//  the second layer
@@ -310,7 +310,7 @@ void Map::drawStage2()
 	drawBlock(-0.4f, -0.05f, 0.8f, 0.05f);
 
 	//  the third layer
-	drawBlock(-0.8f, 0.4f, 1.8f, 0.05f);
+	drawBlock(-0.8f, 0.4f, 1.75f, 0.05f);
 
 	//  the side layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());

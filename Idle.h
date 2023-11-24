@@ -14,6 +14,7 @@ public:
 	void idleExplosion();
 	void idleStageClear();
 	void idleGameover();
+	void idleGamestart();
 
 private:
 	clock_t endTime;

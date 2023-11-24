@@ -33,6 +33,7 @@ extern int level;
 extern int bubble_total_num;
 extern bool clear;
 extern bool gameover;
+extern bool gamestart;
 extern bool restarted;
 extern bool keystates[6];
 

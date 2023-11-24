@@ -8,7 +8,10 @@ void Idle::operate()
 {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
-		if (gameover) {
+		if (gamestart) {
+			idleGamestart();
+		}
+		else if (gameover) {
 			idleGameover();
 		}
 		else if (!clear) {
@@ -191,5 +194,12 @@ void Idle::idleGameover()
 	if (keystates[KEY::RESTART]) {
 		gameover = false;
 		restarted = true;
+	}
+}
+
+void Idle::idleGamestart()
+{
+	if (keystates[KEY::SPACEBAR]) {
+		gamestart = false;
 	}
 }
