@@ -82,6 +82,7 @@ void Map::changeMap(vector<Monster>& monsters, bool& clear)
 		}
 	}
 }
+
 void Map::setMonsters(vector<Monster>& monsters) {
 	switch (stage) {
 	case 0:

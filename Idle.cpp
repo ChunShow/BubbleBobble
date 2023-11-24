@@ -10,13 +10,14 @@ void Idle::operate()
 	if (endTime - startTime > 1000 / 30) {
 		if (!gamestart) {
 			idleGamestart();
+			idlePlayer();
 		}
 		if (gameover) {
 			idleGameover();
 		}
-	  else {
+		else {
 			idleBoard();
-			if (!gamestart || !clear) {
+			if (!clear) {
 				idleItem();
 				idlePlayer();
 				idleBubbleAlive();
@@ -27,8 +28,8 @@ void Idle::operate()
 			else {
 				idleStageClear();
 			}
-			startTime = endTime;
 		}
+		startTime = endTime;
 		glutPostRedisplay();
 	}
 }
@@ -300,6 +301,7 @@ void Idle::idleGameover()
 
 void Idle::idleGamestart()
 {
+	board.reset();
 	if (keystates[KEY::SPACEBAR]) {
 		gamestart = true;
 	}

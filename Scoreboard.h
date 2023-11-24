@@ -16,6 +16,8 @@ public:
 	void changeLeftTimeToScore(clock_t lastClearTime);
 	void addScoreByTime();
 
+	void reset();
+
 private:
 	int score;
 	int scoreByTime;

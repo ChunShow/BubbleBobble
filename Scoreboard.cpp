@@ -70,3 +70,10 @@ void Scoreboard::addScoreByTime()
 		scoreByTime -= 1;
 	}
 }
+
+void Scoreboard::reset()
+{
+	score = 0;
+	lastClearTime = clock();
+	scoreByTime = 0;
+}
