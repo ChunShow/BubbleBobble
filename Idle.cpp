@@ -8,15 +8,15 @@ void Idle::operate()
 {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
-		if (gamestart) {
+		if (!gamestart) {
 			idleGamestart();
 		}
-		else if (gameover) {
+		if (gameover) {
 			idleGameover();
 		}
-		else {
+	  else {
 			idleBoard();
-			if (!clear) {
+			if (!gamestart || !clear) {
 				idleItem();
 				idlePlayer();
 				idleBubbleAlive();
@@ -301,6 +301,6 @@ void Idle::idleGameover()
 void Idle::idleGamestart()
 {
 	if (keystates[KEY::SPACEBAR]) {
-		gamestart = false;
+		gamestart = true;
 	}
 }

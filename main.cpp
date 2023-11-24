@@ -16,7 +16,7 @@ int bubble_total_num=0;
 int level;
 bool clear;
 bool gameover = false;
-bool gamestart = true;
+bool gamestart = false;
 bool restarted = false;
 bool dataClearedForMoving = false;
 bool keystates[6];
@@ -39,13 +39,13 @@ void initialize(bool restarted)
 	stages = Map(level);
 	board = Scoreboard();
 
-	for (int i = 0; i < 3; i++) {
-		monsters.push_back(Monster(ROBOT));
-	}
+	//for (int i = 0; i < 3; i++) {
+	//	monsters.push_back(Monster(ROBOT));
+	//}
 
-	monsters[0].setPosition(-0.4f, -0.25f);
-	monsters[1].setPosition(0.25f, 0.25);
-	monsters[2].setPosition(-0.4f, 0.75f);
+	//monsters[0].setPosition(-0.4f, -0.25f);
+	//monsters[1].setPosition(0.25f, 0.25);
+	//monsters[2].setPosition(-0.4f, 0.75f);
 
 	if (!restarted) {
 		gmover.initTexture();
@@ -151,7 +151,7 @@ void display()
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
-	stages.drawMap(monsters, clear);
+	stages.drawMap(monsters, clear, gamestart);
 
 	//Detect clear
 	if (clear) clearDataToChangeStage();
@@ -231,8 +231,6 @@ void display()
 		gameover = true;
 	}
 	
-	if (gamestart) displayTitle();
-
 	if (gameover == true){
 		displayGameover();
 	}

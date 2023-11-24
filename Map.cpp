@@ -9,15 +9,16 @@ Map::Map(int level) : stage(level), drawn(false), time(0.0f)
 	}
 }
 
-void Map::drawMap(vector<Monster>& monsters, bool& clear)
+void Map::drawMap(vector<Monster>& monsters, bool& clear, bool gamestart)
 {
-	drawBackground();
+	if (gamestart) drawBackground();
+
 	glPushMatrix();
 	if (time >= 0.6f) glTranslatef(0.0f, time - 0.6f, 0.0f);
 	//  draw map according to the level
 	drawStage(stage);
 
-	if (clear) {
+	if (gamestart && clear) {
 		glTranslatef(0.0f, -2.4f, 0.0f);
 		border.clear();
 		borderHard.clear();
@@ -50,9 +51,6 @@ void Map::drawStage(int level) {
 }
 void Map::drawBackground()
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glBindTexture(GL_TEXTURE_2D, textures[_FIELD_SKY].getTextureID());
@@ -221,42 +219,16 @@ void Map::drawStage0()
 {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-	//  the side layer
-	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
-	drawHard(-1.2f, 1.0f, 0.25f, 2.2f);
-	drawHard(0.95f, 1.0f, 0.25f, 2.2f);
-
-	//  the bottom layer
-	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
-	drawHard(-0.95f, -0.95f, 1.9f, 0.25f);
-	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
-	drawBlock(-1.2f, -1.0f, 2.4f, 0.2f);
-
-	//  the top layer
-	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
-	drawHard(-1.2f, 1.2f, 2.4f, 0.25f);
-	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
-	drawBlock(-1.2f, 1.2f, 2.4f, 0.2f);
-
-	//  the first layer
-	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
-	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
-	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
-	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
-
-	//  the second layer
-	drawBlock(-0.95f, 0.05f, 0.25f, 0.05f);
-	drawBlock(0.7f, 0.05f, 0.25f, 0.05f);
-	drawBlock(-0.4f, 0.05f, 0.8f, 0.05f);
-
-	//  the third layer
-	drawBlock(-0.95f, 0.55f, 0.25f, 0.05f);
-	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
-	drawBlock(-0.4f, 0.55f, 0.8f, 0.05f);
-
+	glBindTexture(GL_TEXTURE_2D, textures[_TITLE].getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
+	glEnd();
 	glDisable(GL_TEXTURE_2D);
-	drawn = true;
+
+	glFinish();
 }
 void Map::drawStage1()
 {
@@ -276,9 +248,9 @@ void Map::drawStage1()
 
 	//  the top layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
-	drawHard(-1.2f, 1.2f, 2.4f, 0.25f);
+	drawHard(-1.2f, 1.4f, 2.4f, 0.45f);
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
-	drawBlock(-1.2f, 1.2f, 2.4f, 0.2f);
+	drawBlock(-1.2f, 1.4f, 2.4f, 0.4f);
 
 	//  the first layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
