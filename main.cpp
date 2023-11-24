@@ -42,6 +42,9 @@ void initialize(bool restarted)
 	monsters[0].setPosition(-0.4f, -0.25f);
 	monsters[1].setPosition(0.25f, 0.25);
 	monsters[2].setPosition(-0.4f, 0.75f);
+
+	gmover.initTexture();
+	title.initTexture();
 }
 
 void idle()
@@ -92,6 +95,7 @@ void displayGameover()
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 0.0f);
 	glEnd();
 }
+
 void displayTitle()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
