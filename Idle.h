@@ -7,6 +7,7 @@ public:
 	Idle();
 
 	void operate();
+	void idleItem();
 	void idlePlayer();
 	void idleBubbleAlive();
 	void idleMonster();

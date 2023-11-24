@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "Bubble.h"
 #include "Explosion.h"
+#include "Item.h"
 
 #include "keyFunction.h"
 #include "Idle.h"
@@ -28,6 +29,7 @@ extern Map stages;
 extern map<int, Bubble> bubbles;
 extern vector<Monster> monsters;
 extern vector<Explosion> explosions;
+extern vector<Item> items;
 
 extern int level;
 extern int bubble_total_num;

@@ -12,6 +12,7 @@ void Idle::operate()
 			idleGameover();
 		}
 		else if (!clear) {
+			idleItem();
 			idlePlayer();
 			idleBubbleAlive();
 			idleMonster();
@@ -26,14 +27,68 @@ void Idle::operate()
 	}
 }
 
+void Idle::idleItem()
+{
+	for (auto& item : items) {
+		if (item.collisionDetection(player)) {
+			item.makeAchived();
+		}
+
+		if (item.isEffective()) { // enable item effect
+
+			if (!item.isDisposable()) {
+				switch (item.getType()) { //deals non-disposable items
+				case SPEED:
+					player.setSpeedScale(1.5f);
+					break;
+				case DOUBLE:
+					player.onDoubleShot();
+					break;
+				case RAPID:
+					player.setDelay(150.0f);
+					break;
+				}
+			}
+			else {
+				switch (item.getType()) {
+				case HEART:
+					player.increaseLife();
+					break;
+				case SCORE:
+					break;
+				}
+				item.release(); // disable the disposable item
+			}
+		}
+		if (item.isEffectFinished()) { // disable item effect
+			cout << item.getType() << " Finished" << endl;
+			switch (item.getType()) {
+			case SPEED:
+				player.setSpeedScale(1.0f);
+				break;
+			case DOUBLE:
+				player.offDoubleShot();
+				break;
+			case RAPID:
+				player.setDelay(300.0f);
+				break;
+			}
+		}
+	}
+}
+
 void Idle::idlePlayer()
 {
+	float scale = player.getSpeedScale();
+	float xSpeedGround = 0.025f * scale;
+	float xSpeedFall = 0.015f * scale;
+
 	if (keystates[KEY::LEFT]) {
 		//  case of player's direction changes from RIGHT to LEFT
 		if (player.getDirection() == KEY::RIGHT) player.setDirection(KEY::LEFT);
 		else {
-			if (player.getState() == FALL) player.translate(-0.015f, 0.0f);
-			else player.translate(-0.025f, 0.0f);
+			if (player.getState() == FALL) player.translate(-xSpeedFall, 0.0f);
+			else player.translate(-xSpeedGround, 0.0f);
 			stages.checkLEFT();
 		}
 	}
@@ -41,8 +96,8 @@ void Idle::idlePlayer()
 		//  case of player's direction changes from LEFT to RIGHT
 		if (player.getDirection() == KEY::LEFT) player.setDirection(KEY::RIGHT);
 		else {
-			if (player.getState() == FALL) player.translate(0.015f, 0.0f);
-			else player.translate(0.025f, 0.0f);
+			if (player.getState() == FALL) player.translate(xSpeedFall, 0.0f);
+			else player.translate(xSpeedGround, 0.0f);
 			stages.checkRIGHT();
 		}
 	}
@@ -53,10 +108,18 @@ void Idle::idlePlayer()
 			player.translate(0.0f, -0.01f);
 		}
 	}
-	if (keystates[KEY::SPACEBAR] && (endTime - lastCreationTime) > 300) {
-		Bubble bubble = player.shoot();
+	if (keystates[KEY::SPACEBAR] && (endTime - lastCreationTime) > player.getDelay()) {
+		Bubble bubble1 = player.shoot();
 		bubble_total_num += 1;
-		bubbles.insert(make_pair(bubble_total_num, bubble));
+		bubbles.insert(make_pair(bubble_total_num, bubble1));
+
+		if (player.isDoubleShot()) {
+			Bubble bubble2 = player.shoot();
+			bubble2.setDirection((player.getDirection() == LEFT) ? D_RIGHT : D_LEFT);
+			bubble_total_num += 1;
+			bubbles.insert(make_pair(bubble_total_num, bubble2));
+		}
+
 		lastCreationTime = endTime;
 	}
 
@@ -89,7 +152,7 @@ void Idle::idleBubbleAlive()
 	for (auto& pair : bubbles) {
 		Bubble& bubble = pair.second;
 		if (!bubble.isGrown()) continue;
-		if (bubble.collisionDetection(*playerPointer)) {
+		if (bubble.collisionDetection(player)) {
 			bubble.alive = false;
 		}
 	}

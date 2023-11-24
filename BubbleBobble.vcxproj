@@ -147,6 +147,7 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="Hitbox.h" />
     <ClInclude Include="Idle.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="keyFunction.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="main.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Hitbox.cpp" />
     <ClCompile Include="Idle.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="keyFunction.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />

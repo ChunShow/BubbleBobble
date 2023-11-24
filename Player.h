@@ -51,10 +51,26 @@ public:
 	float getHeight();
 	virtual Hitbox getHitbox() override;
 
+
+	//functions for item effects
+	float getSpeedScale();
+	void setSpeedScale(float sc);
+	bool isDoubleShot();
+	void onDoubleShot();
+	void offDoubleShot();
+	float getDelay();
+	float setDelay(float de);
+	void increaseLife();
+
 private:
 	KEY direction;
 	STATE state;
 	float height;
+
+	//variables for item effects
+	float speedScale = 1.0f;
+	float delay = 300.0f;
+	bool doubleShot = false;
 
 	//  variables of texture 
 	GLuint textureID;

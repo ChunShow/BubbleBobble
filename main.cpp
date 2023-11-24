@@ -9,6 +9,7 @@ Map stages(0) ;
 map<int, Bubble> bubbles;
 vector<Monster> monsters;
 vector<Explosion> explosions;
+vector<Item> items;
 
 int bubble_total_num=0;
 int level;
@@ -38,6 +39,10 @@ void initialize(bool restarted)
 	monsters[0].setPosition(-0.4f, -0.25f);
 	monsters[1].setPosition(0.25f, 0.25);
 	monsters[2].setPosition(-0.4f, 0.75f);
+
+	Item item(HEART, 0.0f, 0.0f);
+	items.push_back(item);
+
 }
 
 void idle()
@@ -105,7 +110,7 @@ void display()
 	if (clear) bubbles.clear();
 
 	for (auto& monster : monsters) {
-		if (monster.collisionDetection(*playerPointer) && !monster.isTrapped()) {
+		if (monster.collisionDetection(player) && !monster.isTrapped()) {
 			if (!player.isInvincible()) player.giveInvincibility(27);
 		}
 	}
@@ -138,6 +143,14 @@ void display()
 
 	glDisable(GL_DEPTH_TEST);
 
+	int i = 0;
+	while (items.begin() + i < items.end()) {
+		if (items[i].visible()) items[i].draw();
+		
+		if (items[i].isDisappeared() || items[i].isEffectFinished()) items.erase(items.begin() + i);
+		else i++;
+	}
+
 	int j = 0;
 	while (monsters.begin() + j < monsters.end()) {
 		if (!monsters[j].isTrapped()) {
@@ -152,7 +165,6 @@ void display()
 			j++;
 		}
 	}
-
 
 	if (!player.isBlink()) player.drawPlayer();
 	player.drawLife();
