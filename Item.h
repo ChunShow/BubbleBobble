@@ -19,7 +19,6 @@ public:
 	bool isDisposable();
 	void release();
 
-
 	virtual Hitbox getHitbox() override;
 	float getSize();
 

@@ -21,12 +21,15 @@ Item::Item(ITEM_TYPE item_type, float x, float y)
 	case SCORE:
 		itemEffectDuration = LONG_MAX;
 		disposable = true;
+		break;
 	case DOUBLE:
 		itemEffectDuration = 10000;
 		disposable = false;
+		break;
 	case RAPID:
 		itemEffectDuration = 10000;
 		disposable = false;
+		break;
 	}
 }
 
@@ -40,7 +43,7 @@ void Item::draw()
 		glColor3f(1.0f, 0.0f, 1.0f);
 		break;
 	case SCORE:
-		glColor3f(1.0f, 1.0f, 0.0f);
+		glColor3f(0.0f, 0.0f, 0.0f);
 		break;
 	case DOUBLE:
 		glColor3f(1.0f, 0.0f, 0.0f);

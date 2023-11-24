@@ -8,6 +8,7 @@
 #include "Bubble.h"
 #include "Explosion.h"
 #include "Item.h"
+#include "Scoreboard.h"
 
 #include "keyFunction.h"
 #include "Idle.h"
@@ -29,6 +30,7 @@ extern map<int, Bubble> bubbles;
 extern vector<Monster> monsters;
 extern vector<Explosion> explosions;
 extern vector<Item> items;
+extern Scoreboard board;
 
 extern int level;
 extern int bubble_total_num;
@@ -36,8 +38,10 @@ extern bool clear;
 extern bool gameover;
 extern bool gamestart;
 extern bool restarted;
+extern bool dataClearedForMoving;
 extern bool keystates[6];
 
 extern clock_t startTime;
 extern clock_t lastBubbleCreationTime;
 extern clock_t lastItemCreationTime;
+extern clock_t lastClearTime;
