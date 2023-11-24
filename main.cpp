@@ -59,6 +59,24 @@ void clearDataToRestart() {
 	bubble_total_num = 0;
 }
 
+void clearDataToChangeStage() {
+	bubbles.clear();
+	for (auto& item : items) {
+		switch (item.getType()) {
+		case SPEED:
+			player.setSpeedScale(1.0f);
+			break;
+		case DOUBLE:
+			player.offDoubleShot();
+			break;
+		case RAPID:
+			player.setDelay(300.0f);
+			break;
+		}
+	}
+	items.clear();
+}
+
 void displayGameover()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -72,6 +90,21 @@ void displayGameover()
 	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 0.6f);
 	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 0.0f);
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 0.0f);
+	glEnd();
+}
+void displayTitle()
+{
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, title.getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
 	glEnd();
 }
 
