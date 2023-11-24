@@ -10,6 +10,7 @@ map<int, Bubble> bubbles;
 vector<Monster> monsters;
 vector<Explosion> explosions;
 vector<Item> items;
+Scoreboard board;
 
 int bubble_total_num=0;
 int level;
@@ -17,12 +18,14 @@ bool clear;
 bool gameover = false;
 bool gamestart = true;
 bool restarted = false;
+bool dataClearedForMoving = false;
 bool keystates[6];
 
 Idle idleFunc;
 clock_t startTime = clock();
 clock_t lastBubbleCreationTime = clock();
 clock_t lastItemCreationTime = clock();
+clock_t lastClearTime = clock();
 
 Texture gmover(_MAP, _GAMEOVER);
 Texture title(_MAP, _TITLE);
@@ -34,6 +37,7 @@ void initialize(bool restarted)
 	clear = false;
 
 	stages = Map(level);
+	board = Scoreboard();
 
 	for (int i = 0; i < 3; i++) {
 		monsters.push_back(Monster(ROBOT));
@@ -43,8 +47,10 @@ void initialize(bool restarted)
 	monsters[1].setPosition(0.25f, 0.25);
 	monsters[2].setPosition(-0.4f, 0.75f);
 
-	gmover.initTexture();
-	title.initTexture();
+	if (!restarted) {
+		gmover.initTexture();
+		title.initTexture();
+	}
 }
 
 void idle()
@@ -63,6 +69,7 @@ void clearDataToRestart() {
 }
 
 void clearDataToChangeStage() {
+	if (dataClearedForMoving) return;
 	bubbles.clear();
 	for (auto& item : items) {
 		switch (item.getType()) {
@@ -78,6 +85,8 @@ void clearDataToChangeStage() {
 		}
 	}
 	items.clear();
+	board.changeLeftTimeToScore(lastClearTime);
+	dataClearedForMoving = true;
 }
 
 void displayGameover()
@@ -138,7 +147,7 @@ void display()
 	light1.setDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
 	light1.setLightID(GL_LIGHT0);
 	light1.setPosition(10.0f, 10.0f, 10.0f, 1.0f);
-	light1.setSpecular(0.5f, 0.5f, 0.0f, 1.0f);
+	light1.setSpecular(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_LIGHT0);
 	light1.draw();
 
@@ -210,6 +219,11 @@ void display()
 	if (monsters.size() == 0) {
 		clear = true;
 	}
+
+	glDisable(GL_LIGHT0);
+	//Draw scoreboard
+	board.draw(stages.isMoving());
+
 
 	//Detect gameover
 	if (!player.isAlive()) {

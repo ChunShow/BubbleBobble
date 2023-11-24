@@ -47,6 +47,9 @@ public:
 	vector<vector<float>> getBorder() const;
 	float getTime () const;
 
+	// check whether the map is moving
+	bool isMoving();
+
 	// reset stage number
 	void resetStage();
 
@@ -59,6 +62,9 @@ private:
 
 	//  time consumed moving motion
 	float time;
+
+	// true if the map is moving
+	bool moving;
 	
 	//  border has information of map's layers on which player's state will be STAY from FALL
 	vector<vector<float>> border;
