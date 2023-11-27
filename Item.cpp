@@ -9,6 +9,11 @@ Item::Item(ITEM_TYPE item_type, float x, float y)
 	setPosition(x, y);
 	itemExistenceDuration = 10000;
 
+	for (int i = 0; i < 13; i++) {
+		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
+		textures[i].initTexture();
+	}
+
 	switch (type) {
 	case SPEED:
 		itemEffectDuration = 10000;
@@ -35,30 +40,35 @@ Item::Item(ITEM_TYPE item_type, float x, float y)
 
 void Item::draw()
 {
+
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
 	switch (type) {
 	case SPEED:
-		glColor3f(0.0f, 1.0f, 1.0f);
+		glBindTexture(GL_TEXTURE_2D, textures[_SPEED].getTextureID());
 		break;
 	case HEART:
-		glColor3f(1.0f, 0.0f, 1.0f);
+		glBindTexture(GL_TEXTURE_2D, textures[_HEART].getTextureID());
 		break;
 	case SCORE:
-		glColor3f(0.0f, 0.0f, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, textures[_APPLE].getTextureID());
 		break;
 	case DOUBLE:
-		glColor3f(1.0f, 0.0f, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, textures[_DOUBLE].getTextureID());
 		break;
 	case RAPID:
-		glColor3f(0.0f, 1.0f, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, textures[_BUBBLE].getTextureID());
 		break;
 	}
-	
+
 	glBegin(GL_QUADS);
-	glVertex2f(position[0] - size, position[1] - size);
-	glVertex2f(position[0] + size, position[1] - size);
-	glVertex2f(position[0] + size, position[1] + size);
-	glVertex2f(position[0] - size, position[1] + size);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(position[0] - size, position[1] - size);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(position[0] + size, position[1] - size);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(position[0] + size, position[1] + size);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(position[0] - size, position[1] + size);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);	
 }
 
 ITEM_TYPE Item::getType()

@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Texture.h"
 #include <ctime>
 
 enum ITEM_TYPE {SPEED, HEART, SCORE, DOUBLE, RAPID};
@@ -33,5 +34,7 @@ private:
 	bool disposable;
 
 	float size = 0.05f;
+	
+	vector<Texture> textures;
 };
 

@@ -4,7 +4,7 @@
 Player::Player(){}
 Player::Player(int maxLife) : direction(RIGHT), state(STAY), height(0.16f), moveStage(false), maxLife(maxLife), life(maxLife)
 {
-	setPosition(-0.95f, -0.95f);
+	setPosition(-0.4f, 0.0f);
 	setClearPosition(1.0f, 1.0f);
 	initTextureImage();
 	initTextureTime();

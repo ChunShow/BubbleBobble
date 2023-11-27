@@ -3,7 +3,7 @@
 //  initial setting of map
 Map::Map(int level) : stage(level), drawn(false), time(0.0f)
 {
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < 8; i++) {
 		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
 	}
@@ -26,6 +26,7 @@ void Map::drawMap(vector<Monster>& monsters, bool& clear, bool gamestart)
 		changeMap(monsters, clear);
 	}
 	glPopMatrix();
+	drawScoreBoard();
 }
 void Map::drawStage(int level) {
 	switch (level) {
@@ -61,8 +62,6 @@ void Map::drawBackground()
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.2f, -1.2f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-
-	glFinish();
 }
 
 void Map::changeMap(vector<Monster>& monsters, bool& clear)
@@ -168,6 +167,29 @@ void Map::setMonsters(vector<Monster>& monsters) {
 		break;
 	}
 }
+void Map::drawScoreBoard()
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, textures[_TIME].getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-0.95f, 0.95f);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-0.95f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(-0.71f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(-0.71f, 0.95);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, textures[_SCORE].getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(0.45f, 0.95f);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(0.45f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(0.75f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(0.75f, 0.95);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
 
 void Map::drawBlock(float x, float y, float width, float height) 
 {
@@ -228,8 +250,6 @@ void Map::drawStage0()
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-
-	glFinish();
 }
 void Map::drawStage1()
 {

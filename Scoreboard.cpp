@@ -1,7 +1,7 @@
 #include "main.h"
 
 void displayStrokeCharacters(void* font, string c, float lnWidth, float x, float y) {
-	float scale = 1/ 1200.0f;
+	float scale = 1/ 2800.0f;
 
 	glPushMatrix();
 	glLineWidth(lnWidth);
@@ -37,17 +37,17 @@ void Scoreboard::setLastClearTime()
 
 void Scoreboard::draw(bool isMapMoving)
 {
-	glColor3f(0.0f, 0.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	clock_t time = getLeftTime(lastClearTime);
 	int time_left = getLeftTime(lastClearTime);
 
 	if (!isMapMoving) {
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(time_left), 5.0f, position[0] - 0.8f, position[1] + 0.8f);
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 5.0f, position[0] + 0.6f, position[1] + 0.8f);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(time_left), 2.6f, - 0.7f, 0.96f);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f);
 	}
 	else {
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(scoreByTime), 5.0f, position[0] - 0.8f, position[1] + 0.8f);
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 5.0f, position[0] + 0.6f, position[1] + 0.8f);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(scoreByTime), 2.6f, - 0.7f, 0.96f);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f);
 	}
 }
 

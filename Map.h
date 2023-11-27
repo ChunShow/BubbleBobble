@@ -15,6 +15,7 @@ public:
 	void drawBackground();
 	void changeMap(vector<Monster>& monsters, bool& clear);
 	void setMonsters(vector<Monster>& monsters);
+	void drawScoreBoard();
 
 	/*  drawBlock draws block on which player's state will be STAY from FALL
 	    drawHard draws hard block which player can't pass

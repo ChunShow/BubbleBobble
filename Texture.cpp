@@ -182,11 +182,32 @@ void Texture::setMapFile(FIBITMAP*& bitmap) {
 	case _FIELD_SKY:
 		bitmap = createBitMap("texture/Field_sky.png");
 		break;
+	case _APPLE:
+		bitmap = createBitMap("texture/Apple.png");
+		break;
+	case _HEART:
+		bitmap = createBitMap("texture/Heart.png");
+		break;
+	case _SPEED:
+		bitmap = createBitMap("texture/Speed.png");
+		break;
+	case _BUBBLE:
+		bitmap = createBitMap("texture/Bubble.png");
+		break;
+	case _DOUBLE:
+		bitmap = createBitMap("texture/Double.png");
+		break;
 	case _GAMEOVER:
 		bitmap = createBitMap("texture/gameover.png");
 		break;
 	case _TITLE:
 		bitmap = createBitMap("texture/title.png");
+		break;
+	case _TIME:
+		bitmap = createBitMap("texture/Time_text.png");
+		break;
+	case _SCORE:
+		bitmap = createBitMap("texture/Score_text.png");
 		break;
 	default:
 		bitmap = createBitMap("texture/Dragon.png");

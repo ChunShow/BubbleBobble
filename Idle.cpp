@@ -40,7 +40,7 @@ void Idle::idleBoard() {
 
 void Idle::idleItem()
 {
-	if (endTime - lastItemCreationTime > 1000) {
+	if (endTime - lastItemCreationTime > 5000) {
 		srand((int)clock());
 		float x = 1.6 * (float)rand() / RAND_MAX - 0.8; float y = 1.6 * (float)rand() / RAND_MAX - 0.8;
 		Item item(ITEM_TYPE(rand() % 5), x, y);
