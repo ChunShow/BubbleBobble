@@ -57,7 +57,6 @@ void keyDown(unsigned char key, int x, int y)
 			input.deleteLastLetter();
 		}
 		if (key == ENTER) {
-			cout << "enter pressed" << endl;
 			if (!board.isSaved()) {
 				board.addMyrecord(input.getName());
 				board.save();
@@ -74,6 +73,12 @@ void keyDown(unsigned char key, int x, int y)
 		break;
 	case 'H':
 		displayHelp = !displayHelp;
+		break;
+	case 'r':
+		displayLeaderboard = !displayLeaderboard;
+		break;
+	case 'R':
+		displayLeaderboard = !displayLeaderboard;
 		break;
 	}
 }

@@ -59,14 +59,18 @@ void Scoreboard::draw(bool isMapMoving)
 
 void Scoreboard::displayLeaderboard()
 {
+	float padding = 0.0f;
+	gamestart ? glColor3f(1.0f, 1.0f, 1.0f) : glColor3f(0.0f, 0.0f, 0.0f) ;
+	if (!gamestart) padding = 0.2f;
+
 	auto itr = leaderboard.begin();
-	float scale = 1 / 1400.0f;
+	float scale = 1 / 1600.0f;
 	for (int i = 0; i < 5; i++) {
 		string score = to_string((*itr).first.second); string name = (*itr).second;
 		score.insert(score.begin(), 5 - score.size(), ' ');
 
 		string line = to_string(i + 1) + ' ' + score + ' ' + name;
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, line, 2.6f, -.5f, 0.0f - 0.1*i, scale);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, line, 2.6f, -0.427f, padding-0.35f - 0.10*i, scale);
 		itr = next(itr);
 	}
 }
@@ -106,6 +110,11 @@ void Scoreboard::computeFinalScore()
 		score = score + getLeftTime(lastClearTime);
 		fixed = true;
 	}
+}
+
+void Scoreboard::displayFinalScore()
+{
+	displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.1f, -0.17f, 1/1000.0f);
 }
 
 void Scoreboard::loadLeaderboard()

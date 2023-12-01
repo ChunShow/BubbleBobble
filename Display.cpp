@@ -9,7 +9,7 @@ void Display::operate()
 
 	displayBlend();
 	displayLight();
-
+	
 	displayMap();
 	displayBubble();
 	displayItem();
@@ -176,10 +176,10 @@ void Display::displayWin()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glBindTexture(GL_TEXTURE_2D, gmwin.getTextureID());
 	glBegin(GL_POLYGON);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 0.6f);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 0.6f);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 0.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, .9f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, .9f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -0.35f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -0.35f);
 	glEnd();
 }
 
@@ -234,8 +234,10 @@ void Display::handleGameover()
 void Display::handleWin()
 {
 	if (win == true) {
-		glColor3f(0.0f, 0.0f, 0.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		input.displayName();
+		board.displayFinalScore();
 		board.displayLeaderboard();
 		displayWin();
 	}

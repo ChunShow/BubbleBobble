@@ -79,5 +79,5 @@ private:
 	vector<Texture> textures;
 
 	// Number of total stages;
-	int maxLevel = 1;
+	int maxLevel = 4;
 };

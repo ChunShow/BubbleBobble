@@ -3,7 +3,7 @@
 //  initial setting of map
 Map::Map(int level) : stage(level), drawn(false), time(0.0f)
 {
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 11; i++) {
 		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
 	}
@@ -261,6 +261,21 @@ void Map::drawStage0()
 		glTexCoord2f(0.0f, 0.0f); glVertex2f(-0.9f, -0.45f);
 		glEnd();
 	}
+	if (displayLeaderboard) {
+		glBindTexture(GL_TEXTURE_2D, textures[_LEADERBOARD].getTextureID());
+		glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(-0.6f, 0.4f);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(0.6f, 0.4f);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(0.6f, -0.8f);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(-0.6f, -0.8f);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+
+		glDisable(GLUT_DEPTH);
+		board.displayLeaderboard();
+		glEnable(GLUT_DEPTH);
+	}
+
 	glDisable(GL_TEXTURE_2D);
 }
 void Map::drawStage1()

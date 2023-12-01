@@ -35,6 +35,7 @@ public:
 
 	void reset();
 	void computeFinalScore();
+	void displayFinalScore();
 
 	void loadLeaderboard();
 	void writeLeaderboard();
