@@ -19,6 +19,7 @@ bool gamestart = false;
 bool restarted = false;
 bool win = false;
 bool displayHelp = false;
+bool displayLeaderboard = false;
 bool dataClearedForMoving = false;
 bool keystates[6];
 

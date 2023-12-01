@@ -209,6 +209,9 @@ void Texture::setMapFile(FIBITMAP*& bitmap) {
 	case _HELP:
 		bitmap = createBitMap("texture/help.png");
 		break;
+	case _LEADERBOARD:
+		bitmap = createBitMap("texture/leaderboard.png");
+		break;
 	case _TIME:
 		bitmap = createBitMap("texture/Time_text.png");
 		break;

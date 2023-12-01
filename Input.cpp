@@ -23,7 +23,8 @@ string Input::getName()
 
 void Input::displayName()
 {
-	displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, getName(), 2.6f, -.3f, 0.3f, 1 / 1500.0f);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, getName(), 2.6f, 0.1f, 0.015f, 1 / 1000.0f);
 }
 
 void Input::reset()

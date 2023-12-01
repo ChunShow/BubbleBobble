@@ -47,6 +47,7 @@ extern bool gamestart;
 extern bool restarted;
 extern bool win;
 extern bool displayHelp;
+extern bool displayLeaderboard;
 extern bool dataClearedForMoving;
 extern bool keystates[6];
 
