@@ -6,6 +6,18 @@
 #include <io.h>
 #include <map>
 
+using namespace std;
+
+struct cmpByScore {
+	bool operator()(const pair<int, int>& a, const pair<int, int>& b) const {
+		int a_sc = a.second; int b_sc = b.second;
+		int a_id = a.first; int b_id = b.first;
+
+		if (a_sc != b_sc) return a_sc > b_sc;
+		else return a_id < b_id;
+	}
+};
+
 class Scoreboard : public Object
 {
 public:
@@ -22,14 +34,20 @@ public:
 	void addScoreByTime();
 
 	void reset();
+	void computeFinalScore();
 
 	void loadLeaderboard();
 	void writeLeaderboard();
 	void addMyrecord(string name);
 
+	bool isSaved();
+	void save();
+
 private:
 	int score;
 	int scoreByTime;
-	map<int, string> leaderboard;
+	bool fixed = false;
+	bool saved = false;
+	map<pair<int, int>, string, cmpByScore> leaderboard;
 };
 

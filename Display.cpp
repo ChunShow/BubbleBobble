@@ -26,6 +26,7 @@ void Display::operate()
 	if (stages.isFinalStage() && clear) {
 		win = true;
 		clear = false;
+		board.computeFinalScore();
 	}
 	handleWin();
 
@@ -189,6 +190,8 @@ void Display::clearDataToRestart() {
 	explosions.clear();
 	items.clear();
 	bubble_total_num = 0;
+	board.reset();
+	input.reset();
 	displayHelp = false;
 }
 
@@ -231,10 +234,10 @@ void Display::handleGameover()
 void Display::handleWin()
 {
 	if (win == true) {
-		//displayWin();
 		glColor3f(0.0f, 0.0f, 0.0f);
-		string str = input.getName();
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, str, 2.6f, 0.0f, -0.6f, 1/2000.0f);
+		input.displayName();
+		board.displayLeaderboard();
+		displayWin();
 	}
 	if (restarted == true) {
 		clearDataToRestart();

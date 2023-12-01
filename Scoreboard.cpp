@@ -15,7 +15,7 @@ Scoreboard::Scoreboard()
 	score = 0;
 	lastClearTime = clock();
 	scoreByTime = 0;
-	leaderboard = map<int, string>();
+	leaderboard = map<pair<int, int>, string, cmpByScore>();
 	loadLeaderboard();
 }
 
@@ -59,6 +59,16 @@ void Scoreboard::draw(bool isMapMoving)
 
 void Scoreboard::displayLeaderboard()
 {
+	auto itr = leaderboard.begin();
+	float scale = 1 / 1400.0f;
+	for (int i = 0; i < 5; i++) {
+		string score = to_string((*itr).first.second); string name = (*itr).second;
+		score.insert(score.begin(), 5 - score.size(), ' ');
+
+		string line = to_string(i + 1) + ' ' + score + ' ' + name;
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, line, 2.6f, -.5f, 0.0f - 0.1*i, scale);
+		itr = next(itr);
+	}
 }
 
 int Scoreboard::getLeftTime(clock_t lastClearTime)
@@ -86,6 +96,16 @@ void Scoreboard::reset()
 	score = 0;
 	lastClearTime = clock();
 	scoreByTime = 0;
+	saved = false;
+	fixed = false;
+}
+
+void Scoreboard::computeFinalScore()
+{
+	if (!fixed) {
+		score = score + getLeftTime(lastClearTime);
+		fixed = true;
+	}
 }
 
 void Scoreboard::loadLeaderboard()
@@ -93,9 +113,9 @@ void Scoreboard::loadLeaderboard()
 	if (_access("leaderboard.txt", 0) == -1) ofstream("leaderboard.txt").close(); // make file if "leaderboard.txt" does not exists.
 
 	fstream ifs("leaderboard.txt");
-	int sc; string name; 
-	while (ifs >> sc >> name) {
-		leaderboard.insert(make_pair(sc, name));
+	int id; int sc; string name;
+	while (ifs >> id >> sc >> name) {
+		leaderboard.insert(make_pair(make_pair(id, sc), name));
 	}
 	ifs.close();
 }
@@ -103,13 +123,25 @@ void Scoreboard::loadLeaderboard()
 void Scoreboard::writeLeaderboard()
 {
 	fstream ofs("leaderboard.txt");
-	for (auto itr = leaderboard.end(); itr != leaderboard.begin(); itr--) {
-		ofs << (*itr).first << ' ' << (*itr).second << endl;
+	for (auto itr = leaderboard.begin(); itr != leaderboard.end(); itr++) {
+		ofs << (*itr).first.first << ' ' << (*itr).first.second << ' ' << (*itr).second << endl;
 	}
 	ofs.close();
 }
 
 void Scoreboard::addMyrecord(string name)
 {
-	leaderboard.insert(make_pair(score, name));
+	int length = leaderboard.size();
+	leaderboard.insert(make_pair(make_pair(length + 1, score), name));
+}
+
+bool Scoreboard::isSaved()
+{
+	return saved;
+}
+
+void Scoreboard::save()
+{
+	saved = true;
+	writeLeaderboard();
 }
