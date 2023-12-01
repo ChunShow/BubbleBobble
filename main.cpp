@@ -32,9 +32,14 @@ Texture title(_MAP, _TITLE);
 
 void initialize(bool restarted)
 {
+	level = 0 ;
 	player = Player(5);
-	level = 0;
 	clear = false;
+	gamestart = false;
+	if (!restarted) {
+		gmover.initTexture();
+		title.initTexture();
+	}
 
 	stages = Map(level);
 	board = Scoreboard();
@@ -46,11 +51,6 @@ void initialize(bool restarted)
 	//monsters[0].setPosition(-0.4f, -0.25f);
 	//monsters[1].setPosition(0.25f, 0.25);
 	//monsters[2].setPosition(-0.4f, 0.75f);
-
-	if (!restarted) {
-		gmover.initTexture();
-		title.initTexture();
-	}
 }
 
 void idle()
@@ -65,6 +65,7 @@ void clearDataToRestart() {
 	monsters.clear();
 	explosions.clear();
 	items.clear();
+	clear = false; 
 	bubble_total_num = 0;
 }
 

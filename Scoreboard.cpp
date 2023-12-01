@@ -34,7 +34,6 @@ void Scoreboard::setLastClearTime()
 	lastClearTime = clock();
 }
 
-
 void Scoreboard::draw(bool isMapMoving)
 {
 	glColor3f(0.0f, 0.0f, 0.0f);
