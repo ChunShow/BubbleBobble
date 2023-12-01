@@ -221,6 +221,10 @@ bool Player::isAlive()
 {
 	return (life >= 1);
 }
+void Player::setLife(int i)
+{
+	life = i;
+}
 void Player::reset()
 {
 	direction = KEY::RIGHT;

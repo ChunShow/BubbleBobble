@@ -41,6 +41,7 @@ public:
 	//  gameover and restart methods
 	//  determine whether player is alive or not
 	bool isAlive();
+	void setLife(int i);
 	//  reset player
 	void reset();
 

@@ -42,12 +42,18 @@ void Scoreboard::draw(bool isMapMoving)
 	float scale = 1 / 2800.0f;
 
 	if (!isMapMoving) {
+		if  (time_left <= 50) glColor3f(5.0f, 0.0f, 0.0f);
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(time_left), 2.6f, - 0.7f, 0.96f, scale);
+		glColor3f(0.0f, 0.0f, 0.0f);
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f, scale);
 	}
 	else {
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(scoreByTime), 2.6f, - 0.7f, 0.96f, scale);
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f, scale);
+	}
+	
+	if (time_left == 0) {
+		player.setLife(0);
 	}
 }
 

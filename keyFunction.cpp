@@ -12,6 +12,7 @@ void specialKeyDown(int key, int x, int y)
 	case GLUT_KEY_UP:
 		keystates[KEY::UP] = 1;
 		if (player.getState() == STAY) {
+			PlaySound(TEXT("sound/jump"), 0, SND_FILENAME | SND_ASYNC);
 			player.setState(JUMP);
 			player.setVelocityY(0.10f);
 		}

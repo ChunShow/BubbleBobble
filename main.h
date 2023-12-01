@@ -17,6 +17,9 @@
 
 #include <map>
 
+#include <mmsystem.h>
+#pragma comment(lib,"winmm.lib")
+
 using namespace std;
 
 #define WINDOW_X 400
