@@ -1,0 +1,7 @@
+5 1257 smion
+6 214 field
+7 213 loren
+4 129 loend
+3 40 ridle
+1 30 ddddd
+2 30 rfkae

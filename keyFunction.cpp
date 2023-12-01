@@ -48,11 +48,20 @@ void specialKeyUp(int key, int x, int y)
 
 void keyDown(unsigned char key, int x, int y)
 {
-	if ('a' <= key && key <= 'z' && win) {
-		input.addLetter(key);
-	}
-	if (key == backspace) {
-		input.deleteLastLetter();
+	if (win) {
+		if ('a' <= key && key <= 'z') {
+			input.addLetter(key);
+		}
+		if (key == BACKSPACE) {
+			input.deleteLastLetter();
+		}
+		if (key == ENTER) {
+			cout << "enter pressed" << endl;
+			if (!board.isSaved()) {
+				board.addMyrecord(input.getName());
+				board.save();
+			}
+		}
 	}
 
 	switch (key) {

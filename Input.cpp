@@ -5,7 +5,6 @@ void Input::addLetter(char c)
 	if (length < 5) {
 		name[length] = c;
 		length += 1;
-		cout << c << " added" << endl;
 	}
 }
 
@@ -13,12 +12,22 @@ void Input::deleteLastLetter()
 {
 	if (length >= 1) {
 		name[length-1] = ' ';
-		length -= 1;
-		cout << "deleted" << endl;
+		length -= 1;;
 	}
 }
 
 string Input::getName()
 {
 	return string(name);
+}
+
+void Input::displayName()
+{
+	displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, getName(), 2.6f, -.3f, 0.3f, 1 / 1500.0f);
+}
+
+void Input::reset()
+{
+	for (int i = 0; i < 5; i++) name[i] = ' ';
+	length = 0;
 }
