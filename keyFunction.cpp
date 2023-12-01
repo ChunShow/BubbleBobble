@@ -19,9 +19,6 @@ void specialKeyDown(int key, int x, int y)
 	case GLUT_KEY_DOWN:
 		keystates[KEY::DOWN] = 1;
 		break;
-	case GLUT_KEY_CTRL_L:
-		keystates[KEY::RESTART] = 1;
-		break;
 	}
 }
 
@@ -40,9 +37,6 @@ void specialKeyUp(int key, int x, int y)
 	case GLUT_KEY_DOWN:
 		keystates[KEY::DOWN] = 0;
 		break;
-	case GLUT_KEY_CTRL_L:
-		keystates[KEY::RESTART] = 0;
-		break;
 	}
 }
 
@@ -52,6 +46,18 @@ void keyDown(unsigned char key, int x, int y)
 	case spacebar:
 		keystates[KEY::SPACEBAR] = 1;
 		break;
+	case 'h':
+		displayHelp = !displayHelp;
+		break;
+	case 'H':
+		displayHelp = !displayHelp;
+		break;
+	case 'r':
+		keystates[KEY::RESTART] = 1;
+		break;
+	case 'R':
+		keystates[KEY::RESTART] = 1;
+		break;
 	}
 }
 
@@ -60,6 +66,12 @@ void keyUp(unsigned char key, int x, int y)
 	switch (key) {
 	case spacebar:
 		keystates[KEY::SPACEBAR] = 0;
+		break;
+	case 'r':
+		keystates[KEY::RESTART] = 0;
+		break;
+	case 'R':
+		keystates[KEY::RESTART] = 0;
 		break;
 	}
 }

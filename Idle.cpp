@@ -296,6 +296,8 @@ void Idle::idleGameover()
 	if (keystates[KEY::RESTART]) {
 		gameover = false;
 		restarted = true;
+		gamestart = false;
+		displayHelp = false;
 	}
 }
 
@@ -304,5 +306,6 @@ void Idle::idleGamestart()
 	board.reset();
 	if (keystates[KEY::SPACEBAR]) {
 		gamestart = true;
+		displayHelp = false;
 	}
 }
