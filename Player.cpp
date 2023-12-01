@@ -169,6 +169,7 @@ void Player::updatePosition()
 Bubble Player::shoot()
 {
 	attackTime = 8;
+	audio[1].PlayBubbleShoot();
 
 	Bubble bubble;
 	bubble.initialize();
@@ -204,6 +205,7 @@ void Player::initializePosition()
 		direction = RIGHT;
 		state = FALL;
 		setClearPosition(1.0f, 1.0f);
+		audio[2].PlayBubblePop();
 	}
 	else if (getPositionX() <= -0.95f) {
 		setPositionX(-0.95f);

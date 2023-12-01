@@ -12,7 +12,7 @@ void specialKeyDown(int key, int x, int y)
 	case GLUT_KEY_UP:
 		keystates[KEY::UP] = 1;
 		if (player.getState() == STAY) {
-			PlaySound(TEXT("sound/jump"), 0, SND_FILENAME | SND_ASYNC);
+			audio[0].PlayJump();
 			player.setState(JUMP);
 			player.setVelocityY(0.10f);
 		}
@@ -70,10 +70,16 @@ void keyDown(unsigned char key, int x, int y)
 		keystates[KEY::SPACEBAR] = 1;
 		break;
 	case 'h':
-		displayHelp = !displayHelp;
+		if (gamestart == false) {
+			audio[4].PlayClick();
+			displayHelp = !displayHelp;
+		}
 		break;
 	case 'H':
-		displayHelp = !displayHelp;
+		if (gamestart == false) {
+			audio[4].PlayClick();
+			displayHelp = !displayHelp;
+		}
 		break;
 	}
 }

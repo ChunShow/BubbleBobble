@@ -155,7 +155,6 @@ void Idle::idlePlayer()
 		}
 	}
 	if (keystates[KEY::SPACEBAR] && (endTime - lastBubbleCreationTime) > player.getDelay()) {
-		PlaySound(TEXT("sound/bubble_shoot.wav"), 0, SND_FILENAME | SND_ASYNC);
 		Bubble bubble1 = player.shoot();
 		bubble_total_num += 1;
 		bubbles.insert(make_pair(bubble_total_num, bubble1));

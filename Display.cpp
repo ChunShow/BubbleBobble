@@ -99,6 +99,7 @@ void Display::displayBubble()
 		else {
 			explosions.push_back(Explosion(bubble.getPositionX(), bubble.getPositionY(), bubble.isTrapping()));
 			bubbles.erase(itr++);
+			audio[2].PlayBubblePop();
 		}
 	}
 

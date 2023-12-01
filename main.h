@@ -10,6 +10,7 @@
 #include "Item.h"
 #include "Scoreboard.h"
 #include "Input.h"
+#include "Audio.h"
 
 #include "keyFunction.h"
 #include "Idle.h"
@@ -49,6 +50,7 @@ extern bool displayHelp;
 extern bool dataClearedForMoving;
 extern bool keystates[6];
 
+extern vector<Audio> audio;
 extern clock_t startTime;
 extern clock_t lastBubbleCreationTime;
 extern clock_t lastItemCreationTime;

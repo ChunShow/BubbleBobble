@@ -22,6 +22,7 @@ bool displayHelp = false;
 bool dataClearedForMoving = false;
 bool keystates[6];
 
+vector<Audio> audio;
 Idle idleFunc;
 Display displayFunc;
 clock_t startTime = clock();
@@ -44,6 +45,10 @@ void initialize(bool restarted)
 		gmover.initTexture();
 		title.initTexture();
 		gmwin.initTexture();
+		for (int i = 0; i < 10; i++) {
+			audio.push_back(Audio());
+		}
+		audio[3].PlayBGM1();
 	}
 
 	stages = Map(level);
