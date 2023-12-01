@@ -12,6 +12,7 @@
 
 #include "keyFunction.h"
 #include "Idle.h"
+#include "Display.h"
 
 #include <map>
 
@@ -38,6 +39,7 @@ extern bool clear;
 extern bool gameover;
 extern bool gamestart;
 extern bool restarted;
+extern bool displayHelp;
 extern bool dataClearedForMoving;
 extern bool keystates[6];
 
@@ -45,3 +47,8 @@ extern clock_t startTime;
 extern clock_t lastBubbleCreationTime;
 extern clock_t lastItemCreationTime;
 extern clock_t lastClearTime;
+
+extern Texture gmover;
+extern Texture title;
+
+void initialize(bool restarted);

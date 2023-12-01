@@ -13,15 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Function">
+      <UniqueIdentifier>{90ac0be2-5fcf-4ef1-a311-f6b8fa436103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Function">
+      <UniqueIdentifier>{f8308b13-6e93-4807-90ad-bc7607ee4ac5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="keyFunction.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
@@ -45,9 +48,6 @@
     <ClInclude Include="Object.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Idle.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Hitbox.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -60,15 +60,21 @@
     <ClInclude Include="Scoreboard.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Idle.h">
+      <Filter>헤더 파일\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="Display.h">
+      <Filter>헤더 파일\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="keyFunction.h">
+      <Filter>헤더 파일\Function</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="keyFunction.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
@@ -92,9 +98,6 @@
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Idle.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Hitbox.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -106,6 +109,15 @@
     </ClCompile>
     <ClCompile Include="Scoreboard.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Idle.cpp">
+      <Filter>소스 파일\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>소스 파일\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="keyFunction.cpp">
+      <Filter>소스 파일\Function</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
