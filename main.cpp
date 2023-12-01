@@ -32,7 +32,7 @@ Texture title(_MAP, _TITLE);
 
 void initialize(bool restarted)
 {
-	level = 0 ;
+	level = 0;
 	player = Player(5);
 	clear = false;
 	gamestart = false;
@@ -43,6 +43,7 @@ void initialize(bool restarted)
 
 	stages = Map(level);
 	board = Scoreboard();
+}
 
 void idle()
 {
