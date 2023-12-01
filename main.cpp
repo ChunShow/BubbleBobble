@@ -32,22 +32,23 @@ Texture title(_MAP, _TITLE);
 
 void initialize(bool restarted)
 {
+	level = 0 ;
 	player = Player(5);
-	level = 0;
 	clear = false;
-
-	stages = Map(level);
-	board = Scoreboard();
-
+	gamestart = false;
 	if (!restarted) {
 		gmover.initTexture();
 		title.initTexture();
 	}
-}
+
+	stages = Map(level);
+	board = Scoreboard();
+
 void idle()
 {
 	idleFunc.operate();
 }
+  
 void display()
 {
 	displayFunc.operate();
