@@ -9,7 +9,7 @@ Item::Item(ITEM_TYPE item_type, float x, float y)
 	setPosition(x, y);
 	itemExistenceDuration = 10000;
 
-	for (int i = 0; i < 14; i++) {
+	for (int i = 0; i < 15; i++) {
 		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
 	}

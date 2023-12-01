@@ -9,21 +9,28 @@ void Display::operate()
 
 	displayBlend();
 	displayLight();
+
 	displayMap();
-
-	//Detect clear
-	if (clear) clearDataToChangeStage();
-
 	displayBubble();
 	displayItem();
 	displayMonster();
 	displayPlayer();
 	glDisable(GL_LIGHT0);
-
-	if (monsters.size() == 0) clear = true;
 	displayBoard();
-	detectGameover();
 
+	//Detect clear
+	if (monsters.size() == 0) clear = true;
+	handleGameover();
+
+	//Detect win
+	if (stages.isFinalStage() && clear) {
+		win = true;
+		clear = false;
+	}
+	handleWin();
+
+	//Detect clear
+	if (clear) clearDataToChangeStage();
 	glutSwapBuffers();
 }
 
@@ -115,6 +122,7 @@ void Display::displayPlayer()
 	if (!player.isBlink()) player.drawPlayer();
 	player.drawLife();
 }
+
 void Display::displayItem()
 {
 	int i = 0;
@@ -129,7 +137,6 @@ void Display::displayBoard()
 {
 	board.draw(stages.isMoving());
 }
-
 
 
 void Display::displayTitle()
@@ -162,6 +169,19 @@ void Display::displayGameover()
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 0.0f);
 	glEnd();
 }
+void Display::displayWin()
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, gmwin.getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 0.6f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 0.6f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, 0.0f);
+	glEnd();
+}
+
 void Display::clearDataToRestart() {
 	stages.resetStage();
 	bubbles.clear();
@@ -169,7 +189,9 @@ void Display::clearDataToRestart() {
 	explosions.clear();
 	items.clear();
 	bubble_total_num = 0;
+	displayHelp = false;
 }
+
 void Display::clearDataToChangeStage() {
 	if (dataClearedForMoving) return;
 	bubbles.clear();
@@ -190,7 +212,7 @@ void Display::clearDataToChangeStage() {
 	board.changeLeftTimeToScore(lastClearTime);
 	dataClearedForMoving = true;
 }
-void Display::detectGameover()
+void Display::handleGameover()
 {
 	if (!player.isAlive()) {
 		player.reset();
@@ -198,6 +220,21 @@ void Display::detectGameover()
 	}
 	if (gameover == true) {
 		displayGameover();
+	}
+	if (restarted == true) {
+		clearDataToRestart();
+		initialize(restarted);
+		restarted = false;
+	}
+}
+
+void Display::handleWin()
+{
+	if (win == true) {
+		//displayWin();
+		glColor3f(0.0f, 0.0f, 0.0f);
+		string str = input.getName();
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, str, 2.6f, 0.0f, -0.6f, 1/2000.0f);
 	}
 	if (restarted == true) {
 		clearDataToRestart();

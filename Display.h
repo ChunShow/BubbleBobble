@@ -16,8 +16,10 @@ public:
 
 	void displayTitle();
 	void displayGameover();
+	void displayWin();
 	void clearDataToRestart();
 	void clearDataToChangeStage();
-	void detectGameover();
+	void handleGameover();
+	void handleWin();
 };
 

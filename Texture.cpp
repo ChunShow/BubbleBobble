@@ -203,6 +203,9 @@ void Texture::setMapFile(FIBITMAP*& bitmap) {
 	case _TITLE:
 		bitmap = createBitMap("texture/title.png");
 		break;
+	case _GAMEWIN:
+		bitmap = createBitMap("texture/gamewin.png");
+		break;
 	case _HELP:
 		bitmap = createBitMap("texture/help.png");
 		break;

@@ -17,6 +17,7 @@ public:
 	void idleStageClear();
 	void idleGameover();
 	void idleGamestart();
+	void idleGameWin();
 
 private:
 	clock_t endTime;

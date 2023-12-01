@@ -9,6 +9,7 @@
 #include "Explosion.h"
 #include "Item.h"
 #include "Scoreboard.h"
+#include "Input.h"
 
 #include "keyFunction.h"
 #include "Idle.h"
@@ -32,6 +33,7 @@ extern vector<Monster> monsters;
 extern vector<Explosion> explosions;
 extern vector<Item> items;
 extern Scoreboard board;
+extern Input input;
 
 extern int level;
 extern int bubble_total_num;
@@ -39,6 +41,7 @@ extern bool clear;
 extern bool gameover;
 extern bool gamestart;
 extern bool restarted;
+extern bool win;
 extern bool displayHelp;
 extern bool dataClearedForMoving;
 extern bool keystates[6];
@@ -50,5 +53,7 @@ extern clock_t lastClearTime;
 
 extern Texture gmover;
 extern Texture title;
+extern Texture gmwin;
 
 void initialize(bool restarted);
+void displayStrokeCharacters(void* font, string c, float lnWidth, float x, float y, float scale);

@@ -1,6 +1,7 @@
 #pragma once
 
-#define spacebar 32 
+#define spacebar 32
+#define backspace 8
 #define restart 341
 
 void specialKeyDown(int key, int x, int y);

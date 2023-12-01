@@ -1,8 +1,6 @@
 #include "main.h"
 
-void displayStrokeCharacters(void* font, string c, float lnWidth, float x, float y) {
-	float scale = 1/ 2800.0f;
-
+void displayStrokeCharacters(void* font, string c, float lnWidth, float x, float y, float scale) {
 	glPushMatrix();
 	glLineWidth(lnWidth);
 	glTranslatef(x, y, 0.0f);
@@ -17,6 +15,8 @@ Scoreboard::Scoreboard()
 	score = 0;
 	lastClearTime = clock();
 	scoreByTime = 0;
+	leaderboard = map<int, string>();
+	loadLeaderboard();
 }
 
 int Scoreboard::getScore()
@@ -39,15 +39,20 @@ void Scoreboard::draw(bool isMapMoving)
 	glColor3f(0.0f, 0.0f, 0.0f);
 	clock_t time = getLeftTime(lastClearTime);
 	int time_left = getLeftTime(lastClearTime);
+	float scale = 1 / 2800.0f;
 
 	if (!isMapMoving) {
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(time_left), 2.6f, - 0.7f, 0.96f);
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(time_left), 2.6f, - 0.7f, 0.96f, scale);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f, scale);
 	}
 	else {
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(scoreByTime), 2.6f, - 0.7f, 0.96f);
-		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(scoreByTime), 2.6f, - 0.7f, 0.96f, scale);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f, scale);
 	}
+}
+
+void Scoreboard::displayLeaderboard()
+{
 }
 
 int Scoreboard::getLeftTime(clock_t lastClearTime)
@@ -75,4 +80,30 @@ void Scoreboard::reset()
 	score = 0;
 	lastClearTime = clock();
 	scoreByTime = 0;
+}
+
+void Scoreboard::loadLeaderboard()
+{
+	if (_access("leaderboard.txt", 0) == -1) ofstream("leaderboard.txt").close(); // make file if "leaderboard.txt" does not exists.
+
+	fstream ifs("leaderboard.txt");
+	int sc; string name; 
+	while (ifs >> sc >> name) {
+		leaderboard.insert(make_pair(sc, name));
+	}
+	ifs.close();
+}
+
+void Scoreboard::writeLeaderboard()
+{
+	fstream ofs("leaderboard.txt");
+	for (auto itr = leaderboard.end(); itr != leaderboard.begin(); itr--) {
+		ofs << (*itr).first << ' ' << (*itr).second << endl;
+	}
+	ofs.close();
+}
+
+void Scoreboard::addMyrecord(string name)
+{
+	leaderboard.insert(make_pair(score, name));
 }

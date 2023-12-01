@@ -8,25 +8,30 @@ void Idle::operate()
 {
 	endTime = clock();
 	if (endTime - startTime > 1000 / 30) {
-		if (!gamestart) {
-			idleGamestart();
-			idlePlayer();
-		}
-		if (gameover) {
-			idleGameover();
+		if (win) {
+			idleGameWin();
 		}
 		else {
-			idleBoard();
-			if (!clear) {
-				idleItem();
+			if (!gamestart) {
+				idleGamestart();
 				idlePlayer();
-				idleBubbleAlive();
-				idleMonster();
-				idleBubble();
-				idleExplosion();
+			}
+			if (gameover) {
+				idleGameover();
 			}
 			else {
-				idleStageClear();
+				idleBoard();
+				if (!clear) {
+					idleItem();
+					idlePlayer();
+					idleBubbleAlive();
+					idleMonster();
+					idleBubble();
+					idleExplosion();
+				}
+				else {
+					idleStageClear();
+				}
 			}
 		}
 		startTime = endTime;
@@ -306,6 +311,16 @@ void Idle::idleGamestart()
 	board.reset();
 	if (keystates[KEY::SPACEBAR]) {
 		gamestart = true;
+		displayHelp = false;
+	}
+}
+
+void Idle::idleGameWin()
+{
+	if (keystates[KEY::RESTART]) {
+		win = false;
+		restarted = true;
+		gamestart = false;
 		displayHelp = false;
 	}
 }

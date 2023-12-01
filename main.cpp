@@ -9,6 +9,7 @@ vector<Monster> monsters;
 vector<Explosion> explosions;
 vector<Item> items;
 Scoreboard board;
+Input input;
 
 int bubble_total_num=0;
 int level;
@@ -16,6 +17,7 @@ bool clear;
 bool gameover = false;
 bool gamestart = false;
 bool restarted = false;
+bool win = false;
 bool displayHelp = false;
 bool dataClearedForMoving = false;
 bool keystates[6];
@@ -29,16 +31,19 @@ clock_t lastClearTime = clock();
 
 Texture gmover(_MAP, _GAMEOVER);
 Texture title(_MAP, _TITLE);
+Texture gmwin(_MAP, _GAMEWIN);
 
 void initialize(bool restarted)
 {
 	level = 0;
 	player = Player(5);
 	clear = false;
+	win = false;
 	gamestart = false;
 	if (!restarted) {
 		gmover.initTexture();
 		title.initTexture();
+		gmwin.initTexture();
 	}
 
 	stages = Map(level);
@@ -49,7 +54,7 @@ void idle()
 {
 	idleFunc.operate();
 }
-  
+
 void display()
 {
 	displayFunc.operate();

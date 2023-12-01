@@ -3,7 +3,7 @@
 //  initial setting of map
 Map::Map(int level) : stage(level), drawn(false), time(0.0f)
 {
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 10; i++) {
 		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
 	}
@@ -87,14 +87,17 @@ void Map::setMonsters(vector<Monster>& monsters) {
 	case 0:
 		break;
 	case 1:
-		for (int i = 0; i < 4; i++) {
-			monsters.push_back(Monster(CREATURE));
-		}
+		monsters.push_back(Monster(CREATURE));
 		monsters[0].setPosition(0.0f, -0.1f);
-		monsters[1].setPosition(0.0f, 0.35f);
-		monsters[2].setPosition(-0.8f, 0.25f);
-		monsters[3].setPosition(0.8f, 0.25f);
 		break;
+		//for (int i = 0; i < 4; i++) {
+		//	monsters.push_back(Monster(CREATURE));
+		//}
+		//monsters[0].setPosition(0.0f, -0.1f);
+		//monsters[1].setPosition(0.0f, 0.35f);
+		//monsters[2].setPosition(-0.8f, 0.25f);
+		//monsters[3].setPosition(0.8f, 0.25f);
+		//break;
 	case 2:
 		for (int i = 0; i < 4; i++) {
 			monsters.push_back(Monster(GHOST));
@@ -666,4 +669,9 @@ void Map::resetStage()
 {
 	stage = 0;
 	drawn = false;
+}
+
+bool Map::isFinalStage()
+{
+	return stage == maxLevel;
 }

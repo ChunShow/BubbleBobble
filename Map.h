@@ -54,6 +54,9 @@ public:
 	// reset stage number
 	void resetStage();
 
+	// detects whether it is final stage or not.
+	bool isFinalStage();
+
 private:
 	//  stage means the stage level
 	int stage;
@@ -67,11 +70,14 @@ private:
 	// true if the map is moving
 	bool moving;
 	
-	//  border has information of map's layers on which player's state will be STAY from FALL
+	// border has information of map's layers on which player's state will be STAY from FALL
 	vector<vector<float>> border;
-	//  borderHard has information of map's layers which player can't pass
+	// borderHard has information of map's layers which player can't pass
 	vector<vector<float>> borderHard;
 
-	//  textures information used in map design
+	// textures information used in map design
 	vector<Texture> textures;
+
+	// Number of total stages;
+	int maxLevel = 1;
 };
