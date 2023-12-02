@@ -13,6 +13,7 @@ void displayStrokeCharacters(void* font, string c, float lnWidth, float x, float
 Scoreboard::Scoreboard()
 {
 	score = 0;
+	counter = 0;
 	lastClearTime = clock();
 	scoreByTime = 0;
 	leaderboard = map<pair<int, int>, string, cmpByScore>();
@@ -45,10 +46,12 @@ void Scoreboard::draw(bool isMapMoving)
 		if  (time_left <= 50) glColor3f(5.0f, 0.0f, 0.0f);
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(time_left), 2.6f, - 0.7f, 0.96f, scale);
 		glColor3f(0.0f, 0.0f, 0.0f);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(stages.getLevel()), 2.6f, 0.08f, 0.96f, scale);
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f, scale);
 	}
 	else {
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(scoreByTime), 2.6f, - 0.7f, 0.96f, scale);
+		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(stages.getLevel()), 2.6f, 0.08f, 0.96f, scale);
 		displayStrokeCharacters(GLUT_STROKE_MONO_ROMAN, to_string(score), 2.6f, 0.78f, 0.96f, scale);
 	}
 	
@@ -59,14 +62,16 @@ void Scoreboard::draw(bool isMapMoving)
 
 void Scoreboard::displayLeaderboard()
 {
+	if (counter > 5) counter = 5;
 	float padding = 0.0f;
 	gamestart ? glColor3f(1.0f, 1.0f, 1.0f) : glColor3f(0.0f, 0.0f, 0.0f) ;
 	if (!gamestart) padding = 0.2f;
 
 	auto itr = leaderboard.begin();
 	float scale = 1 / 1600.0f;
-	for (int i = 0; i < 5; i++) {
-		string score = to_string((*itr).first.second); string name = (*itr).second;
+	for (int i = 0; i < counter; i++) {
+		string score = to_string((*itr).first.second); 
+		string name = (*itr).second;
 		score.insert(score.begin(), 5 - score.size(), ' ');
 
 		string line = to_string(i + 1) + ' ' + score + ' ' + name;
@@ -120,11 +125,13 @@ void Scoreboard::displayFinalScore()
 void Scoreboard::loadLeaderboard()
 {
 	if (_access("leaderboard.txt", 0) == -1) ofstream("leaderboard.txt").close(); // make file if "leaderboard.txt" does not exists.
+	counter = 0;
 
 	fstream ifs("leaderboard.txt");
 	int id; int sc; string name;
 	while (ifs >> id >> sc >> name) {
 		leaderboard.insert(make_pair(make_pair(id, sc), name));
+		counter++;
 	}
 	ifs.close();
 }
@@ -153,4 +160,8 @@ void Scoreboard::save()
 {
 	saved = true;
 	writeLeaderboard();
+}
+void Scoreboard::setCounter(int i)
+{
+	counter += i;
 }

@@ -1,4 +1,4 @@
-#include "Item.h"
+#include "main.h"
 
 Item::Item(ITEM_TYPE item_type, float x, float y)
 {
@@ -9,7 +9,7 @@ Item::Item(ITEM_TYPE item_type, float x, float y)
 	setPosition(x, y);
 	itemExistenceDuration = 10000;
 
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < 17; i++) {
 		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
 	}
@@ -98,6 +98,7 @@ bool Item::isEffectFinished()
 
 void Item::makeAchived()
 {
+	if (counter++ == 0)	audio[7].PlayItem();
 	achived = true;
 	achivedTime = clock();
 }

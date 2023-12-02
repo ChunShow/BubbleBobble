@@ -2,7 +2,7 @@
 
 clock_t endTime;
 
-Idle::Idle() {};
+Idle::Idle() : counter(0) {};
 
 void Idle::operate()
 {
@@ -35,6 +35,7 @@ void Idle::operate()
 			}
 		}
 		startTime = endTime;
+		counter++;
 		glutPostRedisplay();
 	}
 }
@@ -45,10 +46,10 @@ void Idle::idleBoard() {
 
 void Idle::idleItem()
 {
-	if (endTime - lastItemCreationTime > 5000) {
-		srand((int)clock());
+	if (endTime - lastItemCreationTime > 5000) {		
+		srand(counter*counter);
 		float x = 1.6 * (float)rand() / RAND_MAX - 0.8; float y = 1.6 * (float)rand() / RAND_MAX - 0.8;
-		Item item(ITEM_TYPE(rand() % 5), x, y);
+		Item item(ITEM_TYPE(counter*counter % 5), x, y);
 		items.push_back(item);
 		lastItemCreationTime = endTime;
 	}
@@ -72,6 +73,9 @@ void Idle::idleItem()
 
 		if (falling) {
 			item.translate(0.0f, -0.01f);
+			if (item.getPositionY() < -1.2f) {
+				item.setPositionY(1.0f);
+			}
 		}
 	}
 
@@ -81,7 +85,6 @@ void Idle::idleItem()
 		}
 
 		if (item.isEffective()) { // enable item effect
-
 			if (!item.isDisposable()) {
 				switch (item.getType()) { //deals non-disposable items
 				case SPEED:
@@ -154,7 +157,7 @@ void Idle::idlePlayer()
 			player.translate(0.0f, -0.01f);
 		}
 	}
-	if (keystates[KEY::SPACEBAR] && (endTime - lastBubbleCreationTime) > player.getDelay()) {
+	if ((stages.getLevel() != 0) && keystates[KEY::SPACEBAR] && (endTime - lastBubbleCreationTime) > player.getDelay()) {
 		Bubble bubble1 = player.shoot();
 		bubble_total_num += 1;
 		bubbles.insert(make_pair(bubble_total_num, bubble1));
@@ -299,10 +302,13 @@ void Idle::idleStageClear()
 void Idle::idleGameover()
 {
 	if (keystates[KEY::RESTART]) {
+		audio[3].PlayBGM1();
+		audio[4].resetSoundGameover();
 		gameover = false;
 		restarted = true;
 		gamestart = false;
 		displayHelp = false;
+		counter = 0;
 	}
 }
 
@@ -312,15 +318,19 @@ void Idle::idleGamestart()
 	if (keystates[KEY::SPACEBAR]) {
 		gamestart = true;
 		displayHelp = false;
+		displayLeaderboard = false;
 	}
 }
 
 void Idle::idleGameWin()
 {
 	if (keystates[KEY::RESTART]) {
+		audio[3].PlayBGM1();
+		audio[4].resetSoundGameclear();
 		win = false;
 		restarted = true;
 		gamestart = false;
 		displayHelp = false;
+		displayLeaderboard = false;
 	}
 }

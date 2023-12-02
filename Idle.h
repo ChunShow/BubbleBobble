@@ -21,4 +21,5 @@ public:
 
 private:
 	clock_t endTime;
+	int counter;
 };

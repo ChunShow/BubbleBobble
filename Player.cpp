@@ -128,6 +128,7 @@ void Player::giveInvincibility(int frame)
 	life -= 1;
 	blinkTime = frame;
 	damageTime = 8;
+	audio[6].PlayAttacked();
 }
 bool Player::isInvincible()
 {
@@ -162,6 +163,9 @@ void Player::updatePosition()
 	//  out of the bottom side
 	if (getPositionY() < -1.2f) {
 		setPositionY(1.0f);
+	}
+	else if (getPositionY() > 1.2f) {
+		setPositionY(-1.0f);
 	}
 }
 
@@ -198,14 +202,15 @@ void Player::setClearPosition(float x, float y)
 void Player::initializePosition()
 {
 	if (clearPosition[0] == 1.0f && clearPosition[1] == 1.0f) setClearPosition(getPositionX(), getPositionY());
+	audio[5].PlayBubbling();
 
 	moveStage = true;
 	if ((getPositionX() <= -0.92f) && (getPositionY() <= -0.92f)) {
 		moveStage = false;
 		direction = RIGHT;
 		state = FALL;
+		audio[5].PlayBubblePlayer();
 		setClearPosition(1.0f, 1.0f);
-		audio[2].PlayBubblePop();
 	}
 	else if (getPositionX() <= -0.95f) {
 		setPositionX(-0.95f);

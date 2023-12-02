@@ -3,7 +3,7 @@
 //  initial setting of map
 Map::Map(int level) : stage(level), drawn(false), time(0.0f)
 {
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 12; i++) {
 		textures.push_back(Texture(_MAP, (TEXTURE_BLOCK)i));
 		textures[i].initTexture();
 	}
@@ -78,6 +78,7 @@ void Map::changeMap(vector<Monster>& monsters, bool& clear)
 			dataClearedForMoving = false;
 			lastClearTime = clock();
 			setMonsters(monsters);
+			audio[5].setCounter();
 		}
 	}
 }
@@ -140,18 +141,24 @@ void Map::setMonsters(vector<Monster>& monsters) {
 
 		break;
 	case 4:
-		monsters.push_back(Monster(CREATURE));
-		monsters[0].setPosition(0.08f, 0.4f);
+		for (int i = 0; i < 2; i++) {
+			monsters.push_back(Monster(CREATURE));
+		}
+		monsters[0].setPosition(0.02f, -0.15f);
+		monsters[1].setPosition(-0.16f, -0.15f);
 
 		for (int i = 0; i < 6; i++) {
-			monsters.push_back(Monster(ROBOT));
+			monsters.push_back(Monster(GHOST));
 		}
-		monsters[1].setPosition(-0.8f, -0.15f);
-		monsters[2].setPosition(0.8f, -0.15f);
+		monsters[2].setPosition(-0.8f, -0.15f);
 		monsters[3].setPosition(-0.8f, 0.35f);
-		monsters[4].setPosition(0.8f, 0.35f);
-		monsters[5].setPosition(-0.8f, 0.85f);
+		monsters[4].setPosition(-0.8f, 0.85f);
+		monsters[5].setPosition(0.8f, 0.35f);
 		monsters[6].setPosition(0.8f, 0.85f);
+		monsters[7].setPosition(0.8f, -0.15f);
+
+		monsters.push_back(Monster(ROBOT));
+		monsters[8].setPosition(-0.08f, -0.7f);
 		break;
 	default:
 		monsters.push_back(Monster(CREATURE));
@@ -179,6 +186,14 @@ void Map::drawScoreBoard()
 	glTexCoord2f(0.0f, 1.0f); glVertex2f(-0.95f, 1.0f);
 	glTexCoord2f(1.0f, 1.0f); glVertex2f(-0.71f, 1.0f);
 	glTexCoord2f(1.0f, 0.0f); glVertex2f(-0.71f, 0.95);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, textures[_STAGE].getTextureID());
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-0.25f, 0.95f);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-0.25f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(0.05f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(0.05f, 0.95);
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, textures[_SCORE].getTextureID());
@@ -411,46 +426,48 @@ void Map::drawStage4()
 
 	//  the side layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
-	drawHard(-1.2f, 1.0f, 0.25f, 1.0f);
-	drawHard(-1.2f, -0.45f, 0.25f, 0.75f);
-	drawHard(0.95f, 1.0f, 0.25f, 1.0f);
-	drawHard(0.95f, -0.45f, 0.25f, 0.75f);
+	drawHard(-1.2f, 1.0f, 0.25f, 1.45f);
+	drawHard(-1.2f, -0.95f, 0.25f, 0.25f);
+	drawHard(0.95f, 1.0f, 0.25f, 1.45f);
+	drawHard(0.95f, -0.95f, 0.25f, 0.25f);
 
 	//  the bottom layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
-	drawHard(-0.95f, -0.95f, 0.75f, 0.25f);
-	drawHard(0.2f, -0.95f, 0.75f, 0.25f);
+	drawHard(-0.95f, -0.95f, 0.25f, 0.25f);
+	drawHard(0.7f, -0.95f, 0.25f, 0.25f);
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
-	drawBlock(-1.2f, -1.0f, 1.0f, 0.2f);
-	drawBlock(0.2f, -1.0f, 1.0f, 0.2f);
+	drawBlock(-1.2f, -1.0f, 0.5f, 0.2f);
+	drawBlock(0.7f, -1.0f, 0.5f, 0.2f);
 
 	//  the top layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLUE].getTextureID());
-	drawHard(-1.2f, 1.2f, 1.0f, 0.25f);
-	drawHard(0.2f, 1.2f, 1.0f, 0.25f);
+	drawHard(-1.2f, 1.2f, 0.5f, 0.25f);
+	drawHard(0.7f, 1.2f, 0.5f, 0.25f);
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
-	drawBlock(-1.2f, 1.2f, 1.0f, 0.2f);
-	drawBlock(0.2f, 1.2f, 1.0f, 0.2f);
+	drawBlock(-1.2f, 1.2f, 0.5f, 0.2f);
+	drawBlock(0.7f, 1.2f, 0.5f, 0.2f);
 
 	//  the first layer
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_RED].getTextureID());
-	drawBlock(-0.95f, -0.45f, 0.25f, 0.05f);
-	drawBlock(0.7f, -0.45f, 0.25f, 0.05f);
-	drawBlock(-0.4f, -0.45f, 0.8f, 0.05f);
+	drawBlock(-0.95f, -0.45f, 0.4f, 0.05f);
+	drawBlock(0.55f, -0.45f, 0.4f, 0.05f);
+	drawBlock(-0.2f, -0.45f, 0.4f, 0.05f);
 
 	//  the second layer
-	drawBlock(-0.95f, 0.05f, 0.25f, 0.05f);
-	drawBlock(0.7f, 0.05f, 0.25f, 0.05f);
+	drawBlock(-0.95f, 0.05f, 0.4f, 0.05f);
+	drawBlock(0.55f, 0.05f, 0.4f, 0.05f);
+	drawBlock(-0.2f, 0.05f, 0.4f, 0.05f);
 
 	//  the third layer
-	drawBlock(-0.95f, 0.55f, 0.25f, 0.05f);
-	drawBlock(0.7f, 0.55f, 0.25f, 0.05f);
+	drawBlock(-0.95f, 0.55f, 0.4f, 0.05f);
+	drawBlock(0.55f, 0.55f, 0.4f, 0.05f);
 
 	//  the middle object
 	glBindTexture(GL_TEXTURE_2D, textures[_BRICK_BLACK].getTextureID());
-	drawHard(-0.4f, 0.40f, 0.10f, 0.40f);
-	drawHard(-0.3f, 0.10f, 0.6f, 0.10f);
-	drawHard(0.3f, 0.40f, 0.10f, 0.40f);
+	drawHard(-0.55f, 0.75f, 0.15f, 1.2f);
+	drawHard(0.4f, 0.75f, 0.15f, 1.2f);
+	drawHard(-0.55f, 0.75f, 0.35f, 0.10f);
+	drawHard(0.2f, 0.75f, 0.35f, 0.10f);
 
 	glDisable(GL_TEXTURE_2D);
 	drawn = true;
@@ -671,6 +688,12 @@ float Map::getTime() const
 {
 	return time;
 }
+
+int Map::getLevel() const
+{
+	return stage;
+}
+
 
 bool Map::isMoving()
 {

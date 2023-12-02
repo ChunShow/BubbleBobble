@@ -47,6 +47,7 @@ public:
 	vector<vector<float>> getBorderHard () const;
 	vector<vector<float>> getBorder() const;
 	float getTime () const;
+	int getLevel() const;
 
 	// check whether the map is moving
 	bool isMoving();

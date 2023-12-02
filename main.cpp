@@ -46,14 +46,15 @@ void initialize(bool restarted)
 		gmover.initTexture();
 		title.initTexture();
 		gmwin.initTexture();
-		for (int i = 0; i < 10; i++) {
-			audio.push_back(Audio());
+		for (int i = 0; i < 8; i++) {
+			audio.push_back(Audio(i));
 		}
 		audio[3].PlayBGM1();
 	}
-
 	stages = Map(level);
 	board = Scoreboard();
+	audio[3].setCounter();
+	audio[4].setCounter();
 }
 
 void idle()

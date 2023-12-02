@@ -60,6 +60,7 @@ void keyDown(unsigned char key, int x, int y)
 			if (!board.isSaved()) {
 				board.addMyrecord(input.getName());
 				board.save();
+				board.setCounter(1);
 			}
 		}
 	}
@@ -72,19 +73,29 @@ void keyDown(unsigned char key, int x, int y)
 		if (gamestart == false) {
 			audio[4].PlayClick();
 			displayHelp = !displayHelp;
+			if (displayLeaderboard) displayLeaderboard = !displayLeaderboard;
 		}
 		break;
 	case 'H':
 		if (gamestart == false) {
 			audio[4].PlayClick();
 			displayHelp = !displayHelp;
+			if (displayLeaderboard) displayLeaderboard = !displayLeaderboard;
 		}
 		break;
 	case 'r':
-		displayLeaderboard = !displayLeaderboard;
+		if (gamestart == false) {
+			audio[4].PlayClick();
+			displayLeaderboard = !displayLeaderboard;
+			if (displayHelp) displayHelp = !displayHelp;
+		}
 		break;
 	case 'R':
-		displayLeaderboard = !displayLeaderboard;
+		if (gamestart == false) {
+			audio[4].PlayClick();
+			displayLeaderboard = !displayLeaderboard;
+			if (displayHelp) displayHelp = !displayHelp;
+		}
 		break;
 	}
 }

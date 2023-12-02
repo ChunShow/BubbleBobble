@@ -43,6 +43,7 @@ public:
 
 	bool isSaved();
 	void save();
+	void setCounter(int i);
 
 private:
 	int score;
@@ -50,5 +51,6 @@ private:
 	bool fixed = false;
 	bool saved = false;
 	map<pair<int, int>, string, cmpByScore> leaderboard;
+	int counter;
 };
 

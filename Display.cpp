@@ -9,14 +9,16 @@ void Display::operate()
 
 	displayBlend();
 	displayLight();
-	
-	displayMap();
-	displayBubble();
-	displayItem();
-	displayMonster();
-	displayPlayer();
-	glDisable(GL_LIGHT0);
-	displayBoard();
+
+	if (!restarted) {
+		displayMap();
+		displayBubble();
+		displayItem();
+		displayMonster();
+		displayPlayer();
+		glDisable(GL_LIGHT0);
+		displayBoard();
+	}
 
 	//Detect clear
 	if (monsters.size() == 0) clear = true;
@@ -24,6 +26,8 @@ void Display::operate()
 
 	//Detect win
 	if (stages.isFinalStage() && clear) {
+		audio[4].PlayGameclear();
+		audio[3].stopBGM1();
 		win = true;
 		clear = false;
 		board.computeFinalScore();
@@ -221,6 +225,8 @@ void Display::handleGameover()
 	if (!player.isAlive()) {
 		player.reset();
 		gameover = true;
+		audio[4].PlayGameover();
+		audio[3].stopBGM1();
 	}
 	if (gameover == true) {
 		displayGameover();

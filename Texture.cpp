@@ -218,6 +218,9 @@ void Texture::setMapFile(FIBITMAP*& bitmap) {
 	case _SCORE:
 		bitmap = createBitMap("texture/Score_text.png");
 		break;
+	case _STAGE:
+		bitmap = createBitMap("texture/Stage_text.png");
+		break;
 	default:
 		bitmap = createBitMap("texture/Dragon.png");
 		break;

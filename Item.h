@@ -34,6 +34,7 @@ private:
 	bool disposable;
 
 	float size = 0.05f;
+	int counter = 0;
 	
 	vector<Texture> textures;
 };

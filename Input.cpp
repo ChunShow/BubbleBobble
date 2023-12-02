@@ -18,6 +18,7 @@ void Input::deleteLastLetter()
 
 string Input::getName()
 {
+	if (name[0] == ' ') return "None";
 	return string(name);
 }
 
